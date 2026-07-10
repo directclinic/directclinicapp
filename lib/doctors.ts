@@ -13,6 +13,7 @@
 //   phone             text not null
 //   email             text not null
 //   in_network        boolean not null default false
+//   insurance_plans   text[] not null          -- specific accepted plans
 //   copay_usd         integer not null
 //   deductible_status text not null            -- "Met" | "Not met"
 //   languages         text[] not null
@@ -41,6 +42,7 @@ export interface Doctor {
   phone: string
   email: string
   inNetwork: boolean
+  insurancePlans: string[]
   copayUsd: number
   deductibleStatus: 'Met' | 'Not met'
   languages: string[]
@@ -68,6 +70,12 @@ export const DOCTORS: Doctor[] = [
     phone: '(212) 555-0177',
     email: 'sarah.levine@uesinternalmed.example',
     inNetwork: true,
+    insurancePlans: [
+      'Blue Cross Blue Shield Medicare Advantage',
+      'Aetna Medicare Advantage',
+      'UnitedHealthcare Medicare Advantage',
+      'Original Medicare (Part B)',
+    ],
     copayUsd: 20,
     deductibleStatus: 'Met',
     languages: ['English', 'Russian'],
@@ -89,6 +97,12 @@ export const DOCTORS: Doctor[] = [
     phone: '(718) 555-0143',
     email: 'm.rodriguez@jacksonhtsgeriatrics.example',
     inNetwork: true,
+    insurancePlans: [
+      'Blue Cross Blue Shield Medicare Advantage',
+      'Fidelis Care Medicaid Managed Care',
+      'Healthfirst Medicare Advantage',
+      'Original Medicare (Part B)',
+    ],
     copayUsd: 15,
     deductibleStatus: 'Met',
     languages: ['English', 'Spanish', 'Tagalog'],
@@ -110,6 +124,12 @@ export const DOCTORS: Doctor[] = [
     phone: '(718) 555-0198',
     email: 'mei.chen@sunsetparkfammed.example',
     inNetwork: true,
+    insurancePlans: [
+      'Blue Cross Blue Shield Medicare Advantage',
+      'EmblemHealth HMO',
+      'Fidelis Care Medicaid Managed Care',
+      'Cigna PPO',
+    ],
     copayUsd: 20,
     deductibleStatus: 'Met',
     languages: ['English', 'Cantonese', 'Spanish'],
@@ -131,6 +151,12 @@ export const DOCTORS: Doctor[] = [
     phone: '(718) 555-0121',
     email: 'a.rahman@parkchestercardio.example',
     inNetwork: true,
+    insurancePlans: [
+      'Blue Cross Blue Shield Medicare Advantage',
+      'Aetna PPO',
+      'UnitedHealthcare Medicare Advantage',
+      'Healthfirst Medicaid Managed Care',
+    ],
     copayUsd: 25,
     deductibleStatus: 'Met',
     languages: ['English', 'Bengali'],
@@ -152,6 +178,12 @@ export const DOCTORS: Doctor[] = [
     phone: '(718) 555-0165',
     email: 'g.ferraro@bensonhurstendo.example',
     inNetwork: true,
+    insurancePlans: [
+      'Blue Cross Blue Shield Medicare Advantage',
+      'Cigna HMO',
+      'Aetna Medicare Advantage',
+      'Original Medicare (Part B)',
+    ],
     copayUsd: 20,
     deductibleStatus: 'Met',
     languages: ['English', 'Italian'],
@@ -173,6 +205,12 @@ export const DOCTORS: Doctor[] = [
     phone: '(718) 555-0189',
     email: 'd.okonkwo@stgeorgegeriatrics.example',
     inNetwork: true,
+    insurancePlans: [
+      'Blue Cross Blue Shield Medicare Advantage',
+      'Healthfirst Medicare Advantage',
+      'Fidelis Care Medicaid Managed Care',
+      'Original Medicare (Part B)',
+    ],
     copayUsd: 15,
     deductibleStatus: 'Met',
     languages: ['English', 'Spanish'],
@@ -194,6 +232,12 @@ export const DOCTORS: Doctor[] = [
     phone: '(718) 555-0154',
     email: 'o.petrova@brightonrheum.example',
     inNetwork: true,
+    insurancePlans: [
+      'Blue Cross Blue Shield Medicare Advantage',
+      'EmblemHealth PPO',
+      'UnitedHealthcare Medicare Advantage',
+      'Original Medicare (Part B)',
+    ],
     copayUsd: 25,
     deductibleStatus: 'Met',
     languages: ['English', 'Russian'],
@@ -215,6 +259,12 @@ export const DOCTORS: Doctor[] = [
     phone: '(718) 555-0132',
     email: 'robert.kim@flushingeyecare.example',
     inNetwork: true,
+    insurancePlans: [
+      'Blue Cross Blue Shield Medicare Advantage',
+      'Aetna Medicare Advantage',
+      'EmblemHealth HMO',
+      'VSP Vision Care',
+    ],
     copayUsd: 20,
     deductibleStatus: 'Met',
     languages: ['English', 'Cantonese'],

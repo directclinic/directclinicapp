@@ -110,6 +110,22 @@ function BookAppointmentView() {
                 {doctor.email}
               </a>
             </div>
+            <div className="mt-2 border-t border-[#6C5287]/15 pt-3">
+              <p className="text-base font-semibold text-[#6C5287]">
+                Insurance accepted:
+              </p>
+              <ul className="mt-2 flex flex-wrap gap-2">
+                {doctor.insurancePlans.map((plan) => (
+                  <li
+                    key={plan}
+                    className="inline-flex items-center gap-1.5 rounded-full border border-[#6C5287]/30 bg-[#6C5287]/5 px-3 py-1.5 text-sm font-medium text-[#4a3860]"
+                  >
+                    <Check className="h-4 w-4 shrink-0 text-[#4D6E37]" aria-hidden="true" />
+                    {plan}
+                  </li>
+                ))}
+              </ul>
+            </div>
           </div>
         </section>
 

@@ -119,6 +119,24 @@ export function DoctorCard({
         {doctor.languages.join(', ')}
       </p>
 
+      {/* Insurance accepted */}
+      <div className="mt-3">
+        <p className="text-base font-semibold text-foreground">
+          {strings.insuranceAccepted}:
+        </p>
+        <ul className="mt-2 flex flex-wrap gap-2">
+          {doctor.insurancePlans.map((plan) => (
+            <li
+              key={plan}
+              className="inline-flex items-center gap-1.5 rounded-full border-2 border-primary/25 bg-primary/5 px-3 py-1.5 text-sm font-medium text-foreground"
+            >
+              <BadgeCheck className="size-4 shrink-0 text-primary" aria-hidden="true" />
+              {plan}
+            </li>
+          ))}
+        </ul>
+      </div>
+
       {/* Transit */}
       <p className="mt-2 flex items-start gap-2 rounded-lg bg-muted px-3 py-2 text-base text-foreground">
         <TrainFront className="mt-0.5 size-5 shrink-0 text-primary" aria-hidden="true" />

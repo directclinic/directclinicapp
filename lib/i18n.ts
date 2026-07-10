@@ -42,6 +42,7 @@ export interface Strings {
   deductibleMet: string
   priceDisclaimer: string
   languagesSpoken: string
+  insuranceAccepted: string
   bookAppointment: string
   mapDirections: string
   acceptingNew: string
@@ -85,6 +86,7 @@ export const TRANSLATIONS: Record<LanguageCode, Strings> = {
     priceDisclaimer:
       'Prices verified with insurance as of today. No hidden fees.',
     languagesSpoken: 'Languages spoken',
+    insuranceAccepted: 'Insurance accepted',
     bookAppointment: 'Book appointment',
     mapDirections: 'Map Directions',
     acceptingNew: 'Accepting new patients',
@@ -132,6 +134,7 @@ export const TRANSLATIONS: Record<LanguageCode, Strings> = {
     priceDisclaimer:
       'Precios verificados con el seguro hoy. Sin cargos ocultos.',
     languagesSpoken: 'Idiomas que se hablan',
+    insuranceAccepted: 'Seguros aceptados',
     bookAppointment: 'Reservar cita',
     mapDirections: 'Cómo llegar',
     acceptingNew: 'Acepta nuevos pacientes',
@@ -178,6 +181,7 @@ export const TRANSLATIONS: Record<LanguageCode, Strings> = {
     deductibleMet: '已達到',
     priceDisclaimer: '價格已於今日經保險核實。沒有隱藏費用。',
     languagesSpoken: '會說的語言',
+    insuranceAccepted: '接受的保險',
     bookAppointment: '預約',
     mapDirections: '地圖路線',
     acceptingNew: '接受新病人',
@@ -225,6 +229,7 @@ export const TRANSLATIONS: Record<LanguageCode, Strings> = {
     priceDisclaimer:
       'Цены подтверждены страховкой на сегодня. Без скрытых платежей.',
     languagesSpoken: 'Языки общения',
+    insuranceAccepted: 'Принимаемые страховки',
     bookAppointment: 'Записаться на приём',
     mapDirections: 'Маршрут на карте',
     acceptingNew: 'Принимает новых пациентов',
@@ -271,6 +276,7 @@ export const TRANSLATIONS: Record<LanguageCode, Strings> = {
     deductibleMet: 'পূরণ হয়েছে',
     priceDisclaimer: 'আজকের তারিখে বীমা দিয়ে দাম যাচাই করা হয়েছে। কোনো লুকানো খরচ নেই।',
     languagesSpoken: 'কথ্য ভাষা',
+    insuranceAccepted: 'গৃহীত বীমা',
     bookAppointment: 'অ্যাপয়েন্টমেন্ট নিন',
     mapDirections: 'মানচিত্রে পথ',
     acceptingNew: 'নতুন রোগী নিচ্ছেন',
@@ -318,6 +324,7 @@ export const TRANSLATIONS: Record<LanguageCode, Strings> = {
     priceDisclaimer:
       'Prezzi verificati con l’assicurazione oggi. Nessun costo nascosto.',
     languagesSpoken: 'Lingue parlate',
+    insuranceAccepted: 'Assicurazioni accettate',
     bookAppointment: 'Prenota appuntamento',
     mapDirections: 'Indicazioni sulla mappa',
     acceptingNew: 'Accetta nuovi pazienti',
@@ -365,6 +372,7 @@ export const TRANSLATIONS: Record<LanguageCode, Strings> = {
     priceDisclaimer:
       'Ang mga presyo ay na-verify sa insurance ngayon. Walang nakatagong bayarin.',
     languagesSpoken: 'Mga wikang sinasalita',
+    insuranceAccepted: 'Mga tinatanggap na insurance',
     bookAppointment: 'Mag-book ng appointment',
     mapDirections: 'Direksyon sa Mapa',
     acceptingNew: 'Tumatanggap ng bagong pasyente',
