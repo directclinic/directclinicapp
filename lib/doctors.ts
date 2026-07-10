@@ -10,6 +10,7 @@
 //   latitude          double precision not null
 //   longitude         double precision not null
 //   address           text not null
+//   phone             text not null
 //   in_network        boolean not null default false
 //   copay_usd         integer not null
 //   deductible_status text not null            -- "Met" | "Not met"
