@@ -1,33 +1,24 @@
 'use client'
 
 import { useEffect, useRef, useState } from 'react'
-import { useRouter } from 'next/navigation'
-import { ChevronLeft, Globe, Check, Minus, Plus, Stethoscope } from 'lucide-react'
-import {
-  LANGUAGES,
-  type LanguageCode,
-  type Strings,
-} from '@/lib/i18n'
+import { Globe, Check, Minus, Plus, Stethoscope } from 'lucide-react'
+import { LANGUAGES, type LanguageCode, type Strings } from '@/lib/i18n'
+import { MAX_STEP, MIN_STEP } from '@/lib/use-accessibility'
 import { cn } from '@/lib/utils'
 
-export function TopNav({
+export function IntakeHeader({
   language,
   setLanguage,
   strings,
   fontStep,
   setFontStep,
-  minStep,
-  maxStep,
 }: {
   language: LanguageCode
   setLanguage: (c: LanguageCode) => void
   strings: Strings
   fontStep: number
   setFontStep: (n: number) => void
-  minStep: number
-  maxStep: number
 }) {
-  const router = useRouter()
   const [open, setOpen] = useState(false)
   const ref = useRef<HTMLDivElement>(null)
 
@@ -45,21 +36,11 @@ export function TopNav({
 
   return (
     <header className="flex flex-wrap items-center justify-between gap-3 border-b-2 border-border bg-card px-4 py-3 sm:px-6">
-      <div className="flex items-center gap-3">
-        <button
-          type="button"
-          onClick={() => router.push('/')}
-          className="inline-flex min-h-14 items-center gap-2 rounded-xl border-2 border-primary bg-card px-5 text-lg font-bold text-primary transition-colors hover:bg-primary/10 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-primary/40"
-        >
-          <ChevronLeft className="size-6 shrink-0" aria-hidden="true" />
-          {strings.back}
-        </button>
-        <div className="hidden items-center gap-2 sm:flex">
-          <span className="flex size-11 items-center justify-center rounded-xl bg-primary text-primary-foreground">
-            <Stethoscope className="size-6" aria-hidden="true" />
-          </span>
-          <span className="text-xl font-bold text-foreground">Direct Clinic</span>
-        </div>
+      <div className="flex items-center gap-2">
+        <span className="flex size-11 items-center justify-center rounded-xl bg-primary text-primary-foreground">
+          <Stethoscope className="size-6" aria-hidden="true" />
+        </span>
+        <span className="text-xl font-bold text-foreground">Direct Clinic</span>
       </div>
 
       <div className="flex items-center gap-3">
@@ -69,27 +50,31 @@ export function TopNav({
           role="group"
           aria-label={strings.textSize}
         >
-          <span className="px-2 text-base font-semibold text-muted-foreground">
+          <span className="hidden px-2 text-base font-semibold text-muted-foreground sm:inline">
             {strings.textSize}
           </span>
           <button
             type="button"
-            onClick={() => setFontStep(Math.max(minStep, fontStep - 1))}
-            disabled={fontStep <= minStep}
+            onClick={() => setFontStep(fontStep - 1)}
+            disabled={fontStep <= MIN_STEP}
             aria-label={strings.decreaseText}
             className="inline-flex size-12 items-center justify-center rounded-lg bg-secondary text-secondary-foreground transition-colors hover:bg-primary hover:text-primary-foreground disabled:opacity-40 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-primary/40"
           >
             <Minus className="size-4" aria-hidden="true" />
-            <span aria-hidden="true" className="text-base font-bold">A</span>
+            <span aria-hidden="true" className="text-base font-bold">
+              A
+            </span>
           </button>
           <button
             type="button"
-            onClick={() => setFontStep(Math.min(maxStep, fontStep + 1))}
-            disabled={fontStep >= maxStep}
+            onClick={() => setFontStep(fontStep + 1)}
+            disabled={fontStep >= MAX_STEP}
             aria-label={strings.increaseText}
             className="inline-flex size-12 items-center justify-center rounded-lg bg-secondary text-secondary-foreground transition-colors hover:bg-primary hover:text-primary-foreground disabled:opacity-40 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-primary/40"
           >
-            <span aria-hidden="true" className="text-lg font-bold">A</span>
+            <span aria-hidden="true" className="text-lg font-bold">
+              A
+            </span>
             <Plus className="size-4" aria-hidden="true" />
           </button>
         </div>
