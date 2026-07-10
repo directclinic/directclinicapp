@@ -22,6 +22,7 @@
 //   accepted_carriers text[] not null          -- insurance carrier ids in-network here
 
 import type { CareId } from '@/lib/intake'
+import { INSURANCE_CARRIERS } from '@/lib/intake'
 
 export type Borough =
   | 'Manhattan'
