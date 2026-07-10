@@ -48,14 +48,6 @@ export interface Strings {
   acceptingNew: string
   reviews: string
   allBoroughs: string
-  addressPlaceholder: string
-  findNearby: string
-  locating: string
-  addressNotFound: string
-  nearYouPrefix: string
-  clearLocation: string
-  milesAway: string
-  youAreHere: string
   intake: IntakeStrings
   booking: BookingStrings
 }
@@ -120,15 +112,6 @@ export const TRANSLATIONS: Record<LanguageCode, Strings> = {
     acceptingNew: 'Accepting new patients',
     reviews: 'reviews',
     allBoroughs: 'All Boroughs',
-    addressPlaceholder: 'Enter your address to find clinics nearby',
-    findNearby: 'Find nearby',
-    locating: 'Finding your location\u2026',
-    addressNotFound:
-      'We couldn\u2019t find that address. Try adding your borough or ZIP code.',
-    nearYouPrefix: 'Near',
-    clearLocation: 'Clear location',
-    milesAway: 'mi away',
-    youAreHere: 'You are here',
     intake: {
       welcomeTitle: 'Find a Doctor Near You',
       welcomeSubtitle:
@@ -195,15 +178,6 @@ export const TRANSLATIONS: Record<LanguageCode, Strings> = {
     acceptingNew: 'Acepta nuevos pacientes',
     reviews: 'reseñas',
     allBoroughs: 'Todos los distritos',
-    addressPlaceholder: 'Ingrese su dirección para encontrar clínicas cercanas',
-    findNearby: 'Buscar cerca',
-    locating: 'Buscando su ubicación\u2026',
-    addressNotFound:
-      'No encontramos esa dirección. Intente agregar su distrito o código postal.',
-    nearYouPrefix: 'Cerca de',
-    clearLocation: 'Borrar ubicación',
-    milesAway: 'mi de distancia',
-    youAreHere: 'Usted está aquí',
     intake: {
       welcomeTitle: 'Encuentre un médico cerca de usted',
       welcomeSubtitle:
@@ -269,14 +243,6 @@ export const TRANSLATIONS: Record<LanguageCode, Strings> = {
     acceptingNew: '接受新病人',
     reviews: '則評價',
     allBoroughs: '所有區',
-    addressPlaceholder: '輸入您的地址以尋找附近的診所',
-    findNearby: '尋找附近',
-    locating: '正在尋找您的位置\u2026',
-    addressNotFound: '找不到該地址。請嘗試加上您所在的區或郵遞區號。',
-    nearYouPrefix: '附近',
-    clearLocation: '清除位置',
-    milesAway: '英里外',
-    youAreHere: '您在這裡',
     intake: {
       welcomeTitle: '尋找附近的醫生',
       welcomeSubtitle:
@@ -343,15 +309,6 @@ export const TRANSLATIONS: Record<LanguageCode, Strings> = {
     acceptingNew: 'Принимает новых пациен��ов',
     reviews: 'отзывов',
     allBoroughs: 'Все районы',
-    addressPlaceholder: 'Введите свой адрес, чтобы найти клиники поблизости',
-    findNearby: 'Найти рядом',
-    locating: 'Определяем ваше местоположение\u2026',
-    addressNotFound:
-      'Не удалось найти этот адрес. Попробуйте добавить район или почтовый индекс.',
-    nearYouPrefix: 'Рядом с',
-    clearLocation: 'Очистить местоположение',
-    milesAway: 'миль от вас',
-    youAreHere: 'Вы здесь',
     intake: {
       welcomeTitle: 'Найдите врача рядом с вами',
       welcomeSubtitle:
@@ -417,23 +374,14 @@ export const TRANSLATIONS: Record<LanguageCode, Strings> = {
     acceptingNew: 'নতুন রোগী নিচ্ছেন',
     reviews: 'পর্যালোচনা',
     allBoroughs: 'সব বরো',
-    addressPlaceholder: 'কাছাকাছি ক্লিনিক খুঁজতে আপনার ঠিকানা লিখুন',
-    findNearby: 'কাছাকাছি খুঁজুন',
-    locating: 'আপনার অবস্থান খোঁজা হচ্ছে\u2026',
-    addressNotFound:
-      'আমরা সেই ঠিকানাটি খুঁজে পাইনি। আপনার এলাকা বা জিপ কোড যোগ করে দেখুন।',
-    nearYouPrefix: 'কাছে',
-    clearLocation: 'অবস্থান মুছুন',
-    milesAway: 'মাইল দূরে',
-    youAreHere: 'আপনি এখানে আছেন',
     intake: {
       welcomeTitle: 'আপনার কাছে একজন ডাক্তার খুঁজুন',
       welcomeSubtitle:
         'কয়েকটি দ্রুত প্রশ্নের উত্তর দিন, আমরা আপনাকে নেটওয়ার্কভুক্ত ক্লিনিক ও স্পষ্ট দাম দেখাব।',
       step1Label: '১. আপনার বীমা প্রদানকারী নির্বাচন করুন',
-      step1Help: 'আপনার বীমা কার্ডে দেখানো কোম্পানিটি বেছে নিন���',
+      step1Help: 'আপনার বীমা কার্ডে দেখানো কোম্পানিটি বেছে নিন।',
       selectCarrier: 'আপনার বীমা প্রদানকারী বেছে নিন',
-      planLabel: 'আপনার প্ল্যানের ধরন নির্বাচন করু��',
+      planLabel: 'আপনার প্ল্যানের ধরন নির্বাচন করুন',
       selectPlan: 'আপনার প্ল্যানের ধরন বেছে নিন',
       step2Label: '২. আজ আপনার কোন ধরনের সেবা প্রয়োজন?',
       step2Help: 'আপনার সফরের সাথে সবচেয়ে মানানসই বিকল্পটি বেছে নিন।',
@@ -492,15 +440,6 @@ export const TRANSLATIONS: Record<LanguageCode, Strings> = {
     acceptingNew: 'Accetta nuovi pazienti',
     reviews: 'recensioni',
     allBoroughs: 'Tutti i distretti',
-    addressPlaceholder: 'Inserisci il tuo indirizzo per trovare cliniche vicine',
-    findNearby: 'Trova vicino',
-    locating: 'Individuazione della tua posizione\u2026',
-    addressNotFound:
-      'Non abbiamo trovato quell\u2019indirizzo. Prova ad aggiungere il quartiere o il CAP.',
-    nearYouPrefix: 'Vicino a',
-    clearLocation: 'Cancella posizione',
-    milesAway: 'miglia di distanza',
-    youAreHere: 'Sei qui',
     intake: {
       welcomeTitle: 'Trova un medico vicino a te',
       welcomeSubtitle:
@@ -567,15 +506,6 @@ export const TRANSLATIONS: Record<LanguageCode, Strings> = {
     acceptingNew: 'Tumatanggap ng bagong pasyente',
     reviews: 'mga review',
     allBoroughs: 'Lahat ng Borough',
-    addressPlaceholder: 'Ilagay ang iyong address para makahanap ng klinika malapit',
-    findNearby: 'Maghanap ng malapit',
-    locating: 'Hinahanap ang iyong lokasyon\u2026',
-    addressNotFound:
-      'Hindi namin nahanap ang address na iyon. Subukang idagdag ang iyong borough o ZIP code.',
-    nearYouPrefix: 'Malapit sa',
-    clearLocation: 'I-clear ang lokasyon',
-    milesAway: 'milya ang layo',
-    youAreHere: 'Nandito ka',
     intake: {
       welcomeTitle: 'Maghanap ng Doktor na Malapit sa Iyo',
       welcomeSubtitle:

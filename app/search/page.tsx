@@ -7,10 +7,8 @@ import {
   DOCTORS,
   CARRIER_ID_BY_NAME,
   estimateCopay,
-  haversineMiles,
   type Doctor,
 } from '@/lib/doctors'
-import { geocodeAddress, type GeoResult } from '@/lib/geocode'
 import { TRANSLATIONS } from '@/lib/i18n'
 import { type CareId } from '@/lib/intake'
 import { useAccessibility, MIN_STEP, MAX_STEP } from '@/lib/use-accessibility'
@@ -34,9 +32,6 @@ function SearchView() {
   const searchParams = useSearchParams()
   const [query, setQuery] = useState('')
   const [activeBorough, setActiveBorough] = useState<string>('All Boroughs')
-  // The patient's geocoded address; when set, clinics are ranked by distance.
-  const [userLocation, setUserLocation] = useState<GeoResult | null>(null)
-  const [geoStatus, setGeoStatus] = useState<'idle' | 'loading' | 'error'>('idle')
   const [focused, setFocused] = useState<Doctor | null>(null)
   // The doctor whose booking modal is currently open (null when closed).
   const [bookingDoctor, setBookingDoctor] = useState<Doctor | null>(null)
@@ -64,62 +59,29 @@ function SearchView() {
   )
 
   const doctors = useMemo(() => {
-    const list = DOCTORS.filter((d) => {
+    const q = query.trim().toLowerCase()
+    return DOCTORS.filter((d) => {
       // Care type is the primary filter: only doctors who provide it are shown.
       const careOk = !care || d.careTypes.includes(care)
       // Insurance filter: when a carrier is chosen, only show in-network clinics.
       const networkOk = !carrierId || d.acceptedCarriers.includes(carrierId)
       const boroughOk =
         activeBorough === 'All Boroughs' || d.borough === activeBorough
-      return careOk && networkOk && boroughOk
-    }).map((d) => ({
-      // Apply the co-pay estimated from the selected plan + care type, and the
-      // distance from the patient's entered address (when one is set).
-      ...d,
-      copayUsd: estimatedCopay ?? d.copayUsd,
-      distanceMiles: userLocation
-        ? haversineMiles(userLocation.lat, userLocation.lng, d.latitude, d.longitude)
-        : null,
-    }))
-
-    // When the patient has entered an address, rank nearest-first; otherwise
-    // fall back to the highest-rated clinics.
-    if (userLocation) {
-      list.sort((a, b) => (a.distanceMiles ?? 0) - (b.distanceMiles ?? 0))
-    } else {
-      list.sort((a, b) => b.rating - a.rating)
-    }
-    return list
-  }, [activeBorough, care, carrierId, estimatedCopay, userLocation])
+      const queryOk =
+        q === '' ||
+        d.neighborhood.toLowerCase().includes(q) ||
+        d.borough.toLowerCase().includes(q) ||
+        d.fullName.toLowerCase().includes(q) ||
+        d.specialty.toLowerCase().includes(q)
+      return careOk && networkOk && boroughOk && queryOk
+    })
+      // Apply the co-pay estimated from the selected plan + care type.
+      .map((d) => ({ ...d, copayUsd: estimatedCopay ?? d.copayUsd }))
+      .sort((a, b) => b.rating - a.rating)
+  }, [query, activeBorough, care, carrierId, estimatedCopay])
 
   function handleDirections(d: Doctor) {
     setFocused(d)
-  }
-
-  // Geocode the address in the search box and rank clinics by distance to it.
-  async function handleAddressSearch() {
-    const q = query.trim()
-    if (!q) {
-      setUserLocation(null)
-      setGeoStatus('idle')
-      return
-    }
-    setGeoStatus('loading')
-    setFocused(null)
-    const result = await geocodeAddress(q)
-    if (result) {
-      setUserLocation(result)
-      setGeoStatus('idle')
-    } else {
-      setUserLocation(null)
-      setGeoStatus('error')
-    }
-  }
-
-  function handleClearLocation() {
-    setUserLocation(null)
-    setGeoStatus('idle')
-    setQuery('')
   }
 
   return (
@@ -183,10 +145,6 @@ function SearchView() {
             setActiveBorough={setActiveBorough}
             insuranceLabel={insuranceLabel}
             careLabel={careLabel}
-            onAddressSearch={handleAddressSearch}
-            geoStatus={geoStatus}
-            userLocationLabel={userLocation?.label ?? null}
-            onClearLocation={handleClearLocation}
           />
           <div className="h-full w-full">
             <DoctorMap
@@ -194,8 +152,6 @@ function SearchView() {
               focused={focused}
               onSelect={setFocused}
               copayLabel={strings.copay}
-              userLocation={userLocation}
-              youAreHereLabel={strings.youAreHere}
             />
           </div>
         </section>

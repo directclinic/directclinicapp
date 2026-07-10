@@ -51,9 +51,6 @@ export interface Doctor {
   acceptingNew: boolean
   careTypes: CareId[]
   acceptedCarriers: string[]
-  // Computed client-side (distance from the patient's entered address). Not a
-  // database column — only present after an address search.
-  distanceMiles?: number | null
 }
 
 // Simulated result set from:
@@ -344,21 +341,3 @@ export const BOROUGHS: Array<'All Boroughs' | Borough> = [
 ]
 
 export const NYC_CENTER: [number, number] = [40.7128, -74.006]
-
-// Great-circle distance in miles between two lat/lng points (haversine formula).
-// Used to rank clinics by how close they are to the patient's entered address.
-export function haversineMiles(
-  lat1: number,
-  lng1: number,
-  lat2: number,
-  lng2: number,
-): number {
-  const toRad = (deg: number) => (deg * Math.PI) / 180
-  const earthRadiusMiles = 3958.8
-  const dLat = toRad(lat2 - lat1)
-  const dLng = toRad(lng2 - lng1)
-  const a =
-    Math.sin(dLat / 2) ** 2 +
-    Math.cos(toRad(lat1)) * Math.cos(toRad(lat2)) * Math.sin(dLng / 2) ** 2
-  return earthRadiusMiles * 2 * Math.asin(Math.sqrt(a))
-}
