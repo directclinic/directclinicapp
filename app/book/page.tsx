@@ -55,9 +55,9 @@ function BookAppointmentView() {
       <header className="sticky top-0 z-10 border-b border-[#6C5287]/20 bg-[#F7F4FA]/95 backdrop-blur">
         <div className="mx-auto flex max-w-3xl items-center gap-4 px-4 py-3">
           <Link
-            href="/"
+            href="/search"
             className="inline-flex h-12 min-w-12 items-center gap-1 rounded-xl border border-[#6C5287]/40 px-3 text-base font-semibold text-[#6C5287] transition-colors hover:bg-white"
-            aria-label="Go back"
+            aria-label="Go back to map"
           >
             <ChevronLeft className="h-5 w-5" aria-hidden="true" />
             Back
