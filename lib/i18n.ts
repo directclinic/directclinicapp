@@ -48,6 +48,24 @@ export interface Strings {
   reviews: string
   allBoroughs: string
   intake: IntakeStrings
+  booking: BookingStrings
+}
+
+export interface BookingStrings {
+  scheduleWith: string
+  selectDate: string
+  selectTime: string
+  morning: string
+  afternoon: string
+  monthLabel: string
+  weekdays: [string, string, string, string, string, string, string]
+  addressLabel: string
+  confirmPrefix: string
+  cancelBooking: string
+  confirmedTitle: string
+  confirmedLead: string
+  whenLabel: string
+  done: string
 }
 
 export interface IntakeStrings {
@@ -113,6 +131,22 @@ export const TRANSLATIONS: Record<LanguageCode, Strings> = {
         'Privacy Guaranteed: We do not ask for or save personal medical conditions. Your search is safe and anonymous.',
       selectedSummary: 'Your selections',
     },
+    booking: {
+      scheduleWith: 'Schedule with',
+      selectDate: 'Select a Date',
+      selectTime: 'Select a Time',
+      morning: 'Morning',
+      afternoon: 'Afternoon',
+      monthLabel: 'April 2026',
+      weekdays: ['S', 'M', 'T', 'W', 'T', 'F', 'S'],
+      addressLabel: 'Clinic address',
+      confirmPrefix: 'Confirm Appointment with',
+      cancelBooking: 'Cancel',
+      confirmedTitle: 'Appointment Confirmed!',
+      confirmedLead: 'You\u2019re all set with',
+      whenLabel: 'When',
+      done: 'Done',
+    },
   },
   es: {
     back: 'Atrás',
@@ -160,6 +194,22 @@ export const TRANSLATIONS: Record<LanguageCode, Strings> = {
         'Privacidad garantizada: No preguntamos ni guardamos condiciones médicas personales. Su búsqueda es segura y anónima.',
       selectedSummary: 'Sus selecciones',
     },
+    booking: {
+      scheduleWith: 'Programar con',
+      selectDate: 'Seleccione una fecha',
+      selectTime: 'Seleccione una hora',
+      morning: 'Mañana',
+      afternoon: 'Tarde',
+      monthLabel: 'Abril 2026',
+      weekdays: ['D', 'L', 'M', 'X', 'J', 'V', 'S'],
+      addressLabel: 'Dirección de la clínica',
+      confirmPrefix: 'Confirmar cita con',
+      cancelBooking: 'Cancelar',
+      confirmedTitle: '¡Cita confirmada!',
+      confirmedLead: 'Todo listo con',
+      whenLabel: 'Cuándo',
+      done: 'Listo',
+    },
   },
   zh: {
     back: '返回',
@@ -206,6 +256,22 @@ export const TRANSLATIONS: Record<LanguageCode, Strings> = {
         '私隱保證：我哋唔會詢問或儲存你嘅個人醫療狀況。你嘅搜尋安全又匿名。',
       selectedSummary: '你嘅選擇',
     },
+    booking: {
+      scheduleWith: '預約',
+      selectDate: '選擇日期',
+      selectTime: '選擇時間',
+      morning: '上午',
+      afternoon: '下午',
+      monthLabel: '2026年4月',
+      weekdays: ['日', '一', '二', '三', '四', '五', '六'],
+      addressLabel: '診所地址',
+      confirmPrefix: '確認預約：',
+      cancelBooking: '取消',
+      confirmedTitle: '預約已確認！',
+      confirmedLead: '已為你預約',
+      whenLabel: '時間',
+      done: '完成',
+    },
   },
   ru: {
     back: 'Назад',
@@ -227,7 +293,7 @@ export const TRANSLATIONS: Record<LanguageCode, Strings> = {
     languagesSpoken: 'Языки общения',
     bookAppointment: 'Записаться на приём',
     mapDirections: 'Маршрут на карте',
-    acceptingNew: 'Принимает новых пациентов',
+    acceptingNew: 'Принимает новых пациен��ов',
     reviews: 'отзывов',
     allBoroughs: 'Все районы',
     intake: {
@@ -244,7 +310,7 @@ export const TRANSLATIONS: Record<LanguageCode, Strings> = {
       care: {
         pcp: 'Общий осмотр / Терапевт',
         dental: 'Стоматология',
-        eye: 'Проверка зрения',
+        eye: 'Провер��а зрения',
         physical: 'Физиотерапия',
         geriatric: 'Гериатрическая помощь пожилым',
       },
@@ -252,6 +318,22 @@ export const TRANSLATIONS: Record<LanguageCode, Strings> = {
       privacyBadge:
         'Конфиденциальность гарантирована: Мы не спрашиваем и не сохраняем личные медицинские данные. Ваш поиск безопасен и анонимен.',
       selectedSummary: 'Ваш выбор',
+    },
+    booking: {
+      scheduleWith: 'Запись к',
+      selectDate: 'Выберите дату',
+      selectTime: 'Выберите время',
+      morning: 'Утро',
+      afternoon: 'День',
+      monthLabel: 'Апрель 2026',
+      weekdays: ['Вс', 'Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб'],
+      addressLabel: 'Адрес клиники',
+      confirmPrefix: 'Подтвердить приём у',
+      cancelBooking: 'Отмена',
+      confirmedTitle: 'Приём подтверждён!',
+      confirmedLead: 'Всё готово для приёма у',
+      whenLabel: 'Когда',
+      done: 'Готово',
     },
   },
   bn: {
@@ -298,6 +380,22 @@ export const TRANSLATIONS: Record<LanguageCode, Strings> = {
       privacyBadge:
         'গোপনীয়তা নিশ্চিত: আমরা ব্যক্তিগত চিকিৎসা তথ্য জিজ্ঞাসা করি না বা সংরক্ষণ করি না। আপনার অনুসন্ধান নিরাপদ ও নামহীন।',
       selectedSummary: 'আপনার নির্বাচন',
+    },
+    booking: {
+      scheduleWith: 'সাক্ষাৎ নির্ধারণ করুন',
+      selectDate: 'একটি তারিখ নির্বাচন করুন',
+      selectTime: 'একটি সময় নির্বাচন করুন',
+      morning: 'সকাল',
+      afternoon: 'বিকাল',
+      monthLabel: 'এপ্রিল ২০২৬',
+      weekdays: ['র', 'সো', 'ম', 'বু', 'বৃ', 'শু', 'শ'],
+      addressLabel: 'ক্লিনিকের ঠিকানা',
+      confirmPrefix: 'অ্যাপয়েন্টমেন্ট নিশ্চিত করুন:',
+      cancelBooking: 'বাতিল',
+      confirmedTitle: 'অ্যাপয়েন্টমেন্ট নিশ্চিত হয়েছে!',
+      confirmedLead: 'আপনার সব প্রস্তুত',
+      whenLabel: 'কখন',
+      done: 'সম্পন্ন',
     },
   },
   it: {
@@ -346,6 +444,22 @@ export const TRANSLATIONS: Record<LanguageCode, Strings> = {
         'Privacy garantita: Non chiediamo né salviamo condizioni mediche personali. La tua ricerca è sicura e anonima.',
       selectedSummary: 'Le tue scelte',
     },
+    booking: {
+      scheduleWith: 'Prenota con',
+      selectDate: 'Seleziona una data',
+      selectTime: 'Seleziona un orario',
+      morning: 'Mattina',
+      afternoon: 'Pomeriggio',
+      monthLabel: 'Aprile 2026',
+      weekdays: ['D', 'L', 'M', 'M', 'G', 'V', 'S'],
+      addressLabel: 'Indirizzo della clinica',
+      confirmPrefix: 'Conferma appuntamento con',
+      cancelBooking: 'Annulla',
+      confirmedTitle: 'Appuntamento confermato!',
+      confirmedLead: 'Tutto pronto con',
+      whenLabel: 'Quando',
+      done: 'Fatto',
+    },
   },
   tl: {
     back: 'Bumalik',
@@ -392,6 +506,22 @@ export const TRANSLATIONS: Record<LanguageCode, Strings> = {
       privacyBadge:
         'Garantisadong Privacy: Hindi kami nagtatanong o nag-iimbak ng personal na kondisyong medikal. Ligtas at anonimo ang iyong paghahanap.',
       selectedSummary: 'Ang iyong mga pinili',
+    },
+    booking: {
+      scheduleWith: 'Mag-iskedyul kay',
+      selectDate: 'Pumili ng Petsa',
+      selectTime: 'Pumili ng Oras',
+      morning: 'Umaga',
+      afternoon: 'Hapon',
+      monthLabel: 'Abril 2026',
+      weekdays: ['Li', 'Lu', 'Ma', 'Mi', 'Hu', 'Bi', 'Sa'],
+      addressLabel: 'Address ng klinika',
+      confirmPrefix: 'Kumpirmahin ang Appointment kay',
+      cancelBooking: 'Kanselahin',
+      confirmedTitle: 'Nakumpirma na ang Appointment!',
+      confirmedLead: 'Handa ka na kay',
+      whenLabel: 'Kailan',
+      done: 'Tapos',
     },
   },
 }

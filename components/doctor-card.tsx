@@ -1,6 +1,5 @@
 'use client'
 
-import Link from 'next/link'
 import {
   BadgeCheck,
   CalendarCheck,
@@ -30,6 +29,7 @@ export function DoctorCard({
   isFocused,
   onDirections,
   onSelect,
+  onBook,
   tone,
 }: {
   doctor: Doctor
@@ -37,6 +37,7 @@ export function DoctorCard({
   isFocused: boolean
   onDirections: () => void
   onSelect: () => void
+  onBook: () => void
   tone: number
 }) {
   return (
@@ -127,14 +128,17 @@ export function DoctorCard({
 
       {/* Actions */}
       <div className="mt-4 grid grid-cols-2 gap-3">
-        <Link
-          href="/book"
-          onClick={(e) => e.stopPropagation()}
+        <button
+          type="button"
+          onClick={(e) => {
+            e.stopPropagation()
+            onBook()
+          }}
           className="inline-flex min-h-14 items-center justify-center gap-2 rounded-xl bg-primary px-4 text-lg font-bold text-primary-foreground transition-colors hover:bg-primary/90 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-primary/40"
         >
           <CalendarCheck className="size-5 shrink-0" aria-hidden="true" />
           {strings.bookAppointment}
-        </Link>
+        </button>
         <button
           type="button"
           onClick={(e) => {
