@@ -281,6 +281,16 @@ export const CARRIER_ID_BY_NAME: Record<string, string> = {
   Healthfirst: 'healthfirst',
 }
 
+// Reverse lookup: carrier id -> display name, derived from CARRIER_ID_BY_NAME.
+export const CARRIER_NAME_BY_ID: Record<string, string> = Object.fromEntries(
+  Object.entries(CARRIER_ID_BY_NAME).map(([name, id]) => [id, name]),
+)
+
+// Resolve a doctor's accepted carrier ids into human-readable display names.
+export function carrierNames(ids: string[]): string[] {
+  return ids.map((id) => CARRIER_NAME_BY_ID[id] ?? id)
+}
+
 // Estimate the patient's co-pay from the selected plan and care type. Co-pays are
 // determined by the insurance plan (PPO/HMO/etc.), with a small specialist
 // surcharge for non-primary care. Public managed-care programs are $0.
