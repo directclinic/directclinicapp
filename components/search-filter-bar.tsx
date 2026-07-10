@@ -1,6 +1,14 @@
 'use client'
 
-import { HeartHandshake, MapPin, Search, ShieldCheck } from 'lucide-react'
+import {
+  HeartHandshake,
+  Loader2,
+  MapPin,
+  Navigation,
+  Search,
+  ShieldCheck,
+  X,
+} from 'lucide-react'
 import { BOROUGHS } from '@/lib/doctors'
 import type { Strings } from '@/lib/i18n'
 import { cn } from '@/lib/utils'
@@ -13,6 +21,10 @@ export function SearchFilterBar({
   setActiveBorough,
   insuranceLabel,
   careLabel,
+  onAddressSearch,
+  geoStatus,
+  userLocationLabel,
+  onClearLocation,
 }: {
   strings: Strings
   query: string
@@ -21,35 +33,84 @@ export function SearchFilterBar({
   setActiveBorough: (v: string) => void
   insuranceLabel?: string
   careLabel?: string
+  onAddressSearch: () => void
+  geoStatus: 'idle' | 'loading' | 'error'
+  userLocationLabel: string | null
+  onClearLocation: () => void
 }) {
+  const loading = geoStatus === 'loading'
   return (
     <div className="pointer-events-none absolute inset-x-0 top-0 z-[1000] p-4">
       <div className="pointer-events-auto mx-auto max-w-3xl space-y-3">
-        {/* Search pill */}
+        {/* Address search pill */}
         <form
-          onSubmit={(e) => e.preventDefault()}
+          onSubmit={(e) => {
+            e.preventDefault()
+            onAddressSearch()
+          }}
           className="flex items-center gap-3 rounded-full border-2 border-primary bg-card py-2 pl-5 pr-2 shadow-lg"
         >
-          <Search className="size-6 shrink-0 text-primary" aria-hidden="true" />
-          <label htmlFor="area-search" className="sr-only">
-            {strings.searchPlaceholder}
+          <MapPin className="size-6 shrink-0 text-primary" aria-hidden="true" />
+          <label htmlFor="address-search" className="sr-only">
+            {strings.addressPlaceholder}
           </label>
           <input
-            id="area-search"
+            id="address-search"
             type="search"
             value={query}
             onChange={(e) => setQuery(e.target.value)}
-            placeholder={strings.searchPlaceholder}
+            placeholder={strings.addressPlaceholder}
+            autoComplete="street-address"
             className="min-h-11 flex-1 bg-transparent text-lg text-foreground outline-none placeholder:text-muted-foreground"
           />
           <button
             type="submit"
-            className="inline-flex min-h-11 items-center rounded-full bg-primary px-5 text-lg font-bold text-primary-foreground transition-colors hover:bg-primary/90 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-primary/40"
+            disabled={loading}
+            className="inline-flex min-h-11 items-center gap-2 rounded-full bg-primary px-5 text-lg font-bold text-primary-foreground transition-colors hover:bg-primary/90 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-primary/40 disabled:opacity-60"
           >
-            <Search className="size-5 sm:hidden" aria-hidden="true" />
-            <span className="hidden sm:inline">{strings.searchPlaceholder.split(' ')[0]}</span>
+            {loading ? (
+              <Loader2 className="size-5 animate-spin" aria-hidden="true" />
+            ) : (
+              <Search className="size-5" aria-hidden="true" />
+            )}
+            <span className="hidden sm:inline">{strings.findNearby}</span>
           </button>
         </form>
+
+        {/* Location status: loading, error, or the active "near you" chip */}
+        {loading && (
+          <p
+            role="status"
+            className="inline-flex items-center gap-2 rounded-full bg-card px-4 py-2 text-base font-semibold text-foreground shadow-sm"
+          >
+            <Loader2 className="size-5 shrink-0 animate-spin text-primary" aria-hidden="true" />
+            {strings.locating}
+          </p>
+        )}
+        {geoStatus === 'error' && (
+          <p
+            role="alert"
+            className="rounded-2xl border-2 border-dashed border-primary/50 bg-card px-4 py-3 text-base font-semibold text-foreground shadow-sm"
+          >
+            {strings.addressNotFound}
+          </p>
+        )}
+        {userLocationLabel && !loading && (
+          <div className="inline-flex max-w-full items-center gap-2 rounded-full bg-primary px-4 py-2 text-base font-semibold text-primary-foreground shadow-sm">
+            <Navigation className="size-5 shrink-0" aria-hidden="true" />
+            <span className="truncate">
+              {strings.nearYouPrefix} {userLocationLabel}
+            </span>
+            <button
+              type="button"
+              onClick={onClearLocation}
+              aria-label={strings.clearLocation}
+              className="ml-1 inline-flex size-7 shrink-0 items-center justify-center rounded-full bg-primary-foreground/20 transition-colors hover:bg-primary-foreground/30 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-primary-foreground/40"
+            >
+              <X className="size-4" aria-hidden="true" />
+            </button>
+          </div>
+        )}
 
         {/* Active filter badges */}
         <div className="flex flex-wrap items-center gap-2">
