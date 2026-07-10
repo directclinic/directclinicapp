@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect } from 'react'
+import { useEffect, useRef } from 'react'
 import L from 'leaflet'
 import {
   MapContainer,
@@ -35,15 +35,27 @@ function pinIcon(active: boolean) {
   })
 }
 
-function MapController({ focused }: { focused: Doctor | null }) {
+function MapController({
+  focused,
+  markerRefs,
+}: {
+  focused: Doctor | null
+  markerRefs: React.RefObject<Record<string, L.Marker | null>>
+}) {
   const map = useMap()
   useEffect(() => {
     if (focused) {
       map.flyTo([focused.latitude, focused.longitude], 15, {
         duration: 1.1,
       })
+      // Open the matching clinic's popup once the fly-to animation settles.
+      const marker = markerRefs.current[focused.id]
+      if (marker) {
+        const timer = setTimeout(() => marker.openPopup(), 700)
+        return () => clearTimeout(timer)
+      }
     }
-  }, [focused, map])
+  }, [focused, map, markerRefs])
   return null
 }
 
@@ -51,11 +63,15 @@ export default function DoctorMap({
   doctors = DOCTORS,
   focused,
   onSelect,
+  copayLabel = 'Co-pay',
 }: {
   doctors?: Doctor[]
   focused: Doctor | null
   onSelect: (d: Doctor) => void
+  copayLabel?: string
 }) {
+  const markerRefs = useRef<Record<string, L.Marker | null>>({})
+
   return (
     <MapContainer
       center={NYC_CENTER}
@@ -68,12 +84,15 @@ export default function DoctorMap({
         attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
       />
-      <MapController focused={focused} />
+      <MapController focused={focused} markerRefs={markerRefs} />
       {doctors.map((d) => (
         <Marker
           key={d.id}
           position={[d.latitude, d.longitude]}
           icon={pinIcon(focused?.id === d.id)}
+          ref={(ref) => {
+            markerRefs.current[d.id] = ref
+          }}
           eventHandlers={{ click: () => onSelect(d) }}
         >
           <Popup>
@@ -82,6 +101,9 @@ export default function DoctorMap({
             </span>
             <span className="block text-xs text-muted-foreground">
               {d.specialty} · {d.neighborhood}
+            </span>
+            <span className="mt-1 block text-sm font-bold text-[#16a34a]">
+              {copayLabel}: ${d.copayUsd}
             </span>
           </Popup>
         </Marker>
