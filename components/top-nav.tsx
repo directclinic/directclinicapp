@@ -55,7 +55,7 @@ export function TopNav({
           <span className="flex size-11 items-center justify-center rounded-xl bg-primary text-primary-foreground">
             <Stethoscope className="size-6" aria-hidden="true" />
           </span>
-          <span className="text-xl font-bold text-foreground">NYC Care Finder</span>
+          <span className="text-xl font-bold text-foreground">Direct Clinic</span>
         </div>
       </div>
 
