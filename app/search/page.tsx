@@ -15,6 +15,7 @@ import { useAccessibility, MIN_STEP, MAX_STEP } from '@/lib/use-accessibility'
 import { TopNav } from '@/components/top-nav'
 import { SearchFilterBar } from '@/components/search-filter-bar'
 import { DoctorCard } from '@/components/doctor-card'
+import { BookingModal } from '@/components/booking-modal'
 
 // Leaflet touches `window`, so load the map only on the client.
 const DoctorMap = dynamic(() => import('@/components/doctor-map'), {
@@ -32,6 +33,8 @@ function SearchView() {
   const [query, setQuery] = useState('')
   const [activeBorough, setActiveBorough] = useState<string>('All Boroughs')
   const [focused, setFocused] = useState<Doctor | null>(null)
+  // The doctor whose booking modal is currently open (null when closed).
+  const [bookingDoctor, setBookingDoctor] = useState<Doctor | null>(null)
   const listRef = useRef<HTMLDivElement>(null)
 
   const strings = TRANSLATIONS[language]
@@ -118,6 +121,7 @@ function SearchView() {
                 isFocused={focused?.id === d.id}
                 onSelect={() => setFocused(d)}
                 onDirections={() => handleDirections(d)}
+                onBook={() => setBookingDoctor(d)}
               />
             ))}
             {doctors.length === 0 && (
@@ -152,6 +156,14 @@ function SearchView() {
           </div>
         </section>
       </div>
+
+      {bookingDoctor && (
+        <BookingModal
+          doctor={bookingDoctor}
+          strings={strings}
+          onClose={() => setBookingDoctor(null)}
+        />
+      )}
     </div>
   )
 }
