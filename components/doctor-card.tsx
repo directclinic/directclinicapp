@@ -128,7 +128,7 @@ export function DoctorCard({
       {/* Actions */}
       <div className="mt-4 grid grid-cols-2 gap-3">
         <Link
-          href="/book"
+          href={`/book?doctor=${doctor.id}`}
           onClick={(e) => e.stopPropagation()}
           className="inline-flex min-h-14 items-center justify-center gap-2 rounded-xl bg-primary px-4 text-lg font-bold text-primary-foreground transition-colors hover:bg-primary/90 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-primary/40"
         >

@@ -1,8 +1,10 @@
 'use client'
 
-import { useState } from 'react'
+import { Suspense, useState } from 'react'
 import Link from 'next/link'
+import { useSearchParams } from 'next/navigation'
 import { ChevronLeft, ChevronRight, Check } from 'lucide-react'
+import { DOCTORS } from '@/lib/doctors'
 
 // --- April 2026 calendar helpers ---------------------------------------
 const MONTH_LABEL = 'April 2026'
@@ -37,7 +39,12 @@ const LANGUAGES = [
   'Arabic',
 ]
 
-export default function BookAppointmentPage() {
+function BookAppointmentView() {
+  const searchParams = useSearchParams()
+  const doctorId = searchParams.get('doctor')
+  const doctor =
+    DOCTORS.find((d) => d.id === doctorId) ?? DOCTORS[0]
+
   const [selectedDate, setSelectedDate] = useState<number | null>(14)
   const [selectedTime, setSelectedTime] = useState<string | null>('10:00 AM')
   const [language, setLanguage] = useState('')
@@ -71,19 +78,19 @@ export default function BookAppointmentPage() {
         >
           <div className="flex flex-col gap-2">
             <h2 className="text-xl font-bold text-[#6C5287]">
-              Dr. Maria Santos, MD
+              {doctor.fullName}, {doctor.credential}
             </h2>
             <p className="text-base leading-relaxed text-[#4D6E37]">
-              82-12 37th Ave, Jackson Heights
+              {doctor.address}
             </p>
             <div className="mt-1">
               <span className="inline-flex items-center gap-1.5 rounded-full bg-[#AACF8F] px-3 py-1.5 text-sm font-semibold text-[#2f4a1f]">
                 <Check className="h-4 w-4" aria-hidden="true" />
-                Fidelis Care &mdash; $0 Co-pay Verified
+                In-Network &mdash; ${doctor.copayUsd} Co-pay Verified
               </span>
             </div>
             <p className="mt-1 text-base font-medium text-[#6C5287]">
-              General Primary Care
+              {doctor.specialty}
             </p>
           </div>
         </section>
@@ -221,7 +228,7 @@ export default function BookAppointmentPage() {
           <div className="mt-4 grid grid-cols-1 gap-4 md:grid-cols-2">
             <p className="text-base leading-relaxed text-[#4D6E37]">
               The clinic selected also has the following languages spoken at the
-              front desk: Spanish, English.
+              front desk: {doctor.languages.join(', ')}.
             </p>
             <div className="rounded-xl bg-[#AACF8F]/25 p-4">
               <p className="text-base leading-relaxed text-[#4D6E37]">
@@ -261,5 +268,19 @@ export default function BookAppointmentPage() {
         </section>
       </div>
     </main>
+  )
+}
+
+export default function BookAppointmentPage() {
+  return (
+    <Suspense
+      fallback={
+        <div className="flex min-h-dvh items-center justify-center bg-[#F7F4FA] text-lg font-medium text-[#6C5287]">
+          Loading…
+        </div>
+      }
+    >
+      <BookAppointmentView />
+    </Suspense>
   )
 }
