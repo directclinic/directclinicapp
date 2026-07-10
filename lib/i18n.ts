@@ -1,3 +1,5 @@
+import type { CareId } from '@/lib/intake'
+
 export type LanguageCode =
   | 'en'
   | 'es'
@@ -45,6 +47,23 @@ export interface Strings {
   acceptingNew: string
   reviews: string
   allBoroughs: string
+  intake: IntakeStrings
+}
+
+export interface IntakeStrings {
+  welcomeTitle: string
+  welcomeSubtitle: string
+  step1Label: string
+  step1Help: string
+  selectCarrier: string
+  planLabel: string
+  selectPlan: string
+  step2Label: string
+  step2Help: string
+  care: Record<CareId, string>
+  findButton: string
+  privacyBadge: string
+  selectedSummary: string
 }
 
 export const TRANSLATIONS: Record<LanguageCode, Strings> = {
@@ -71,6 +90,29 @@ export const TRANSLATIONS: Record<LanguageCode, Strings> = {
     acceptingNew: 'Accepting new patients',
     reviews: 'reviews',
     allBoroughs: 'All Boroughs',
+    intake: {
+      welcomeTitle: 'Find a Doctor Near You',
+      welcomeSubtitle:
+        'Answer a few quick questions and we\u2019ll show you in-network clinics with clear, upfront prices.',
+      step1Label: '1. Select Your Insurance Provider',
+      step1Help: 'Choose the company shown on your insurance card.',
+      selectCarrier: 'Choose your insurance provider',
+      planLabel: 'Select Your Plan Type',
+      selectPlan: 'Choose your plan type',
+      step2Label: '2. What type of care do you need today?',
+      step2Help: 'Tap the option that best matches your visit.',
+      care: {
+        pcp: 'General Checkup / PCP',
+        dental: 'Dental Care',
+        eye: 'Eye Exam',
+        physical: 'Physical Therapy',
+        geriatric: 'Senior Geriatric Care',
+      },
+      findButton: 'Find In-Network Clinics & See Prices',
+      privacyBadge:
+        'Privacy Guaranteed: We do not ask for or save personal medical conditions. Your search is safe and anonymous.',
+      selectedSummary: 'Your selections',
+    },
   },
   es: {
     back: 'Atrás',
@@ -95,6 +137,29 @@ export const TRANSLATIONS: Record<LanguageCode, Strings> = {
     acceptingNew: 'Acepta nuevos pacientes',
     reviews: 'reseñas',
     allBoroughs: 'Todos los distritos',
+    intake: {
+      welcomeTitle: 'Encuentre un médico cerca de usted',
+      welcomeSubtitle:
+        'Responda unas preguntas rápidas y le mostraremos clínicas en su red con precios claros y por adelantado.',
+      step1Label: '1. Seleccione su proveedor de seguro',
+      step1Help: 'Elija la compañía que aparece en su tarjeta de seguro.',
+      selectCarrier: 'Elija su proveedor de seguro',
+      planLabel: 'Seleccione su tipo de plan',
+      selectPlan: 'Elija su tipo de plan',
+      step2Label: '2. ¿Qué tipo de atención necesita hoy?',
+      step2Help: 'Toque la opción que mejor describa su visita.',
+      care: {
+        pcp: 'Chequeo general / Médico de cabecera',
+        dental: 'Atención dental',
+        eye: 'Examen de la vista',
+        physical: 'Fisioterapia',
+        geriatric: 'Atención geriátrica para adultos mayores',
+      },
+      findButton: 'Buscar clínicas en la red y ver precios',
+      privacyBadge:
+        'Privacidad garantizada: No preguntamos ni guardamos condiciones médicas personales. Su búsqueda es segura y anónima.',
+      selectedSummary: 'Sus selecciones',
+    },
   },
   zh: {
     back: '返回',
@@ -118,6 +183,29 @@ export const TRANSLATIONS: Record<LanguageCode, Strings> = {
     acceptingNew: '接受新病人',
     reviews: '則評價',
     allBoroughs: '所有區',
+    intake: {
+      welcomeTitle: '尋找附近的醫生',
+      welcomeSubtitle:
+        '回答幾條簡單問題，我哋就會為你顯示網絡內診所同清晰嘅價格。',
+      step1Label: '1. 選擇你嘅保險公司',
+      step1Help: '請選擇你保險卡上顯示嘅公司。',
+      selectCarrier: '選擇你嘅保險公司',
+      planLabel: '選擇你嘅計劃類型',
+      selectPlan: '選擇你嘅計劃類型',
+      step2Label: '2. 你今日需要邊種護理？',
+      step2Help: '揀選最符合你就診情況嘅選項。',
+      care: {
+        pcp: '一般檢查 / 家庭醫生',
+        dental: '牙科護理',
+        eye: '眼睛檢查',
+        physical: '物理治療',
+        geriatric: '長者老年護理',
+      },
+      findButton: '尋找網絡內診所並查看價格',
+      privacyBadge:
+        '私隱保證：我哋唔會詢問或儲存你嘅個人醫療狀況。你嘅搜尋安全又匿名。',
+      selectedSummary: '你嘅選擇',
+    },
   },
   ru: {
     back: 'Назад',
@@ -142,6 +230,29 @@ export const TRANSLATIONS: Record<LanguageCode, Strings> = {
     acceptingNew: 'Принимает новых пациентов',
     reviews: 'отзывов',
     allBoroughs: 'Все районы',
+    intake: {
+      welcomeTitle: 'Найдите врача рядом с вами',
+      welcomeSubtitle:
+        'Ответьте на несколько быстрых вопросов, и мы покажем вам клиники в сети с понятными ценами.',
+      step1Label: '1. Выберите вашу страховую компанию',
+      step1Help: 'Выберите компанию, указанную на вашей страховой карте.',
+      selectCarrier: 'Выберите страховую компанию',
+      planLabel: 'Выберите тип вашего плана',
+      selectPlan: 'Выберите тип плана',
+      step2Label: '2. Какая помощь вам нужна сегодня?',
+      step2Help: 'Нажмите вариант, который лучше всего подходит для вашего визита.',
+      care: {
+        pcp: 'Общий осмотр / Терапевт',
+        dental: 'Стоматология',
+        eye: 'Проверка зрения',
+        physical: 'Физиотерапия',
+        geriatric: 'Гериатрическая помощь пожилым',
+      },
+      findButton: 'Найти клиники в сети и узнать цены',
+      privacyBadge:
+        'Конфиденциальность гарантирована: Мы не спрашиваем и не сохраняем личные медицинские данные. Ваш поиск безопасен и анонимен.',
+      selectedSummary: 'Ваш выбор',
+    },
   },
   bn: {
     back: 'ফিরে যান',
@@ -165,6 +276,29 @@ export const TRANSLATIONS: Record<LanguageCode, Strings> = {
     acceptingNew: 'নতুন রোগী নিচ্ছেন',
     reviews: 'পর্যালোচনা',
     allBoroughs: 'সব বরো',
+    intake: {
+      welcomeTitle: 'আপনার কাছে একজন ডাক্তার খুঁজুন',
+      welcomeSubtitle:
+        'কয়েকটি দ্রুত প্রশ্নের উত্তর দিন, আমরা আপনাকে নেটওয়ার্কভুক্ত ক্লিনিক ও স্পষ্ট দাম দেখাব।',
+      step1Label: '১. আপনার বীমা প্রদানকারী নির্বাচন করুন',
+      step1Help: 'আপনার বীমা কার্ডে দেখানো কোম্পানিটি বেছে নিন।',
+      selectCarrier: 'আপনার বীমা প্রদানকারী বেছে নিন',
+      planLabel: 'আপনার প্ল্যানের ধরন নির্বাচন করুন',
+      selectPlan: 'আপনার প্ল্যানের ধরন বেছে নিন',
+      step2Label: '২. আজ আপনার কোন ধরনের সেবা প্রয়োজন?',
+      step2Help: 'আপনার সফরের সাথে সবচেয়ে মানানসই বিকল্পটি বেছে নিন।',
+      care: {
+        pcp: 'সাধারণ চেকআপ / প্রাথমিক ডাক্তার',
+        dental: 'দাঁতের যত্ন',
+        eye: 'চোখ পরীক্ষা',
+        physical: 'ফিজিক্যাল থেরাপি',
+        geriatric: 'প্রবীণ বয়স্কদের সেবা',
+      },
+      findButton: 'নেটওয়ার্কভুক্ত ক্লিনিক খুঁজুন ও দাম দেখুন',
+      privacyBadge:
+        'গোপনীয়তা নিশ্চিত: আমরা ব্যক্তিগত চিকিৎসা তথ্য জিজ্ঞাসা করি না বা সংরক্ষণ করি না। আপনার অনুসন্ধান নিরাপদ ও নামহীন।',
+      selectedSummary: 'আপনার নির্বাচন',
+    },
   },
   it: {
     back: 'Indietro',
@@ -189,6 +323,29 @@ export const TRANSLATIONS: Record<LanguageCode, Strings> = {
     acceptingNew: 'Accetta nuovi pazienti',
     reviews: 'recensioni',
     allBoroughs: 'Tutti i distretti',
+    intake: {
+      welcomeTitle: 'Trova un medico vicino a te',
+      welcomeSubtitle:
+        'Rispondi a poche brevi domande e ti mostreremo le cliniche in rete con prezzi chiari e trasparenti.',
+      step1Label: '1. Seleziona la tua assicurazione',
+      step1Help: 'Scegli la compagnia indicata sulla tua tessera assicurativa.',
+      selectCarrier: 'Scegli la tua assicurazione',
+      planLabel: 'Seleziona il tipo di piano',
+      selectPlan: 'Scegli il tipo di piano',
+      step2Label: '2. Di quale assistenza hai bisogno oggi?',
+      step2Help: 'Tocca l\u2019opzione che descrive meglio la tua visita.',
+      care: {
+        pcp: 'Visita generale / Medico di base',
+        dental: 'Cure dentistiche',
+        eye: 'Esame della vista',
+        physical: 'Fisioterapia',
+        geriatric: 'Assistenza geriatrica per anziani',
+      },
+      findButton: 'Trova cliniche in rete e vedi i prezzi',
+      privacyBadge:
+        'Privacy garantita: Non chiediamo né salviamo condizioni mediche personali. La tua ricerca è sicura e anonima.',
+      selectedSummary: 'Le tue scelte',
+    },
   },
   tl: {
     back: 'Bumalik',
@@ -213,5 +370,28 @@ export const TRANSLATIONS: Record<LanguageCode, Strings> = {
     acceptingNew: 'Tumatanggap ng bagong pasyente',
     reviews: 'mga review',
     allBoroughs: 'Lahat ng Borough',
+    intake: {
+      welcomeTitle: 'Maghanap ng Doktor na Malapit sa Iyo',
+      welcomeSubtitle:
+        'Sagutin ang ilang mabilis na tanong at ipapakita namin ang mga in-network na klinika na may malinaw na presyo.',
+      step1Label: '1. Piliin ang Iyong Insurance Provider',
+      step1Help: 'Piliin ang kompanyang nakasaad sa iyong insurance card.',
+      selectCarrier: 'Piliin ang iyong insurance provider',
+      planLabel: 'Piliin ang Uri ng Iyong Plan',
+      selectPlan: 'Piliin ang uri ng iyong plan',
+      step2Label: '2. Anong uri ng pangangalaga ang kailangan mo ngayon?',
+      step2Help: 'Pindutin ang opsyon na pinakaangkop sa iyong pagpapatingin.',
+      care: {
+        pcp: 'Pangkalahatang Checkup / PCP',
+        dental: 'Pangangalaga sa Ngipin',
+        eye: 'Eksaminasyon sa Mata',
+        physical: 'Physical Therapy',
+        geriatric: 'Pangangalaga sa Matatanda',
+      },
+      findButton: 'Hanapin ang In-Network na Klinika at Tingnan ang Presyo',
+      privacyBadge:
+        'Garantisadong Privacy: Hindi kami nagtatanong o nag-iimbak ng personal na kondisyong medikal. Ligtas at anonimo ang iyong paghahanap.',
+      selectedSummary: 'Ang iyong mga pinili',
+    },
   },
 }

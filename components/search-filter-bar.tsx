@@ -1,6 +1,6 @@
 'use client'
 
-import { MapPin, Search, ShieldCheck } from 'lucide-react'
+import { HeartHandshake, MapPin, Search, ShieldCheck } from 'lucide-react'
 import { BOROUGHS } from '@/lib/doctors'
 import type { Strings } from '@/lib/i18n'
 import { cn } from '@/lib/utils'
@@ -11,12 +11,16 @@ export function SearchFilterBar({
   setQuery,
   activeBorough,
   setActiveBorough,
+  insuranceLabel,
+  careLabel,
 }: {
   strings: Strings
   query: string
   setQuery: (v: string) => void
   activeBorough: string
   setActiveBorough: (v: string) => void
+  insuranceLabel?: string
+  careLabel?: string
 }) {
   return (
     <div className="pointer-events-none absolute inset-x-0 top-0 z-[1000] p-4">
@@ -51,8 +55,14 @@ export function SearchFilterBar({
         <div className="flex flex-wrap items-center gap-2">
           <span className="inline-flex items-center gap-2 rounded-full bg-success-muted px-4 py-2 text-base font-semibold text-success-muted-foreground shadow-sm">
             <ShieldCheck className="size-5 shrink-0" aria-hidden="true" />
-            {strings.insuranceFilter}
+            {insuranceLabel ?? strings.insuranceFilter}
           </span>
+          {careLabel && (
+            <span className="inline-flex items-center gap-2 rounded-full bg-accent px-4 py-2 text-base font-semibold text-accent-foreground shadow-sm">
+              <HeartHandshake className="size-5 shrink-0 text-primary" aria-hidden="true" />
+              {careLabel}
+            </span>
+          )}
           <span className="inline-flex items-center gap-2 rounded-full bg-card px-4 py-2 text-base font-semibold text-foreground shadow-sm">
             <MapPin className="size-5 shrink-0 text-primary" aria-hidden="true" />
             {strings.locationFilter}
