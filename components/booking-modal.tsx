@@ -1,23 +1,37 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import {
   CalendarCheck,
   Check,
   ChevronLeft,
   ChevronRight,
   MapPin,
+  ShieldCheck,
   Sun,
   Sunset,
   X,
 } from 'lucide-react'
-import type { Doctor } from '@/lib/doctors'
-import type { Strings } from '@/lib/i18n'
+import { carrierNames, type Doctor } from '@/lib/doctors'
+import type { LanguageCode, Strings } from '@/lib/i18n'
 import { cn } from '@/lib/utils'
 
-// April 2026: the 1st falls on a Wednesday, so 3 leading blanks.
-const LEADING_BLANKS = 3
-const DAYS_IN_MONTH = 30
+// The booking flow opens on April 2026 and users can page forward month by
+// month from there. We never allow navigating before this starting month.
+const START_YEAR = 2026
+const START_MONTH = 3 // April (0-indexed)
+
+// Map each supported UI language to a BCP-47 locale so month names format
+// natively (e.g. "abril de 2026", "2026年4月").
+const LOCALE_BY_LANGUAGE: Record<LanguageCode, string> = {
+  en: 'en-US',
+  es: 'es',
+  zh: 'zh-Hant',
+  ru: 'ru',
+  bn: 'bn',
+  it: 'it',
+  tl: 'fil',
+}
 
 type Period = 'morning' | 'afternoon'
 const TIME_SLOTS: { period: Period; time: string }[] = [
@@ -32,16 +46,69 @@ const TIME_SLOTS: { period: Period; time: string }[] = [
 export function BookingModal({
   doctor,
   strings,
+  language,
   onClose,
 }: {
   doctor: Doctor
   strings: Strings
+  language: LanguageCode
   onClose: () => void
 }) {
   const t = strings.booking
-  const [selectedDate, setSelectedDate] = useState<number>(14)
+  const locale = LOCALE_BY_LANGUAGE[language] ?? 'en-US'
+
+  // The month currently shown in the calendar grid.
+  const [viewYear, setViewYear] = useState(START_YEAR)
+  const [viewMonth, setViewMonth] = useState(START_MONTH)
+  // The chosen appointment date (defaults to April 14, 2026).
+  const [selectedDate, setSelectedDate] = useState(
+    () => new Date(START_YEAR, START_MONTH, 14),
+  )
   const [selectedTime, setSelectedTime] = useState<string>('10:00 AM')
   const [confirmed, setConfirmed] = useState(false)
+
+  // Derived calendar geometry for the month in view.
+  const leadingBlanks = new Date(viewYear, viewMonth, 1).getDay()
+  const daysInMonth = new Date(viewYear, viewMonth + 1, 0).getDate()
+  const atStartMonth = viewYear === START_YEAR && viewMonth === START_MONTH
+
+  const monthLabel = useMemo(
+    () =>
+      new Intl.DateTimeFormat(locale, {
+        month: 'long',
+        year: 'numeric',
+      }).format(new Date(viewYear, viewMonth, 1)),
+    [locale, viewYear, viewMonth],
+  )
+
+  const selectedDateLabel = useMemo(
+    () =>
+      new Intl.DateTimeFormat(locale, {
+        month: 'long',
+        day: 'numeric',
+        year: 'numeric',
+      }).format(selectedDate),
+    [locale, selectedDate],
+  )
+
+  function goToPreviousMonth() {
+    if (atStartMonth) return
+    if (viewMonth === 0) {
+      setViewYear((y) => y - 1)
+      setViewMonth(11)
+    } else {
+      setViewMonth((m) => m - 1)
+    }
+  }
+
+  function goToNextMonth() {
+    if (viewMonth === 11) {
+      setViewYear((y) => y + 1)
+      setViewMonth(0)
+    } else {
+      setViewMonth((m) => m + 1)
+    }
+  }
 
   // Close on Escape and lock body scroll while the modal is open.
   useEffect(() => {
@@ -98,8 +165,7 @@ export function BookingModal({
           <ConfirmedView
             doctor={doctor}
             strings={strings}
-            month={t.monthLabel}
-            day={selectedDate}
+            dateLabel={selectedDateLabel}
             time={selectedTime}
             onClose={onClose}
           />
@@ -115,6 +181,24 @@ export function BookingModal({
                 </span>
               </p>
 
+              {/* Accepted insurance — matches the doctor's listing on the map */}
+              <div>
+                <p className="flex items-center gap-1.5 text-lg font-bold text-foreground">
+                  <ShieldCheck className="size-5 shrink-0 text-primary" aria-hidden="true" />
+                  {strings.acceptsInsurance}
+                </p>
+                <ul className="mt-2 flex flex-wrap gap-2">
+                  {carrierNames(doctor.acceptedCarriers).map((name) => (
+                    <li
+                      key={name}
+                      className="rounded-full border-2 border-border bg-muted px-3 py-1 text-sm font-semibold text-foreground"
+                    >
+                      {name}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+
               {/* Date picker */}
               <div>
                 <h3 className="mb-3 text-xl font-bold text-foreground">
@@ -123,18 +207,24 @@ export function BookingModal({
                 <div className="mb-3 flex items-center justify-between">
                   <button
                     type="button"
-                    className="flex size-11 items-center justify-center rounded-lg border-2 border-border text-foreground transition-colors hover:bg-muted"
-                    aria-label={t.selectDate}
+                    onClick={goToPreviousMonth}
+                    disabled={atStartMonth}
+                    className="flex size-11 items-center justify-center rounded-lg border-2 border-border text-foreground transition-colors hover:bg-muted disabled:cursor-not-allowed disabled:opacity-40 disabled:hover:bg-transparent"
+                    aria-label={t.previousMonth}
                   >
                     <ChevronLeft className="size-5" aria-hidden="true" />
                   </button>
-                  <span className="text-lg font-bold text-foreground">
-                    {t.monthLabel}
+                  <span
+                    className="text-lg font-bold text-foreground"
+                    aria-live="polite"
+                  >
+                    {monthLabel}
                   </span>
                   <button
                     type="button"
+                    onClick={goToNextMonth}
                     className="flex size-11 items-center justify-center rounded-lg border-2 border-border text-foreground transition-colors hover:bg-muted"
-                    aria-label={t.selectDate}
+                    aria-label={t.nextMonth}
                   >
                     <ChevronRight className="size-5" aria-hidden="true" />
                   </button>
@@ -149,19 +239,24 @@ export function BookingModal({
                       {day}
                     </div>
                   ))}
-                  {Array.from({ length: LEADING_BLANKS }).map((_, i) => (
+                  {Array.from({ length: leadingBlanks }).map((_, i) => (
                     <div key={`blank-${i}`} aria-hidden="true" />
                   ))}
-                  {Array.from({ length: DAYS_IN_MONTH }).map((_, i) => {
+                  {Array.from({ length: daysInMonth }).map((_, i) => {
                     const day = i + 1
-                    const isSelected = selectedDate === day
+                    const isSelected =
+                      selectedDate.getFullYear() === viewYear &&
+                      selectedDate.getMonth() === viewMonth &&
+                      selectedDate.getDate() === day
                     return (
                       <button
                         key={day}
                         type="button"
-                        onClick={() => setSelectedDate(day)}
+                        onClick={() =>
+                          setSelectedDate(new Date(viewYear, viewMonth, day))
+                        }
                         aria-pressed={isSelected}
-                        aria-label={`${t.monthLabel} ${day}`}
+                        aria-label={`${monthLabel} ${day}`}
                         className={cn(
                           'mx-auto flex size-11 items-center justify-center rounded-full text-base font-semibold transition-colors',
                           isSelected
@@ -255,15 +350,13 @@ export function BookingModal({
 function ConfirmedView({
   doctor,
   strings,
-  month,
-  day,
+  dateLabel,
   time,
   onClose,
 }: {
   doctor: Doctor
   strings: Strings
-  month: string
-  day: number
+  dateLabel: string
   time: string
   onClose: () => void
 }) {
@@ -287,7 +380,7 @@ function ConfirmedView({
           {t.whenLabel}
         </p>
         <p className="text-2xl font-extrabold">
-          {month} {day} · {time}
+          {dateLabel} · {time}
         </p>
       </div>
       <button

@@ -161,6 +161,7 @@ function SearchView() {
         <BookingModal
           doctor={bookingDoctor}
           strings={strings}
+          language={language}
           onClose={() => setBookingDoctor(null)}
         />
       )}

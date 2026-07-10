@@ -4,10 +4,11 @@ import {
   BadgeCheck,
   CalendarCheck,
   MapPin,
+  ShieldCheck,
   Star,
   TrainFront,
 } from 'lucide-react'
-import type { Doctor } from '@/lib/doctors'
+import { carrierNames, type Doctor } from '@/lib/doctors'
 import type { Strings } from '@/lib/i18n'
 import { cn } from '@/lib/utils'
 
@@ -112,6 +113,24 @@ export function DoctorCard({
         <p className="mt-2 text-sm text-success-muted-foreground/90">
           {strings.priceDisclaimer}
         </p>
+      </div>
+
+      {/* Accepted insurance */}
+      <div className="mt-4">
+        <p className="flex items-center gap-1.5 text-base font-semibold text-foreground">
+          <ShieldCheck className="size-5 shrink-0 text-primary" aria-hidden="true" />
+          {strings.acceptsInsurance}
+        </p>
+        <ul className="mt-2 flex flex-wrap gap-2">
+          {carrierNames(doctor.acceptedCarriers).map((name) => (
+            <li
+              key={name}
+              className="rounded-full border-2 border-border bg-muted px-3 py-1 text-sm font-semibold text-foreground"
+            >
+              {name}
+            </li>
+          ))}
+        </ul>
       </div>
 
       {/* Languages */}
