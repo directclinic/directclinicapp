@@ -10,7 +10,10 @@
 //   latitude          double precision not null
 //   longitude         double precision not null
 //   address           text not null
+//   phone             text not null
+//   email             text not null
 //   in_network        boolean not null default false
+//   insurance_plans   text[] not null          -- specific accepted plans
 //   copay_usd         integer not null
 //   deductible_status text not null            -- "Met" | "Not met"
 //   languages         text[] not null
@@ -40,7 +43,10 @@ export interface Doctor {
   latitude: number
   longitude: number
   address: string
+  phone: string
+  email: string
   inNetwork: boolean
+  insurancePlans: string[]
   copayUsd: number
   deductibleStatus: 'Met' | 'Not met'
   languages: string[]
@@ -66,7 +72,15 @@ export const DOCTORS: Doctor[] = [
     latitude: 40.7736,
     longitude: -73.9566,
     address: '169 E 77th St, New York, NY 10075',
+    phone: '(212) 555-0177',
+    email: 'sarah.levine@uesinternalmed.example',
     inNetwork: true,
+    insurancePlans: [
+      'Blue Cross Blue Shield Medicare Advantage',
+      'Aetna Medicare Advantage',
+      'UnitedHealthcare Medicare Advantage',
+      'Original Medicare (Part B)',
+    ],
     copayUsd: 20,
     deductibleStatus: 'Met',
     languages: ['English', 'Russian'],
@@ -87,7 +101,15 @@ export const DOCTORS: Doctor[] = [
     latitude: 40.7557,
     longitude: -73.8831,
     address: '3745 82nd St, Jackson Heights, NY 11372',
+    phone: '(718) 555-0143',
+    email: 'm.rodriguez@jacksonhtsgeriatrics.example',
     inNetwork: true,
+    insurancePlans: [
+      'Blue Cross Blue Shield Medicare Advantage',
+      'Fidelis Care Medicaid Managed Care',
+      'Healthfirst Medicare Advantage',
+      'Original Medicare (Part B)',
+    ],
     copayUsd: 15,
     deductibleStatus: 'Met',
     languages: ['English', 'Spanish', 'Tagalog'],
@@ -108,7 +130,15 @@ export const DOCTORS: Doctor[] = [
     latitude: 40.6459,
     longitude: -74.0104,
     address: '813 55th St, Brooklyn, NY 11220',
+    phone: '(718) 555-0198',
+    email: 'mei.chen@sunsetparkfammed.example',
     inNetwork: true,
+    insurancePlans: [
+      'Blue Cross Blue Shield Medicare Advantage',
+      'EmblemHealth HMO',
+      'Fidelis Care Medicaid Managed Care',
+      'Cigna PPO',
+    ],
     copayUsd: 20,
     deductibleStatus: 'Met',
     languages: ['English', 'Cantonese', 'Spanish'],
@@ -129,7 +159,15 @@ export const DOCTORS: Doctor[] = [
     latitude: 40.8386,
     longitude: -73.8601,
     address: '1400 Metropolitan Ave, Bronx, NY 10462',
+    phone: '(718) 555-0121',
+    email: 'a.rahman@parkchestercardio.example',
     inNetwork: true,
+    insurancePlans: [
+      'Blue Cross Blue Shield Medicare Advantage',
+      'Aetna PPO',
+      'UnitedHealthcare Medicare Advantage',
+      'Healthfirst Medicaid Managed Care',
+    ],
     copayUsd: 35,
     deductibleStatus: 'Met',
     languages: ['English', 'Bengali'],
@@ -150,7 +188,15 @@ export const DOCTORS: Doctor[] = [
     latitude: 40.6015,
     longitude: -73.9942,
     address: '2098 86th St, Brooklyn, NY 11214',
+    phone: '(718) 555-0165',
+    email: 'g.ferraro@bensonhurstendo.example',
     inNetwork: true,
+    insurancePlans: [
+      'Blue Cross Blue Shield Medicare Advantage',
+      'Cigna HMO',
+      'Aetna Medicare Advantage',
+      'Original Medicare (Part B)',
+    ],
     copayUsd: 30,
     deductibleStatus: 'Met',
     languages: ['English', 'Italian'],
@@ -171,7 +217,15 @@ export const DOCTORS: Doctor[] = [
     latitude: 40.6437,
     longitude: -74.0736,
     address: '1 Bay St, Staten Island, NY 10301',
+    phone: '(718) 555-0189',
+    email: 'd.okonkwo@stgeorgegeriatrics.example',
     inNetwork: true,
+    insurancePlans: [
+      'Blue Cross Blue Shield Medicare Advantage',
+      'Healthfirst Medicare Advantage',
+      'Fidelis Care Medicaid Managed Care',
+      'Original Medicare (Part B)',
+    ],
     copayUsd: 15,
     deductibleStatus: 'Met',
     languages: ['English', 'Spanish'],
@@ -192,7 +246,15 @@ export const DOCTORS: Doctor[] = [
     latitude: 40.5776,
     longitude: -73.9615,
     address: '3047 Brighton 6th St, Brooklyn, NY 11235',
+    phone: '(718) 555-0154',
+    email: 'o.petrova@brightonrheum.example',
     inNetwork: true,
+    insurancePlans: [
+      'Blue Cross Blue Shield Medicare Advantage',
+      'EmblemHealth PPO',
+      'UnitedHealthcare Medicare Advantage',
+      'Original Medicare (Part B)',
+    ],
     copayUsd: 40,
     deductibleStatus: 'Met',
     languages: ['English', 'Russian'],
@@ -213,7 +275,15 @@ export const DOCTORS: Doctor[] = [
     latitude: 40.7596,
     longitude: -73.83,
     address: '136-20 38th Ave, Flushing, NY 11354',
+    phone: '(718) 555-0132',
+    email: 'robert.kim@flushingeyecare.example',
     inNetwork: true,
+    insurancePlans: [
+      'Blue Cross Blue Shield Medicare Advantage',
+      'Aetna Medicare Advantage',
+      'EmblemHealth HMO',
+      'VSP Vision Care',
+    ],
     copayUsd: 30,
     deductibleStatus: 'Met',
     languages: ['English', 'Cantonese'],
@@ -234,7 +304,15 @@ export const DOCTORS: Doctor[] = [
     latitude: 40.7465,
     longitude: -74.0014,
     address: '245 W 23rd St, New York, NY 10011',
+    phone: '(212) 555-0119',
+    email: 'j.sullivan@chelseaoptometry.example',
     inNetwork: true,
+    insurancePlans: [
+      'EmblemHealth HMO',
+      'Aetna Medicare Advantage',
+      'Fidelis Care Medicaid Managed Care',
+      'VSP Vision Care',
+    ],
     copayUsd: 25,
     deductibleStatus: 'Met',
     languages: ['English', 'Spanish'],
@@ -255,7 +333,15 @@ export const DOCTORS: Doctor[] = [
     latitude: 40.7447,
     longitude: -73.9485,
     address: '10-27 46th Rd, Long Island City, NY 11101',
+    phone: '(718) 555-0176',
+    email: 'p.nair@licsportsrehab.example',
     inNetwork: true,
+    insurancePlans: [
+      'Blue Cross Blue Shield Medicare Advantage',
+      'UnitedHealthcare PPO',
+      'Fidelis Care Medicaid Managed Care',
+      'Healthfirst Medicaid Managed Care',
+    ],
     copayUsd: 30,
     deductibleStatus: 'Met',
     languages: ['English', 'Bengali'],

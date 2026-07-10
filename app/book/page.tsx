@@ -1,8 +1,10 @@
 'use client'
 
-import { useState } from 'react'
+import { Suspense, useState } from 'react'
 import Link from 'next/link'
-import { ChevronLeft, ChevronRight, Check } from 'lucide-react'
+import { useSearchParams } from 'next/navigation'
+import { ChevronLeft, ChevronRight, Check, Phone, Mail } from 'lucide-react'
+import { DOCTORS } from '@/lib/doctors'
 
 // --- April 2026 calendar helpers ---------------------------------------
 const MONTH_LABEL = 'April 2026'
@@ -37,7 +39,12 @@ const LANGUAGES = [
   'Arabic',
 ]
 
-export default function BookAppointmentPage() {
+function BookAppointmentView() {
+  const searchParams = useSearchParams()
+  const doctorId = searchParams.get('doctor')
+  const doctor =
+    DOCTORS.find((d) => d.id === doctorId) ?? DOCTORS[0]
+
   const [selectedDate, setSelectedDate] = useState<number | null>(14)
   const [selectedTime, setSelectedTime] = useState<string | null>('10:00 AM')
   const [language, setLanguage] = useState('')
@@ -48,9 +55,9 @@ export default function BookAppointmentPage() {
       <header className="sticky top-0 z-10 border-b border-[#6C5287]/20 bg-[#F7F4FA]/95 backdrop-blur">
         <div className="mx-auto flex max-w-3xl items-center gap-4 px-4 py-3">
           <Link
-            href="/"
+            href="/search"
             className="inline-flex h-12 min-w-12 items-center gap-1 rounded-xl border border-[#6C5287]/40 px-3 text-base font-semibold text-[#6C5287] transition-colors hover:bg-white"
-            aria-label="Go back"
+            aria-label="Go back to map"
           >
             <ChevronLeft className="h-5 w-5" aria-hidden="true" />
             Back
@@ -71,20 +78,54 @@ export default function BookAppointmentPage() {
         >
           <div className="flex flex-col gap-2">
             <h2 className="text-xl font-bold text-[#6C5287]">
-              Dr. Maria Santos, MD
+              {doctor.fullName}, {doctor.credential}
             </h2>
             <p className="text-base leading-relaxed text-[#4D6E37]">
-              82-12 37th Ave, Jackson Heights
+              {doctor.address}
             </p>
             <div className="mt-1">
               <span className="inline-flex items-center gap-1.5 rounded-full bg-[#AACF8F] px-3 py-1.5 text-sm font-semibold text-[#2f4a1f]">
                 <Check className="h-4 w-4" aria-hidden="true" />
-                Fidelis Care &mdash; $0 Co-pay Verified
+                In-Network &mdash; ${doctor.copayUsd} Co-pay Verified
               </span>
             </div>
             <p className="mt-1 text-base font-medium text-[#6C5287]">
-              General Primary Care
+              {doctor.specialty}
             </p>
+            <div className="mt-2 flex flex-col gap-2 border-t border-[#6C5287]/15 pt-3">
+              <a
+                href={`tel:${doctor.phone.replace(/[^\d+]/g, '')}`}
+                className="inline-flex items-center gap-2 text-base font-medium text-[#6C5287] underline-offset-4 hover:underline"
+              >
+                <Phone className="h-4 w-4 shrink-0" aria-hidden="true" />
+                <span className="sr-only">Phone: </span>
+                {doctor.phone}
+              </a>
+              <a
+                href={`mailto:${doctor.email}`}
+                className="inline-flex items-center gap-2 break-all text-base font-medium text-[#6C5287] underline-offset-4 hover:underline"
+              >
+                <Mail className="h-4 w-4 shrink-0" aria-hidden="true" />
+                <span className="sr-only">Email: </span>
+                {doctor.email}
+              </a>
+            </div>
+            <div className="mt-2 border-t border-[#6C5287]/15 pt-3">
+              <p className="text-base font-semibold text-[#6C5287]">
+                Insurance accepted:
+              </p>
+              <ul className="mt-2 flex flex-wrap gap-2">
+                {doctor.insurancePlans.map((plan) => (
+                  <li
+                    key={plan}
+                    className="inline-flex items-center gap-1.5 rounded-full border border-[#6C5287]/30 bg-[#6C5287]/5 px-3 py-1.5 text-sm font-medium text-[#4a3860]"
+                  >
+                    <Check className="h-4 w-4 shrink-0 text-[#4D6E37]" aria-hidden="true" />
+                    {plan}
+                  </li>
+                ))}
+              </ul>
+            </div>
           </div>
         </section>
 
@@ -221,7 +262,7 @@ export default function BookAppointmentPage() {
           <div className="mt-4 grid grid-cols-1 gap-4 md:grid-cols-2">
             <p className="text-base leading-relaxed text-[#4D6E37]">
               The clinic selected also has the following languages spoken at the
-              front desk: Spanish, English.
+              front desk: {doctor.languages.join(', ')}.
             </p>
             <div className="rounded-xl bg-[#AACF8F]/25 p-4">
               <p className="text-base leading-relaxed text-[#4D6E37]">
@@ -261,5 +302,19 @@ export default function BookAppointmentPage() {
         </section>
       </div>
     </main>
+  )
+}
+
+export default function BookAppointmentPage() {
+  return (
+    <Suspense
+      fallback={
+        <div className="flex min-h-dvh items-center justify-center bg-[#F7F4FA] text-lg font-medium text-[#6C5287]">
+          Loading…
+        </div>
+      }
+    >
+      <BookAppointmentView />
+    </Suspense>
   )
 }
