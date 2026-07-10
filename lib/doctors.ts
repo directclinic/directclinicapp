@@ -10,6 +10,8 @@
 //   latitude          double precision not null
 //   longitude         double precision not null
 //   address           text not null
+//   phone             text not null
+//   email             text not null
 //   in_network        boolean not null default false
 //   copay_usd         integer not null
 //   deductible_status text not null            -- "Met" | "Not met"
@@ -36,6 +38,8 @@ export interface Doctor {
   latitude: number
   longitude: number
   address: string
+  phone: string
+  email: string
   inNetwork: boolean
   copayUsd: number
   deductibleStatus: 'Met' | 'Not met'
@@ -61,6 +65,8 @@ export const DOCTORS: Doctor[] = [
     latitude: 40.7736,
     longitude: -73.9566,
     address: '169 E 77th St, New York, NY 10075',
+    phone: '(212) 555-0177',
+    email: 'sarah.levine@uesinternalmed.example',
     inNetwork: true,
     copayUsd: 20,
     deductibleStatus: 'Met',
@@ -80,6 +86,8 @@ export const DOCTORS: Doctor[] = [
     latitude: 40.7557,
     longitude: -73.8831,
     address: '3745 82nd St, Jackson Heights, NY 11372',
+    phone: '(718) 555-0143',
+    email: 'm.rodriguez@jacksonhtsgeriatrics.example',
     inNetwork: true,
     copayUsd: 15,
     deductibleStatus: 'Met',
@@ -99,6 +107,8 @@ export const DOCTORS: Doctor[] = [
     latitude: 40.6459,
     longitude: -74.0104,
     address: '813 55th St, Brooklyn, NY 11220',
+    phone: '(718) 555-0198',
+    email: 'mei.chen@sunsetparkfammed.example',
     inNetwork: true,
     copayUsd: 20,
     deductibleStatus: 'Met',
@@ -118,6 +128,8 @@ export const DOCTORS: Doctor[] = [
     latitude: 40.8386,
     longitude: -73.8601,
     address: '1400 Metropolitan Ave, Bronx, NY 10462',
+    phone: '(718) 555-0121',
+    email: 'a.rahman@parkchestercardio.example',
     inNetwork: true,
     copayUsd: 25,
     deductibleStatus: 'Met',
@@ -137,6 +149,8 @@ export const DOCTORS: Doctor[] = [
     latitude: 40.6015,
     longitude: -73.9942,
     address: '2098 86th St, Brooklyn, NY 11214',
+    phone: '(718) 555-0165',
+    email: 'g.ferraro@bensonhurstendo.example',
     inNetwork: true,
     copayUsd: 20,
     deductibleStatus: 'Met',
@@ -156,6 +170,8 @@ export const DOCTORS: Doctor[] = [
     latitude: 40.6437,
     longitude: -74.0736,
     address: '1 Bay St, Staten Island, NY 10301',
+    phone: '(718) 555-0189',
+    email: 'd.okonkwo@stgeorgegeriatrics.example',
     inNetwork: true,
     copayUsd: 15,
     deductibleStatus: 'Met',
@@ -175,6 +191,8 @@ export const DOCTORS: Doctor[] = [
     latitude: 40.5776,
     longitude: -73.9615,
     address: '3047 Brighton 6th St, Brooklyn, NY 11235',
+    phone: '(718) 555-0154',
+    email: 'o.petrova@brightonrheum.example',
     inNetwork: true,
     copayUsd: 25,
     deductibleStatus: 'Met',
@@ -194,6 +212,8 @@ export const DOCTORS: Doctor[] = [
     latitude: 40.7596,
     longitude: -73.83,
     address: '136-20 38th Ave, Flushing, NY 11354',
+    phone: '(718) 555-0132',
+    email: 'robert.kim@flushingeyecare.example',
     inNetwork: true,
     copayUsd: 20,
     deductibleStatus: 'Met',

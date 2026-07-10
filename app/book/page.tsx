@@ -3,7 +3,7 @@
 import { Suspense, useState } from 'react'
 import Link from 'next/link'
 import { useSearchParams } from 'next/navigation'
-import { ChevronLeft, ChevronRight, Check } from 'lucide-react'
+import { ChevronLeft, ChevronRight, Check, Phone, Mail } from 'lucide-react'
 import { DOCTORS } from '@/lib/doctors'
 
 // --- April 2026 calendar helpers ---------------------------------------
@@ -92,6 +92,24 @@ function BookAppointmentView() {
             <p className="mt-1 text-base font-medium text-[#6C5287]">
               {doctor.specialty}
             </p>
+            <div className="mt-2 flex flex-col gap-2 border-t border-[#6C5287]/15 pt-3">
+              <a
+                href={`tel:${doctor.phone.replace(/[^\d+]/g, '')}`}
+                className="inline-flex items-center gap-2 text-base font-medium text-[#6C5287] underline-offset-4 hover:underline"
+              >
+                <Phone className="h-4 w-4 shrink-0" aria-hidden="true" />
+                <span className="sr-only">Phone: </span>
+                {doctor.phone}
+              </a>
+              <a
+                href={`mailto:${doctor.email}`}
+                className="inline-flex items-center gap-2 break-all text-base font-medium text-[#6C5287] underline-offset-4 hover:underline"
+              >
+                <Mail className="h-4 w-4 shrink-0" aria-hidden="true" />
+                <span className="sr-only">Email: </span>
+                {doctor.email}
+              </a>
+            </div>
           </div>
         </section>
 
