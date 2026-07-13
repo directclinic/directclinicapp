@@ -1,6 +1,7 @@
 'use server'
 
 import { redirect } from 'next/navigation'
+import { revalidatePath } from 'next/cache'
 import { createClient } from '@/lib/supabase/server'
 import { createAdminClient } from '@/lib/supabase/admin'
 
@@ -83,6 +84,44 @@ export async function setRole(role: Role) {
     redirect('/patient')
   }
   redirect('/dashboard')
+}
+
+// Persist the patient's chosen insurance (carrier + plan) on their profile.
+// Called both from the intake/starting page and the dashboard "change
+// insurance" control. Upsert covers accounts without a profile row yet.
+export async function saveInsurance(input: {
+  carrier: string
+  plan: string
+}): Promise<{ ok: true } | { ok: false; error: string }> {
+  const supabase = await createClient()
+  const {
+    data: { user },
+  } = await supabase.auth.getUser()
+
+  if (!user) return { ok: false, error: 'Please sign in to save insurance.' }
+
+  const carrier = input.carrier.trim()
+  const plan = input.plan.trim()
+  if (!carrier || !plan) {
+    return { ok: false, error: 'Please choose a carrier and a plan.' }
+  }
+
+  const { error } = await supabase.from('profiles').upsert(
+    {
+      id: user.id,
+      full_name:
+        (user.user_metadata?.full_name as string | undefined) ?? null,
+      role: 'patient',
+      insurance_carrier: carrier,
+      insurance_plan: plan,
+    },
+    { onConflict: 'id' },
+  )
+
+  if (error) return { ok: false, error: error.message }
+
+  revalidatePath('/patient')
+  return { ok: true }
 }
 
 export async function signOut() {
