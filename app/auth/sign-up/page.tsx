@@ -2,19 +2,21 @@
 
 import { useState } from 'react'
 import Link from 'next/link'
+import { useRouter } from 'next/navigation'
 import { User, Lock, Mail, ArrowRight } from 'lucide-react'
 import { createClient } from '@/lib/supabase/client'
+import { createAccount } from '@/app/actions/account'
 import { AuthShell } from '@/components/auth/auth-shell'
 import { OAuthButtons } from '@/components/auth/oauth-buttons'
 
 export default function SignUpPage() {
+  const router = useRouter()
   const [fullName, setFullName] = useState('')
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [confirm, setConfirm] = useState('')
   const [error, setError] = useState<string | null>(null)
   const [loading, setLoading] = useState(false)
-  const [sent, setSent] = useState(false)
 
   async function handleSignUp(e: React.FormEvent) {
     e.preventDefault()
@@ -28,52 +30,30 @@ export default function SignUpPage() {
       return
     }
     setLoading(true)
-    const supabase = createClient()
-    const { error } = await supabase.auth.signUp({
-      email,
-      password,
-      options: {
-        emailRedirectTo:
-          process.env.NEXT_PUBLIC_DEV_SUPABASE_REDIRECT_URL ??
-          `${window.location.origin}/auth/callback`,
-        data: { full_name: fullName },
-      },
-    })
-    if (error) {
-      setError(error.message)
+
+    // Create a pre-confirmed account server-side (no confirmation email).
+    const result = await createAccount({ email, password, fullName })
+    if (!result.ok) {
+      setError(result.error)
       setLoading(false)
       return
     }
-    setSent(true)
-    setLoading(false)
-  }
 
-  if (sent) {
-    return (
-      <AuthShell
-        title="Check your email"
-        subtitle="We sent you a confirmation link to finish creating your account."
-        footer={
-          <Link
-            href="/auth/login"
-            className="font-bold text-primary underline underline-offset-4"
-          >
-            Back to sign in
-          </Link>
-        }
-      >
-        <div className="rounded-2xl border-2 border-success/40 bg-success-muted px-5 py-6 text-center">
-          <Mail
-            className="mx-auto mb-3 size-10 text-success"
-            aria-hidden="true"
-          />
-          <p className="text-lg font-semibold text-success-muted-foreground">
-            Confirm your email, then sign in to choose whether you are a
-            patient, doctor, or clinic.
-          </p>
-        </div>
-      </AuthShell>
-    )
+    // Immediately sign the new user in and route them to role selection.
+    const supabase = createClient()
+    const { error: signInError } = await supabase.auth.signInWithPassword({
+      email: email.trim().toLowerCase(),
+      password,
+    })
+    if (signInError) {
+      // Account exists but sign-in failed — send them to the login page.
+      setError('Account created. Please sign in to continue.')
+      setLoading(false)
+      router.push('/auth/login')
+      return
+    }
+    router.push('/onboarding')
+    router.refresh()
   }
 
   return (
