@@ -60,6 +60,9 @@ export interface BookingStrings {
   monthLabel: string
   weekdays: [string, string, string, string, string, string, string]
   addressLabel: string
+  contactHeading: string
+  phoneLabel: string
+  insuranceHeading: string
   confirmPrefix: string
   cancelBooking: string
   confirmedTitle: string
@@ -140,6 +143,9 @@ export const TRANSLATIONS: Record<LanguageCode, Strings> = {
       monthLabel: 'April 2026',
       weekdays: ['S', 'M', 'T', 'W', 'T', 'F', 'S'],
       addressLabel: 'Clinic address',
+      contactHeading: 'Clinic Contact',
+      phoneLabel: 'Phone',
+      insuranceHeading: 'Insurance Accepted Here',
       confirmPrefix: 'Confirm Appointment with',
       cancelBooking: 'Cancel',
       confirmedTitle: 'Appointment Confirmed!',
@@ -203,6 +209,9 @@ export const TRANSLATIONS: Record<LanguageCode, Strings> = {
       monthLabel: 'Abril 2026',
       weekdays: ['D', 'L', 'M', 'X', 'J', 'V', 'S'],
       addressLabel: 'Dirección de la clínica',
+      contactHeading: 'Contacto de la clínica',
+      phoneLabel: 'Teléfono',
+      insuranceHeading: 'Seguros aceptados aquí',
       confirmPrefix: 'Confirmar cita con',
       cancelBooking: 'Cancelar',
       confirmedTitle: '¡Cita confirmada!',
@@ -265,6 +274,9 @@ export const TRANSLATIONS: Record<LanguageCode, Strings> = {
       monthLabel: '2026年4月',
       weekdays: ['日', '一', '二', '三', '四', '五', '六'],
       addressLabel: '診所地址',
+      contactHeading: '診所聯絡',
+      phoneLabel: '電話',
+      insuranceHeading: '此診所接受嘅保險',
       confirmPrefix: '確認預約：',
       cancelBooking: '取消',
       confirmedTitle: '預約已確認！',
@@ -328,6 +340,9 @@ export const TRANSLATIONS: Record<LanguageCode, Strings> = {
       monthLabel: 'Апрель 2026',
       weekdays: ['Вс', 'Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб'],
       addressLabel: 'Адрес клиники',
+      contactHeading: 'Контакты клиники',
+      phoneLabel: 'Телефон',
+      insuranceHeading: 'Принимаемые страховки',
       confirmPrefix: 'Подтвердить приём у',
       cancelBooking: 'Отмена',
       confirmedTitle: 'Приём подтверждён!',
@@ -370,7 +385,7 @@ export const TRANSLATIONS: Record<LanguageCode, Strings> = {
       step2Label: '২. আজ আপনার কোন ধরনের সেবা প্রয়োজন?',
       step2Help: 'আপনার সফরের সাথে সবচেয়ে মানানসই বিকল্পটি বেছে নিন।',
       care: {
-        pcp: 'সাধারণ চেকআপ / প্রাথমিক ডাক্তার',
+        pcp: 'সাধার��� চেকআপ / প্রাথমিক ডাক্তার',
         dental: 'দাঁতের যত্ন',
         eye: 'চোখ পরীক্ষা',
         physical: 'ফিজিক্যাল থেরাপি',
@@ -390,6 +405,9 @@ export const TRANSLATIONS: Record<LanguageCode, Strings> = {
       monthLabel: 'এপ্রিল ২০২৬',
       weekdays: ['র', 'সো', 'ম', 'বু', 'বৃ', 'শু', 'শ'],
       addressLabel: 'ক্লিনিকের ঠিকানা',
+      contactHeading: 'ক্লিনিকের যোগাযোগ',
+      phoneLabel: 'ফোন',
+      insuranceHeading: 'এখানে গৃহীত বীমা',
       confirmPrefix: 'অ্যাপয়েন্টমেন্ট নিশ্চিত করুন:',
       cancelBooking: 'বাতিল',
       confirmedTitle: 'অ্যাপয়েন্টমেন্ট নিশ্চিত হয়েছে!',
@@ -453,6 +471,9 @@ export const TRANSLATIONS: Record<LanguageCode, Strings> = {
       monthLabel: 'Aprile 2026',
       weekdays: ['D', 'L', 'M', 'M', 'G', 'V', 'S'],
       addressLabel: 'Indirizzo della clinica',
+      contactHeading: 'Contatto della clinica',
+      phoneLabel: 'Telefono',
+      insuranceHeading: 'Assicurazioni accettate qui',
       confirmPrefix: 'Conferma appuntamento con',
       cancelBooking: 'Annulla',
       confirmedTitle: 'Appuntamento confermato!',
@@ -516,6 +537,9 @@ export const TRANSLATIONS: Record<LanguageCode, Strings> = {
       monthLabel: 'Abril 2026',
       weekdays: ['Li', 'Lu', 'Ma', 'Mi', 'Hu', 'Bi', 'Sa'],
       addressLabel: 'Address ng klinika',
+      contactHeading: 'Kontak ng klinika',
+      phoneLabel: 'Telepono',
+      insuranceHeading: 'Mga Insurance na Tinatanggap Dito',
       confirmPrefix: 'Kumpirmahin ang Appointment kay',
       cancelBooking: 'Kanselahin',
       confirmedTitle: 'Nakumpirma na ang Appointment!',

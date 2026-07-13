@@ -22,7 +22,7 @@
 //   care_types        text[] not null          -- care categories this doctor serves
 //   accepted_carriers text[] not null          -- insurance carrier ids in-network here
 
-import type { CareId } from '@/lib/intake'
+import { INSURANCE_CARRIERS, type CareId } from '@/lib/intake'
 
 export type Borough =
   | 'Manhattan'
@@ -41,6 +41,7 @@ export interface Doctor {
   latitude: number
   longitude: number
   address: string
+  phone: string
   inNetwork: boolean
   copayUsd: number
   deductibleStatus: 'Met' | 'Not met'
@@ -67,6 +68,7 @@ export const DOCTORS: Doctor[] = [
     latitude: 40.7736,
     longitude: -73.9566,
     address: '169 E 77th St, New York, NY 10075',
+    phone: '(212) 555-0177',
     inNetwork: true,
     copayUsd: 20,
     deductibleStatus: 'Met',
@@ -88,6 +90,7 @@ export const DOCTORS: Doctor[] = [
     latitude: 40.7557,
     longitude: -73.8831,
     address: '3745 82nd St, Jackson Heights, NY 11372',
+    phone: '(718) 555-0192',
     inNetwork: true,
     copayUsd: 15,
     deductibleStatus: 'Met',
@@ -109,6 +112,7 @@ export const DOCTORS: Doctor[] = [
     latitude: 40.6459,
     longitude: -74.0104,
     address: '813 55th St, Brooklyn, NY 11220',
+    phone: '(718) 555-0143',
     inNetwork: true,
     copayUsd: 20,
     deductibleStatus: 'Met',
@@ -130,6 +134,7 @@ export const DOCTORS: Doctor[] = [
     latitude: 40.8386,
     longitude: -73.8601,
     address: '1400 Metropolitan Ave, Bronx, NY 10462',
+    phone: '(718) 555-0168',
     inNetwork: true,
     copayUsd: 35,
     deductibleStatus: 'Met',
@@ -151,6 +156,7 @@ export const DOCTORS: Doctor[] = [
     latitude: 40.6015,
     longitude: -73.9942,
     address: '2098 86th St, Brooklyn, NY 11214',
+    phone: '(718) 555-0121',
     inNetwork: true,
     copayUsd: 30,
     deductibleStatus: 'Met',
@@ -172,6 +178,7 @@ export const DOCTORS: Doctor[] = [
     latitude: 40.6437,
     longitude: -74.0736,
     address: '1 Bay St, Staten Island, NY 10301',
+    phone: '(718) 555-0184',
     inNetwork: true,
     copayUsd: 15,
     deductibleStatus: 'Met',
@@ -193,6 +200,7 @@ export const DOCTORS: Doctor[] = [
     latitude: 40.5776,
     longitude: -73.9615,
     address: '3047 Brighton 6th St, Brooklyn, NY 11235',
+    phone: '(718) 555-0139',
     inNetwork: true,
     copayUsd: 40,
     deductibleStatus: 'Met',
@@ -214,6 +222,7 @@ export const DOCTORS: Doctor[] = [
     latitude: 40.7596,
     longitude: -73.83,
     address: '136-20 38th Ave, Flushing, NY 11354',
+    phone: '(718) 555-0156',
     inNetwork: true,
     copayUsd: 30,
     deductibleStatus: 'Met',
@@ -235,6 +244,7 @@ export const DOCTORS: Doctor[] = [
     latitude: 40.7465,
     longitude: -74.0014,
     address: '245 W 23rd St, New York, NY 10011',
+    phone: '(212) 555-0110',
     inNetwork: true,
     copayUsd: 25,
     deductibleStatus: 'Met',
@@ -256,6 +266,7 @@ export const DOCTORS: Doctor[] = [
     latitude: 40.7447,
     longitude: -73.9485,
     address: '10-27 46th Rd, Long Island City, NY 11101',
+    phone: '(718) 555-0107',
     inNetwork: true,
     copayUsd: 30,
     deductibleStatus: 'Met',
@@ -268,6 +279,12 @@ export const DOCTORS: Doctor[] = [
     acceptedCarriers: ['medicaid', 'metroplus', 'healthfirst', 'bcbs', 'united'],
   },
 ]
+
+// Reverse lookup: resolve a carrier id (as stored on a doctor's acceptedCarriers)
+// back to its human-readable display name.
+export const CARRIER_NAME_BY_ID: Record<string, string> = Object.fromEntries(
+  INSURANCE_CARRIERS.map((c) => [c.id, c.name]),
+)
 
 // Slug lookup used to resolve a carrier's display name back to its id.
 export const CARRIER_ID_BY_NAME: Record<string, string> = {
