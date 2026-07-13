@@ -26,7 +26,7 @@ export default async function DashboardPage() {
 
   // Patients don't belong here; clinics/doctors do. No role -> onboarding.
   if (!profile?.role) redirect('/onboarding')
-  if (profile.role === 'patient') redirect('/intake')
+  if (profile.role === 'patient') redirect('/patient')
 
   // Fetch clinics owned by this user, plus appointments made against them.
   const [{ data: clinicsData }, { data: apptData }] = await Promise.all([

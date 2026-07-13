@@ -81,9 +81,32 @@ export async function setRole(role: Role) {
   }
 
   if (role === 'patient') {
-    redirect('/patient')
+    // New patients pick their preferred language next.
+    redirect('/onboarding/language')
   }
   redirect('/dashboard')
+}
+
+// Save (or update) the patient's preferred language on their profile so it
+// becomes their default across devices. Called from the onboarding language
+// step and the global language switcher. Fails quietly when signed out.
+export async function saveLanguage(
+  code: string,
+): Promise<{ ok: true } | { ok: false; error: string }> {
+  const supabase = await createClient()
+  const {
+    data: { user },
+  } = await supabase.auth.getUser()
+
+  if (!user) return { ok: false, error: 'Not signed in.' }
+
+  const { error } = await supabase
+    .from('profiles')
+    .update({ preferred_language: code })
+    .eq('id', user.id)
+
+  if (error) return { ok: false, error: error.message }
+  return { ok: true }
 }
 
 // Save (or update) the patient's insurance selection on their profile.

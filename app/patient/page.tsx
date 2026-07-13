@@ -3,7 +3,9 @@ import Link from 'next/link'
 import { CalendarCheck, FileText, History, Search, Stethoscope } from 'lucide-react'
 import { createClient } from '@/lib/supabase/server'
 import { AutoRefresh } from '@/components/auto-refresh'
+import { LanguageSwitcher } from '@/components/language-switcher'
 import { InsuranceCard } from '@/components/patient/insurance-card'
+import { LANGUAGES, type LanguageCode } from '@/lib/i18n'
 import {
   PatientAppointments,
   type PatientAppointment,
@@ -22,7 +24,9 @@ export default async function PatientDashboardPage() {
 
   const { data: profile } = await supabase
     .from('profiles')
-    .select('role, full_name, insurance_carrier, insurance_plan')
+    .select(
+      'role, full_name, insurance_carrier, insurance_plan, preferred_language',
+    )
     .eq('id', user.id)
     .maybeSingle()
 
@@ -72,6 +76,12 @@ export default async function PatientDashboardPage() {
   const displayName =
     profile.full_name || user.user_metadata?.full_name || user.email
 
+  const preferredLanguage: LanguageCode = LANGUAGES.some(
+    (l) => l.code === profile.preferred_language,
+  )
+    ? (profile.preferred_language as LanguageCode)
+    : 'en'
+
   const stats = [
     { label: 'Upcoming', value: upcomingCount, icon: CalendarCheck },
     { label: 'Past visits', value: pastCount, icon: History },
@@ -93,13 +103,16 @@ export default async function PatientDashboardPage() {
             Patient
           </span>
         </div>
-        <Link
-          href="/intake"
-          className="inline-flex min-h-11 items-center gap-2 rounded-xl bg-primary px-4 text-base font-bold text-primary-foreground transition-colors hover:bg-primary/90 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-primary/40"
-        >
-          <Search className="size-4 shrink-0" aria-hidden="true" />
-          Find &amp; book care
-        </Link>
+        <div className="flex items-center gap-3">
+          <LanguageSwitcher initialLanguage={preferredLanguage} />
+          <Link
+            href="/intake"
+            className="inline-flex min-h-11 items-center gap-2 rounded-xl bg-primary px-4 text-base font-bold text-primary-foreground transition-colors hover:bg-primary/90 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-primary/40"
+          >
+            <Search className="size-4 shrink-0" aria-hidden="true" />
+            Find &amp; book care
+          </Link>
+        </div>
       </header>
 
       <main className="flex-1 px-4 py-8 sm:px-6 sm:py-10">
