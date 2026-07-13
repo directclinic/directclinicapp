@@ -9,6 +9,7 @@ import {
   MapPin,
   Stethoscope,
 } from 'lucide-react'
+import type { DashboardStrings } from '@/lib/dashboard-i18n'
 import { cn } from '@/lib/utils'
 
 export interface PatientAppointment {
@@ -45,9 +46,11 @@ function startOfToday() {
 function AppointmentCard({
   appt,
   isPast,
+  t,
 }: {
   appt: PatientAppointment
   isPast: boolean
+  t: DashboardStrings
 }) {
   return (
     <li className="rounded-3xl border-2 border-border bg-card p-6 shadow-sm">
@@ -79,7 +82,7 @@ function AppointmentCard({
           )}
           {appt.reason && (
             <p className="mt-2 text-pretty text-base text-foreground">
-              <span className="font-semibold">Reason: </span>
+              <span className="font-semibold">{t.reasonLabel}</span>
               {appt.reason}
             </p>
           )}
@@ -104,7 +107,7 @@ function AppointmentCard({
               className="size-4 shrink-0 text-primary"
               aria-hidden="true"
             />
-            Doctor&apos;s note
+            {t.doctorsNote}
           </p>
           <p className="mt-1.5 whitespace-pre-line text-pretty text-base leading-relaxed text-foreground">
             {appt.doctor_note}
@@ -113,7 +116,7 @@ function AppointmentCard({
       ) : (
         isPast && (
           <p className="mt-5 border-t-2 border-border pt-4 text-base text-muted-foreground">
-            No note from the doctor yet.
+            {t.noNoteYet}
           </p>
         )
       )}
@@ -123,8 +126,10 @@ function AppointmentCard({
 
 export function PatientAppointments({
   appointments,
+  t,
 }: {
   appointments: PatientAppointment[]
+  t: DashboardStrings
 }) {
   const [tab, setTab] = useState<Tab>('upcoming')
 
@@ -157,7 +162,7 @@ export function PatientAppointments({
           )}
         >
           <CalendarCheck className="size-5 shrink-0" aria-hidden="true" />
-          Upcoming ({upcoming.length})
+          {t.upcoming} ({upcoming.length})
         </button>
         <button
           role="tab"
@@ -171,7 +176,7 @@ export function PatientAppointments({
           )}
         >
           <History className="size-5 shrink-0" aria-hidden="true" />
-          Past ({past.length})
+          {t.past} ({past.length})
         </button>
       </div>
 
@@ -183,15 +188,18 @@ export function PatientAppointments({
               aria-hidden="true"
             />
             <p className="text-lg font-semibold text-muted-foreground">
-              {tab === 'upcoming'
-                ? 'You have no upcoming appointments. Find a clinic to book your next visit.'
-                : 'No past appointments yet.'}
+              {tab === 'upcoming' ? t.noUpcoming : t.noPast}
             </p>
           </div>
         ) : (
           <ul className="space-y-4">
             {list.map((a) => (
-              <AppointmentCard key={a.id} appt={a} isPast={tab === 'past'} />
+              <AppointmentCard
+                key={a.id}
+                appt={a}
+                isPast={tab === 'past'}
+                t={t}
+              />
             ))}
           </ul>
         )}

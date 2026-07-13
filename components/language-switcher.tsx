@@ -10,13 +10,25 @@ import { cn } from '@/lib/utils'
  * Standalone language selector for pages that don't use the full IntakeHeader
  * (e.g. the patient dashboard). Changing the language persists to this device
  * and to the patient's account so it stays their default everywhere.
+ *
+ * Can run in two modes:
+ * - Uncontrolled: pass `initialLanguage` only; it owns its own accessibility
+ *   state (fine for pages with a single consumer).
+ * - Controlled: pass `language` + `setLanguage` from a parent's single
+ *   useAccessibility instance so the whole page shares one source of truth.
  */
 export function LanguageSwitcher({
   initialLanguage,
+  language: controlledLanguage,
+  setLanguage: controlledSetLanguage,
 }: {
   initialLanguage?: LanguageCode
+  language?: LanguageCode
+  setLanguage?: (code: LanguageCode) => void
 }) {
-  const { language, setLanguage } = useAccessibility(initialLanguage)
+  const fallback = useAccessibility(initialLanguage)
+  const language = controlledLanguage ?? fallback.language
+  const setLanguage = controlledSetLanguage ?? fallback.setLanguage
   const [open, setOpen] = useState(false)
   const ref = useRef<HTMLDivElement>(null)
 

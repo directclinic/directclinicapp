@@ -19,7 +19,9 @@ export function LanguagePicker({
   function handleContinue() {
     setSaving(true)
     // Language is already persisted (device + account) via setLanguage.
-    router.push('/patient')
+    // New patients go to the insurance step next so we can save their plan
+    // before they reach the dashboard.
+    router.push('/intake')
   }
 
   return (

@@ -11,14 +11,17 @@ import {
 } from 'lucide-react'
 import { INSURANCE_CARRIERS } from '@/lib/intake'
 import { saveInsurance } from '@/app/actions/account'
+import type { DashboardStrings } from '@/lib/dashboard-i18n'
 import { cn } from '@/lib/utils'
 
 export function InsuranceCard({
   carrier,
   plan,
+  t,
 }: {
   carrier: string | null
   plan: string | null
+  t: DashboardStrings
 }) {
   const router = useRouter()
   const [editing, setEditing] = useState(false)
@@ -81,11 +84,9 @@ export function InsuranceCard({
               id="insurance-heading"
               className="text-xl font-extrabold text-foreground"
             >
-              Your insurance
+              {t.yourInsurance}
             </h2>
-            <p className="text-base text-muted-foreground">
-              Used to find in-network care.
-            </p>
+            <p className="text-base text-muted-foreground">{t.usedToFind}</p>
           </div>
         </div>
 
@@ -96,7 +97,7 @@ export function InsuranceCard({
             className="inline-flex min-h-11 items-center gap-2 rounded-xl border-2 border-border bg-card px-4 text-base font-bold text-foreground transition-colors hover:border-primary hover:text-primary focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-primary/40"
           >
             <Pencil className="size-4 shrink-0" aria-hidden="true" />
-            Change
+            {t.change}
           </button>
         )}
       </div>
@@ -114,8 +115,7 @@ export function InsuranceCard({
             </div>
           ) : (
             <p className="rounded-2xl border-2 border-dashed border-border bg-muted/40 px-4 py-4 text-pretty text-base font-medium text-muted-foreground">
-              You haven&apos;t added your insurance yet. Add it so we can match
-              you with in-network doctors.
+              {t.noInsuranceYet}
             </p>
           )}
         </div>
@@ -124,7 +124,7 @@ export function InsuranceCard({
           {/* Carrier picker */}
           <div>
             <p className="mb-2 text-lg font-bold text-foreground">
-              Insurance carrier
+              {t.insuranceCarrier}
             </p>
             <div
               role="radiogroup"
@@ -172,7 +172,9 @@ export function InsuranceCard({
           {/* Plan picker */}
           {selectedCarrier && (
             <div>
-              <p className="mb-2 text-lg font-bold text-foreground">Plan</p>
+              <p className="mb-2 text-lg font-bold text-foreground">
+                {t.planWord}
+              </p>
               <div className="relative">
                 <button
                   type="button"
@@ -186,7 +188,7 @@ export function InsuranceCard({
                       : 'border-border text-muted-foreground',
                   )}
                 >
-                  {selectedPlan ?? 'Select your plan'}
+                  {selectedPlan ?? t.selectYourPlan}
                   <ChevronDown
                     className={cn(
                       'size-6 shrink-0 text-primary transition-transform',
@@ -251,7 +253,7 @@ export function InsuranceCard({
               )}
             >
               <Check className="size-5 shrink-0" aria-hidden="true" />
-              {saving ? 'Saving…' : 'Save insurance'}
+              {saving ? t.saving : t.saveInsurance}
             </button>
             <button
               type="button"
@@ -259,7 +261,7 @@ export function InsuranceCard({
               className="inline-flex min-h-12 items-center gap-2 rounded-xl border-2 border-border bg-card px-5 text-lg font-bold text-foreground transition-colors hover:border-primary hover:text-primary focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-primary/40"
             >
               <X className="size-5 shrink-0" aria-hidden="true" />
-              Cancel
+              {t.cancel}
             </button>
           </div>
         </div>
