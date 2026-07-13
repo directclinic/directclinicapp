@@ -6,6 +6,7 @@ import {
   Check,
   ChevronLeft,
   ChevronRight,
+  Loader2,
   MapPin,
   Phone,
   ShieldCheck,
@@ -58,11 +59,15 @@ export function BookingModal({
   strings,
   language,
   onClose,
+  onConfirmedClose,
 }: {
   doctor: Doctor
   strings: Strings
   language: LanguageCode
   onClose: () => void
+  // Called when the patient dismisses the *confirmed* view (Done button or the
+  // close icon). Used to send them to their dashboard after booking.
+  onConfirmedClose: () => void
 }) {
   const t = strings.booking
   const locale = LOCALE_BY_LANG[language] ?? 'en-US'
@@ -87,8 +92,9 @@ export function BookingModal({
 
   async function handleConfirm() {
     setSaveError(null)
+    // Always show a brief loading state so the tap registers as "working".
+    setSaving(true)
     if (isRegistered) {
-      setSaving(true)
       const yyyy = selected.getFullYear()
       const mm = String(selected.getMonth() + 1).padStart(2, '0')
       const dd = String(selected.getDate()).padStart(2, '0')
@@ -102,12 +108,17 @@ export function BookingModal({
         appointmentTime: selectedTime,
         reason,
       })
-      setSaving(false)
       if (!result.ok) {
+        setSaving(false)
         setSaveError(result.error)
         return
       }
+    } else {
+      // Mock (non-registered) clinics don't hit the server, so pause briefly
+      // to give the same reassuring "booking…" feedback.
+      await new Promise((resolve) => setTimeout(resolve, 700))
     }
+    setSaving(false)
     setConfirmed(true)
   }
 
@@ -189,7 +200,7 @@ export function BookingModal({
           </div>
           <button
             type="button"
-            onClick={onClose}
+            onClick={confirmed ? onConfirmedClose : onClose}
             aria-label={strings.back}
             className="flex size-12 shrink-0 items-center justify-center rounded-full bg-primary-foreground/15 text-primary-foreground transition-colors hover:bg-primary-foreground/25 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-primary-foreground/40"
           >
@@ -203,7 +214,7 @@ export function BookingModal({
             strings={strings}
             dateLabel={dateFormatter.format(selected)}
             time={selectedTime}
-            onClose={onClose}
+            onClose={onConfirmedClose}
           />
         ) : (
           <div className="flex min-h-0 flex-1 flex-col overflow-y-auto">
@@ -458,7 +469,14 @@ export function BookingModal({
                 disabled={saving}
                 className="inline-flex min-h-16 w-full items-center justify-center gap-3 rounded-2xl bg-primary px-6 text-center text-xl font-extrabold text-primary-foreground shadow-lg transition-colors hover:bg-primary/90 disabled:opacity-60 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-primary/40"
               >
-                <CalendarCheck className="size-6 shrink-0" aria-hidden="true" />
+                {saving ? (
+                  <Loader2
+                    className="size-6 shrink-0 animate-spin"
+                    aria-hidden="true"
+                  />
+                ) : (
+                  <CalendarCheck className="size-6 shrink-0" aria-hidden="true" />
+                )}
                 <span className="text-balance">
                   {saving
                     ? t.saving

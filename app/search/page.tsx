@@ -9,7 +9,7 @@ import {
   useState,
 } from 'react'
 import dynamic from 'next/dynamic'
-import { useSearchParams } from 'next/navigation'
+import { useRouter, useSearchParams } from 'next/navigation'
 import {
   DOCTORS,
   CARRIER_ID_BY_NAME,
@@ -41,6 +41,7 @@ const DoctorMap = dynamic(() => import('@/components/doctor-map'), {
 
 function SearchView() {
   const { language, setLanguage, fontStep, setFontStep } = useAccessibility()
+  const router = useRouter()
   const searchParams = useSearchParams()
   const [query, setQuery] = useState('')
   const [activeBorough, setActiveBorough] = useState<string>('All Boroughs')
@@ -287,6 +288,13 @@ function SearchView() {
           strings={strings}
           language={language}
           onClose={() => setBookingDoctor(null)}
+          onConfirmedClose={() => {
+            setBookingDoctor(null)
+            // Send the patient to their dashboard and force a fresh server
+            // render so the just-booked appointment always shows up.
+            router.push('/patient')
+            router.refresh()
+          }}
         />
       )}
     </div>
