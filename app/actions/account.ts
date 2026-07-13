@@ -59,10 +59,21 @@ export async function setRole(role: Role) {
 
   if (!user) redirect('/auth/login')
 
-  const { error } = await supabase
-    .from('profiles')
-    .update({ role })
-    .eq('id', user.id)
+  // Upsert (not update): some accounts — especially those created via the
+  // admin API — may not have a profiles row yet, in which case a plain update
+  // would affect zero rows and the role would never persist, bouncing the user
+  // back to onboarding. Upsert creates the row when missing and updates it
+  // otherwise.
+  const { error } = await supabase.from('profiles').upsert(
+    {
+      id: user.id,
+      email: user.email ?? null,
+      full_name:
+        (user.user_metadata?.full_name as string | undefined) ?? null,
+      role,
+    },
+    { onConflict: 'id' },
+  )
 
   if (error) {
     // Surface as a thrown error the client boundary can catch.
