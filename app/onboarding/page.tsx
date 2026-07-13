@@ -1,7 +1,6 @@
 import { redirect } from 'next/navigation'
 import { Stethoscope } from 'lucide-react'
 import { createClient } from '@/lib/supabase/server'
-import { signOut } from '@/app/actions/account'
 import { RolePicker } from '@/components/onboarding/role-picker'
 
 export default async function OnboardingPage() {
@@ -38,14 +37,6 @@ export default async function OnboardingPage() {
             Direct Clinic
           </span>
         </div>
-        <form action={signOut}>
-          <button
-            type="submit"
-            className="min-h-11 rounded-xl border-2 border-border bg-card px-4 text-base font-bold text-foreground transition-colors hover:border-primary hover:text-primary focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-primary/40"
-          >
-            Sign out
-          </button>
-        </form>
       </header>
 
       <main className="flex flex-1 items-center justify-center px-4 py-8 sm:py-12">

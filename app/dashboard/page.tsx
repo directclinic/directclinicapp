@@ -2,7 +2,6 @@ import { redirect } from 'next/navigation'
 import Link from 'next/link'
 import { Stethoscope, Search } from 'lucide-react'
 import { createClient } from '@/lib/supabase/server'
-import { signOut } from '@/app/actions/account'
 import { DashboardTabs } from '@/components/dashboard/dashboard-tabs'
 import type { ClinicRow } from '@/components/dashboard/clinic-list'
 import type { AppointmentRow } from '@/components/dashboard/appointments-list'
@@ -101,14 +100,6 @@ export default async function DashboardPage() {
             <Search className="size-4 shrink-0" aria-hidden="true" />
             Patient view
           </Link>
-          <form action={signOut}>
-            <button
-              type="submit"
-              className="min-h-11 rounded-xl border-2 border-border bg-card px-4 text-base font-bold text-foreground transition-colors hover:border-primary hover:text-primary focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-primary/40"
-            >
-              Sign out
-            </button>
-          </form>
         </div>
       </header>
 

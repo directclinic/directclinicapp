@@ -1,6 +1,8 @@
 import { Analytics } from '@vercel/analytics/next'
 import type { Metadata, Viewport } from 'next'
 import { Inter } from 'next/font/google'
+import { Suspense } from 'react'
+import { GlobalSignOut } from '@/components/global-sign-out'
 import './globals.css'
 
 const inter = Inter({ subsets: ['latin'], variable: '--font-inter' })
@@ -46,6 +48,9 @@ export default function RootLayout({
     <html lang="en" className={`${inter.variable} bg-background`}>
       <body className="font-sans antialiased">
         {children}
+        <Suspense fallback={null}>
+          <GlobalSignOut />
+        </Suspense>
         {process.env.NODE_ENV === 'production' && <Analytics />}
       </body>
     </html>
