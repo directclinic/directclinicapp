@@ -52,6 +52,61 @@ export interface Doctor {
   acceptingNew: boolean
   careTypes: CareId[]
   acceptedCarriers: string[]
+  // Present only for clinics registered by a doctor/clinic user in Supabase.
+  // Used to save real appointments back to the owner's dashboard.
+  clinicId?: string
+  ownerId?: string
+}
+
+// A clinic row as returned from Supabase `public.clinics`.
+export interface ClinicRecord {
+  id: string
+  owner_id: string
+  name: string
+  provider_name: string | null
+  specialty: string | null
+  care_types: string[]
+  accepted_carriers: string[]
+  neighborhood: string | null
+  borough: string | null
+  address: string
+  phone: string | null
+  latitude: number | null
+  longitude: number | null
+  languages: string[]
+  copay_usd: number | null
+  accepting_new: boolean
+}
+
+// Convert a registered Supabase clinic into the Doctor shape the search UI and
+// map already understand, so real listings appear alongside the seed data.
+export function clinicToDoctor(c: ClinicRecord): Doctor | null {
+  // Without coordinates a clinic can't be placed on the map or distance-sorted.
+  if (c.latitude == null || c.longitude == null) return null
+  return {
+    id: `clinic-${c.id}`,
+    fullName: c.provider_name || c.name,
+    credential: '',
+    specialty: c.specialty || c.name,
+    neighborhood: c.neighborhood || '',
+    borough: (c.borough as Borough) || 'Manhattan',
+    latitude: c.latitude,
+    longitude: c.longitude,
+    address: c.address,
+    phone: c.phone || '',
+    inNetwork: true,
+    copayUsd: c.copay_usd ?? 20,
+    deductibleStatus: 'Met',
+    languages: c.languages ?? [],
+    transitNote: '',
+    rating: 5,
+    reviewCount: 0,
+    acceptingNew: c.accepting_new,
+    careTypes: (c.care_types as CareId[]) ?? [],
+    acceptedCarriers: c.accepted_carriers ?? [],
+    clinicId: c.id,
+    ownerId: c.owner_id,
+  }
 }
 
 // Simulated result set from:

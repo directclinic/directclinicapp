@@ -1,6 +1,13 @@
 'use client'
 
-import { Suspense, useCallback, useMemo, useRef, useState } from 'react'
+import {
+  Suspense,
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from 'react'
 import dynamic from 'next/dynamic'
 import { useSearchParams } from 'next/navigation'
 import {
@@ -8,8 +15,11 @@ import {
   CARRIER_ID_BY_NAME,
   estimateCopay,
   distanceMiles,
+  clinicToDoctor,
+  type ClinicRecord,
   type Doctor,
 } from '@/lib/doctors'
+import { createClient } from '@/lib/supabase/client'
 import { geocodeAddress, reverseGeocode, type GeoResult } from '@/lib/geocode'
 import { TRANSLATIONS } from '@/lib/i18n'
 import { type CareId } from '@/lib/intake'
@@ -40,10 +50,33 @@ function SearchView() {
   // The searcher's geocoded address; when set, results are sorted by proximity.
   const [userLocation, setUserLocation] = useState<GeoResult | null>(null)
   const [geoStatus, setGeoStatus] = useState<'idle' | 'loading' | 'error'>('idle')
+  // Clinics registered by doctors/clinics in Supabase, merged into search.
+  const [registered, setRegistered] = useState<Doctor[]>([])
   const listRef = useRef<HTMLDivElement>(null)
   const geoAbort = useRef<AbortController | null>(null)
 
   const strings = TRANSLATIONS[language]
+
+  // Load real clinics once so patient bookings flow to their dashboards.
+  useEffect(() => {
+    let active = true
+    const supabase = createClient()
+    supabase
+      .from('clinics')
+      .select(
+        'id, owner_id, name, provider_name, specialty, care_types, accepted_carriers, neighborhood, borough, address, phone, latitude, longitude, languages, copay_usd, accepting_new',
+      )
+      .then(({ data }) => {
+        if (!active || !data) return
+        const mapped = (data as ClinicRecord[])
+          .map(clinicToDoctor)
+          .filter((d): d is Doctor => d !== null)
+        setRegistered(mapped)
+      })
+    return () => {
+      active = false
+    }
+  }, [])
 
   // Geocode the typed address (via OpenStreetMap) and store the coordinates so
   // clinics can be sorted by real-world distance from that point.
@@ -124,7 +157,9 @@ function SearchView() {
   )
 
   const doctors = useMemo(() => {
-    const filtered = DOCTORS.filter((d) => {
+    // Registered clinics first so real listings surface alongside seed data.
+    const all = [...registered, ...DOCTORS]
+    const filtered = all.filter((d) => {
       // Care type is the primary filter: only doctors who provide it are shown.
       const careOk = !care || d.careTypes.includes(care)
       // Insurance filter: when a carrier is chosen, only show in-network clinics.
@@ -159,7 +194,7 @@ function SearchView() {
       return within.length >= MIN_RESULTS ? within : filtered.slice(0, MIN_RESULTS)
     }
     return filtered
-  }, [activeBorough, care, carrierId, estimatedCopay, userLocation])
+  }, [activeBorough, care, carrierId, estimatedCopay, userLocation, registered])
 
   function handleDirections(d: Doctor) {
     setFocused(d)

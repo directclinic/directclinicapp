@@ -15,6 +15,7 @@ import {
 } from 'lucide-react'
 import { CARRIER_NAME_BY_ID, type Doctor } from '@/lib/doctors'
 import type { LanguageCode, Strings } from '@/lib/i18n'
+import { bookAppointment } from '@/app/actions/appointments'
 import { cn } from '@/lib/utils'
 
 // The calendar opens on this month and cannot page earlier than it.
@@ -71,6 +72,43 @@ export function BookingModal({
   )
   const [selectedTime, setSelectedTime] = useState<string>('10:00 AM')
   const [confirmed, setConfirmed] = useState(false)
+
+  // Patient contact info collected before confirming.
+  const [patientName, setPatientName] = useState('')
+  const [patientPhone, setPatientPhone] = useState('')
+  const [reason, setReason] = useState('')
+  const [saving, setSaving] = useState(false)
+  const [saveError, setSaveError] = useState<string | null>(null)
+
+  // Real (Supabase-registered) clinics carry a clinicId + ownerId, so their
+  // bookings are persisted to the owner's dashboard.
+  const isRegistered = Boolean(doctor.clinicId && doctor.ownerId)
+
+  async function handleConfirm() {
+    setSaveError(null)
+    if (isRegistered) {
+      setSaving(true)
+      const yyyy = selected.getFullYear()
+      const mm = String(selected.getMonth() + 1).padStart(2, '0')
+      const dd = String(selected.getDate()).padStart(2, '0')
+      const result = await bookAppointment({
+        clinicId: doctor.clinicId!,
+        clinicOwnerId: doctor.ownerId!,
+        patientName,
+        patientPhone,
+        careType: doctor.specialty,
+        appointmentDate: `${yyyy}-${mm}-${dd}`,
+        appointmentTime: selectedTime,
+        reason,
+      })
+      setSaving(false)
+      if (!result.ok) {
+        setSaveError(result.error)
+        return
+      }
+    }
+    setConfirmed(true)
+  }
 
   const leadingBlanks = new Date(viewYear, viewMonth, 1).getDay()
   const daysInMonth = new Date(viewYear, viewMonth + 1, 0).getDate()
@@ -341,18 +379,84 @@ export function BookingModal({
                   })}
                 </div>
               </div>
+
+              {/* Patient details */}
+              <div>
+                <h3 className="mb-3 text-xl font-bold text-foreground">
+                  {t.yourDetails}
+                </h3>
+                <div className="space-y-3">
+                  <div>
+                    <label
+                      htmlFor="patient-name"
+                      className="mb-1.5 block text-base font-bold text-foreground"
+                    >
+                      {t.yourNameLabel}
+                    </label>
+                    <input
+                      id="patient-name"
+                      value={patientName}
+                      onChange={(e) => setPatientName(e.target.value)}
+                      placeholder={t.yourNamePlaceholder}
+                      className="min-h-14 w-full rounded-2xl border-2 border-border bg-card px-4 text-lg text-foreground placeholder:text-muted-foreground focus:border-primary focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-primary/40"
+                    />
+                  </div>
+                  <div>
+                    <label
+                      htmlFor="patient-phone"
+                      className="mb-1.5 block text-base font-bold text-foreground"
+                    >
+                      {t.yourPhoneLabel}
+                    </label>
+                    <input
+                      id="patient-phone"
+                      value={patientPhone}
+                      onChange={(e) => setPatientPhone(e.target.value)}
+                      placeholder="(212) 555-0123"
+                      className="min-h-14 w-full rounded-2xl border-2 border-border bg-card px-4 text-lg text-foreground placeholder:text-muted-foreground focus:border-primary focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-primary/40"
+                    />
+                  </div>
+                  <div>
+                    <label
+                      htmlFor="patient-reason"
+                      className="mb-1.5 block text-base font-bold text-foreground"
+                    >
+                      {t.reasonLabel}
+                    </label>
+                    <textarea
+                      id="patient-reason"
+                      value={reason}
+                      onChange={(e) => setReason(e.target.value)}
+                      placeholder={t.reasonPlaceholder}
+                      rows={2}
+                      className="w-full rounded-2xl border-2 border-border bg-card px-4 py-3 text-lg text-foreground placeholder:text-muted-foreground focus:border-primary focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-primary/40"
+                    />
+                  </div>
+                </div>
+              </div>
             </div>
 
             {/* Sticky footer with the giant purple confirm button */}
             <div className="sticky bottom-0 flex flex-col gap-3 border-t-2 border-border bg-card px-6 py-5">
+              {saveError && (
+                <p
+                  role="alert"
+                  className="rounded-xl border-2 border-destructive/40 bg-destructive/10 px-4 py-2 text-center text-base font-semibold text-destructive"
+                >
+                  {saveError}
+                </p>
+              )}
               <button
                 type="button"
-                onClick={() => setConfirmed(true)}
-                className="inline-flex min-h-16 w-full items-center justify-center gap-3 rounded-2xl bg-primary px-6 text-center text-xl font-extrabold text-primary-foreground shadow-lg transition-colors hover:bg-primary/90 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-primary/40"
+                onClick={handleConfirm}
+                disabled={saving}
+                className="inline-flex min-h-16 w-full items-center justify-center gap-3 rounded-2xl bg-primary px-6 text-center text-xl font-extrabold text-primary-foreground shadow-lg transition-colors hover:bg-primary/90 disabled:opacity-60 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-primary/40"
               >
                 <CalendarCheck className="size-6 shrink-0" aria-hidden="true" />
                 <span className="text-balance">
-                  {t.confirmPrefix} {doctor.fullName}
+                  {saving
+                    ? t.saving
+                    : `${t.confirmPrefix} ${doctor.fullName}`}
                 </span>
               </button>
               <button

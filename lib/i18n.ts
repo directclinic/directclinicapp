@@ -76,6 +76,13 @@ export interface BookingStrings {
   confirmedLead: string
   whenLabel: string
   done: string
+  yourDetails: string
+  yourNameLabel: string
+  yourNamePlaceholder: string
+  yourPhoneLabel: string
+  reasonLabel: string
+  reasonPlaceholder: string
+  saving: string
 }
 
 export interface IntakeStrings {
@@ -166,6 +173,13 @@ export const TRANSLATIONS: Record<LanguageCode, Strings> = {
       confirmedLead: 'You\u2019re all set with',
       whenLabel: 'When',
       done: 'Done',
+      yourDetails: 'Your details',
+      yourNameLabel: 'Your full name',
+      yourNamePlaceholder: 'Jane Doe',
+      yourPhoneLabel: 'Phone number',
+      reasonLabel: 'Reason for visit (optional)',
+      reasonPlaceholder: 'Briefly describe why you need care',
+      saving: 'Booking…',
     },
   },
   es: {
@@ -239,6 +253,13 @@ export const TRANSLATIONS: Record<LanguageCode, Strings> = {
       confirmedLead: 'Todo listo con',
       whenLabel: 'Cuándo',
       done: 'Listo',
+      yourDetails: 'Sus datos',
+      yourNameLabel: 'Su nombre completo',
+      yourNamePlaceholder: 'Juana Pérez',
+      yourPhoneLabel: 'Número de teléfono',
+      reasonLabel: 'Motivo de la visita (opcional)',
+      reasonPlaceholder: 'Describa brevemente por qué necesita atención',
+      saving: 'Reservando…',
     },
   },
   zh: {
@@ -311,6 +332,13 @@ export const TRANSLATIONS: Record<LanguageCode, Strings> = {
       confirmedLead: '已為你預約',
       whenLabel: '時間',
       done: '完成',
+      yourDetails: '你嘅資料',
+      yourNameLabel: '你嘅全名',
+      yourNamePlaceholder: '陳大文',
+      yourPhoneLabel: '電話號碼',
+      reasonLabel: '就診原因（可選）',
+      reasonPlaceholder: '簡單講吓你需要咩護理',
+      saving: '預約緊…',
     },
   },
   ru: {
@@ -384,6 +412,13 @@ export const TRANSLATIONS: Record<LanguageCode, Strings> = {
       confirmedLead: 'Всё готово для приёма у',
       whenLabel: 'Когда',
       done: 'Готово',
+      yourDetails: 'Ваши данные',
+      yourNameLabel: 'Ваше полное имя',
+      yourNamePlaceholder: 'Иван Иванов',
+      yourPhoneLabel: 'Номер телефона',
+      reasonLabel: 'Причина визита (необязательно)',
+      reasonPlaceholder: 'Кратко опишите, зачем вам нужна помощь',
+      saving: 'Запись…',
     },
   },
   bn: {
@@ -393,7 +428,7 @@ export const TRANSLATIONS: Record<LanguageCode, Strings> = {
     decreaseText: 'লেখা ছোট করুন',
     increaseText: 'লেখা বড় করুন',
       searchPlaceholder: 'একটি নির্দিষ্ট এলাকা খুঁজুন',
-      addressPlaceholder: 'কাছের ক্লিনিক খুঁজতে আপনার ঠিকানা লিখুন',
+      addressPlaceholder: 'কাছের ক্লিনিক খুঁজতে আপনার ঠিকানা লি���ুন',
       useMyLocation: 'আমার অবস্থান ব্যবহার করুন',
       searchingLocation: 'আপনার ঠিকানা খোঁজা হচ্ছে…',
       locationNotFound: 'ঠিকানাটি পাওয়া যায়নি। একটি বরো বা জিপ কোড যোগ করে দেখুন।',
@@ -456,6 +491,13 @@ export const TRANSLATIONS: Record<LanguageCode, Strings> = {
       confirmedLead: 'আপনার সব প্রস্তুত',
       whenLabel: 'কখন',
       done: 'সম্পন্ন',
+      yourDetails: 'আপনার তথ্য',
+      yourNameLabel: 'আপনার পুরো নাম',
+      yourNamePlaceholder: 'জেন ডো',
+      yourPhoneLabel: 'ফোন নম্বর',
+      reasonLabel: 'ভিজিটের কারণ (ঐচ্ছিক)',
+      reasonPlaceholder: 'সংক্ষেপে লিখুন কেন আপনার সেবা প্রয়োজন',
+      saving: 'বুকিং হচ্ছে…',
     },
   },
   it: {
@@ -529,6 +571,13 @@ export const TRANSLATIONS: Record<LanguageCode, Strings> = {
       confirmedLead: 'Tutto pronto con',
       whenLabel: 'Quando',
       done: 'Fatto',
+      yourDetails: 'I tuoi dati',
+      yourNameLabel: 'Il tuo nome completo',
+      yourNamePlaceholder: 'Maria Rossi',
+      yourPhoneLabel: 'Numero di telefono',
+      reasonLabel: 'Motivo della visita (facoltativo)',
+      reasonPlaceholder: 'Descrivi brevemente perché hai bisogno di cure',
+      saving: 'Prenotazione…',
     },
   },
   tl: {
@@ -602,6 +651,13 @@ export const TRANSLATIONS: Record<LanguageCode, Strings> = {
       confirmedLead: 'Handa ka na kay',
       whenLabel: 'Kailan',
       done: 'Tapos',
+      yourDetails: 'Ang iyong detalye',
+      yourNameLabel: 'Iyong buong pangalan',
+      yourNamePlaceholder: 'Juan dela Cruz',
+      yourPhoneLabel: 'Numero ng telepono',
+      reasonLabel: 'Dahilan ng pagpapatingin (opsyonal)',
+      reasonPlaceholder: 'Maikling ilarawan kung bakit kailangan mo ng pangangalaga',
+      saving: 'Nagbu-book…',
     },
   },
 }
