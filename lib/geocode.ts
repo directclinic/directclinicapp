@@ -32,7 +32,13 @@ export async function geocodeAddress(
 
   const res = await fetch(url, {
     signal,
-    headers: { Accept: 'application/json' },
+    // Nominatim's usage policy requires an identifying User-Agent. Browsers set
+    // one automatically, but server-side fetch must send it explicitly or the
+    // request is rejected (403), which would leave clinics without coordinates.
+    headers: {
+      Accept: 'application/json',
+      'User-Agent': 'DirectClinic/1.0 (clinic finder app)',
+    },
   })
   if (!res.ok) throw new Error(`Geocoding failed (${res.status})`)
 
@@ -68,7 +74,13 @@ export async function reverseGeocode(
     }).toString()
 
   try {
-    const res = await fetch(url, { signal, headers: { Accept: 'application/json' } })
+    const res = await fetch(url, {
+      signal,
+      headers: {
+        Accept: 'application/json',
+        'User-Agent': 'DirectClinic/1.0 (clinic finder app)',
+      },
+    })
     if (!res.ok) return 'Your location'
     const data = (await res.json()) as { display_name?: string }
     return data.display_name ?? 'Your location'
