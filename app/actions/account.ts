@@ -1,6 +1,7 @@
 'use server'
 
 import { redirect } from 'next/navigation'
+import { revalidatePath } from 'next/cache'
 import { createClient } from '@/lib/supabase/server'
 import { createAdminClient } from '@/lib/supabase/admin'
 
@@ -83,6 +84,44 @@ export async function setRole(role: Role) {
     redirect('/patient')
   }
   redirect('/dashboard')
+}
+
+// Save (or update) the patient's insurance selection on their profile.
+// Upserts so it works even if a profile row is somehow missing, and keeps the
+// existing role intact via onConflict merge.
+export async function saveInsurance(input: {
+  carrier: string
+  plan: string
+}): Promise<{ ok: true } | { ok: false; error: string }> {
+  const carrier = input.carrier.trim()
+  const plan = input.plan.trim()
+
+  if (!carrier || !plan) {
+    return { ok: false, error: 'Please choose an insurance carrier and plan.' }
+  }
+
+  const supabase = await createClient()
+  const {
+    data: { user },
+  } = await supabase.auth.getUser()
+
+  if (!user) {
+    return { ok: false, error: 'Please sign in to save your insurance.' }
+  }
+
+  const { error } = await supabase
+    .from('profiles')
+    .update({
+      insurance_carrier: carrier,
+      insurance_plan: plan,
+      insurance_updated_at: new Date().toISOString(),
+    })
+    .eq('id', user.id)
+
+  if (error) return { ok: false, error: error.message }
+
+  revalidatePath('/patient')
+  return { ok: true }
 }
 
 export async function signOut() {

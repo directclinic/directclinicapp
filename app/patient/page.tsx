@@ -3,6 +3,7 @@ import Link from 'next/link'
 import { CalendarCheck, FileText, History, Search, Stethoscope } from 'lucide-react'
 import { createClient } from '@/lib/supabase/server'
 import { AutoRefresh } from '@/components/auto-refresh'
+import { InsuranceCard } from '@/components/patient/insurance-card'
 import {
   PatientAppointments,
   type PatientAppointment,
@@ -21,7 +22,7 @@ export default async function PatientDashboardPage() {
 
   const { data: profile } = await supabase
     .from('profiles')
-    .select('role, full_name')
+    .select('role, full_name, insurance_carrier, insurance_plan')
     .eq('id', user.id)
     .maybeSingle()
 
@@ -134,6 +135,11 @@ export default async function PatientDashboardPage() {
               )
             })}
           </div>
+
+          <InsuranceCard
+            carrier={profile.insurance_carrier ?? null}
+            plan={profile.insurance_plan ?? null}
+          />
 
           <PatientAppointments appointments={appointments} />
         </div>
