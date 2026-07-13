@@ -7,9 +7,32 @@ import {
   TileLayer,
   Marker,
   Popup,
+  Circle,
   useMap,
 } from 'react-leaflet'
 import { DOCTORS, NYC_CENTER, type Doctor } from '@/lib/doctors'
+import type { GeoResult } from '@/lib/geocode'
+
+// A distinct "you are here" marker (green ring with a white dot) so the
+// searcher's address stands apart from the purple clinic pins.
+function homeIcon() {
+  return L.divIcon({
+    className: 'user-home-pin',
+    html: `
+      <span style="
+        display:flex;align-items:center;justify-content:center;
+        width:26px;height:26px;transform:translate(-50%,-50%);
+      ">
+        <span style="
+          display:block;width:20px;height:20px;border-radius:9999px;
+          background:#2563eb;border:4px solid white;
+          box-shadow:0 0 0 3px rgba(37,99,235,0.35),0 2px 4px rgba(0,0,0,0.35);
+        "></span>
+      </span>`,
+    iconSize: [0, 0],
+    iconAnchor: [0, 0],
+  })
+}
 
 // Build a purple / green SVG pin as a Leaflet divIcon so we never rely on
 // the (often broken) default marker asset URLs.
@@ -59,16 +82,32 @@ function MapController({
   return null
 }
 
+// When the searcher sets an address, ease the map over to it so the nearest
+// clinics come into view around the blue "you are here" marker.
+function LocationController({ userLocation }: { userLocation: GeoResult | null }) {
+  const map = useMap()
+  useEffect(() => {
+    if (userLocation) {
+      map.flyTo([userLocation.lat, userLocation.lng], 13, { duration: 1.1 })
+    }
+  }, [userLocation, map])
+  return null
+}
+
 export default function DoctorMap({
   doctors = DOCTORS,
   focused,
   onSelect,
   copayLabel = 'Co-pay',
+  userLocation = null,
+  nearYouPrefix = 'Near',
 }: {
   doctors?: Doctor[]
   focused: Doctor | null
   onSelect: (d: Doctor) => void
   copayLabel?: string
+  userLocation?: GeoResult | null
+  nearYouPrefix?: string
 }) {
   const markerRefs = useRef<Record<string, L.Marker | null>>({})
 
@@ -85,6 +124,35 @@ export default function DoctorMap({
         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
       />
       <MapController focused={focused} markerRefs={markerRefs} />
+      <LocationController userLocation={userLocation} />
+      {userLocation && (
+        <>
+          <Circle
+            center={[userLocation.lat, userLocation.lng]}
+            radius={1600}
+            pathOptions={{
+              color: '#2563eb',
+              fillColor: '#2563eb',
+              fillOpacity: 0.08,
+              weight: 1.5,
+            }}
+          />
+          <Marker
+            position={[userLocation.lat, userLocation.lng]}
+            icon={homeIcon()}
+            zIndexOffset={1000}
+          >
+            <Popup>
+              <span className="block text-sm font-bold text-foreground">
+                {nearYouPrefix}
+              </span>
+              <span className="block text-xs text-muted-foreground">
+                {userLocation.label.split(',').slice(0, 3).join(',')}
+              </span>
+            </Popup>
+          </Marker>
+        </>
+      )}
       {doctors.map((d) => (
         <Marker
           key={d.id}
