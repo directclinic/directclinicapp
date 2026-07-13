@@ -67,7 +67,6 @@ export async function setRole(role: Role) {
   const { error } = await supabase.from('profiles').upsert(
     {
       id: user.id,
-      email: user.email ?? null,
       full_name:
         (user.user_metadata?.full_name as string | undefined) ?? null,
       role,
