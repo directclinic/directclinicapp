@@ -21,7 +21,6 @@ import {
   INSURANCE_CARRIERS,
   type CareId,
 } from '@/lib/intake'
-import { saveInsurance } from '@/app/actions/account'
 import { cn } from '@/lib/utils'
 
 const CARE_ICONS: Record<CareId, LucideIcon> = {
@@ -59,15 +58,12 @@ export function IntakeForm({ strings }: { strings: Strings }) {
 
   const ready = Boolean(carrier && plan && care)
 
-  async function handleSubmit() {
+  function handleSubmit() {
     if (!ready || !carrier || !plan || !care) {
       setAttempted(true)
       return
     }
-    // Save the chosen insurance to the patient's profile so it persists and
-    // can be edited later from the dashboard. Don't block navigation on it.
-    void saveInsurance({ carrier: carrier.name, plan })
-    // Pass the intake selections into the NYC map page query.
+    // Simulate passing the intake selections into the NYC map page query.
     const params = new URLSearchParams({
       carrier: carrier.name,
       plan,

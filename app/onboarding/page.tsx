@@ -18,7 +18,7 @@ export default async function OnboardingPage() {
     .eq('id', user.id)
     .maybeSingle()
 
-  if (profile?.role === 'patient') redirect('/patient')
+  if (profile?.role === 'patient') redirect('/intake')
   if (profile?.role === 'doctor' || profile?.role === 'clinic') {
     redirect('/dashboard')
   }
