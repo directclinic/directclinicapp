@@ -124,7 +124,7 @@ function SearchView() {
   )
 
   const doctors = useMemo(() => {
-    return DOCTORS.filter((d) => {
+    const filtered = DOCTORS.filter((d) => {
       // Care type is the primary filter: only doctors who provide it are shown.
       const careOk = !care || d.careTypes.includes(care)
       // Insurance filter: when a carrier is chosen, only show in-network clinics.
@@ -148,6 +148,17 @@ function SearchView() {
           ? (a.distanceMi ?? Infinity) - (b.distanceMi ?? Infinity)
           : b.rating - a.rating,
       )
+
+    // With an address set, narrow to clinics within a walkable/short-transit
+    // radius. If nothing falls inside it (e.g. an address at the city's edge),
+    // fall back to the nearest handful so the list is never empty.
+    if (userLocation) {
+      const RADIUS_MI = 4
+      const MIN_RESULTS = 6
+      const within = filtered.filter((d) => (d.distanceMi ?? Infinity) <= RADIUS_MI)
+      return within.length >= MIN_RESULTS ? within : filtered.slice(0, MIN_RESULTS)
+    }
+    return filtered
   }, [activeBorough, care, carrierId, estimatedCopay, userLocation])
 
   function handleDirections(d: Doctor) {
