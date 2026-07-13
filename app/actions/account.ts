@@ -70,7 +70,7 @@ export async function setRole(role: Role) {
   }
 
   if (role === 'patient') {
-    redirect('/intake')
+    redirect('/patient')
   }
   redirect('/dashboard')
 }

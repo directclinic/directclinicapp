@@ -36,7 +36,7 @@ export default async function DashboardPage() {
     supabase
       .from('appointments')
       .select(
-        'id, clinic_id, patient_name, patient_email, patient_phone, care_type, appointment_date, appointment_time, reason, status, clinics(name)',
+        'id, clinic_id, patient_name, patient_email, patient_phone, care_type, appointment_date, appointment_time, reason, status, doctor_note, clinics(name)',
       )
       .eq('clinic_owner_id', user.id)
       .order('appointment_date', { ascending: true }),
@@ -60,6 +60,7 @@ export default async function DashboardPage() {
       appointment_time: a.appointment_time,
       reason: a.reason,
       status: a.status,
+      doctor_note: a.doctor_note,
     }
   })
 

@@ -23,7 +23,7 @@ export default async function RootPage() {
   }
 
   if (profile.role === 'patient') {
-    redirect('/intake')
+    redirect('/patient')
   }
 
   // Doctors and clinics go to their clinic workspace.
