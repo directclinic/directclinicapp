@@ -2,9 +2,13 @@ import { redirect } from 'next/navigation'
 import Link from 'next/link'
 import { Stethoscope, Search } from 'lucide-react'
 import { createClient } from '@/lib/supabase/server'
+import { AutoRefresh } from '@/components/auto-refresh'
 import { DashboardTabs } from '@/components/dashboard/dashboard-tabs'
 import type { ClinicRow } from '@/components/dashboard/clinic-list'
 import type { AppointmentRow } from '@/components/dashboard/appointments-list'
+
+// Always render fresh so newly booked appointments appear on load.
+export const dynamic = 'force-dynamic'
 
 export default async function DashboardPage() {
   const supabase = await createClient()
@@ -81,6 +85,7 @@ export default async function DashboardPage() {
 
   return (
     <div className="flex min-h-dvh flex-col bg-background">
+      <AutoRefresh />
       <header className="flex flex-wrap items-center justify-between gap-3 border-b-2 border-border bg-card px-4 py-4 sm:px-6">
         <div className="flex items-center gap-2">
           <span className="flex size-11 items-center justify-center rounded-xl bg-primary text-primary-foreground">

@@ -1,5 +1,6 @@
 'use server'
 
+import { revalidatePath } from 'next/cache'
 import { createClient } from '@/lib/supabase/server'
 
 export interface BookingInput {
@@ -43,6 +44,10 @@ export async function bookAppointment(
   })
 
   if (error) return { ok: false, error: error.message }
+
+  // Refresh both dashboards so the new booking shows up right away.
+  revalidatePath('/dashboard')
+  revalidatePath('/patient')
   return { ok: true }
 }
 
@@ -72,5 +77,9 @@ export async function saveDoctorNote(
     .eq('clinic_owner_id', user.id)
 
   if (error) return { ok: false, error: error.message }
+
+  // Patient dashboard reads these notes; refresh it and the doctor view.
+  revalidatePath('/patient')
+  revalidatePath('/dashboard')
   return { ok: true }
 }

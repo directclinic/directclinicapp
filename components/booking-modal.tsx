@@ -18,9 +18,12 @@ import type { LanguageCode, Strings } from '@/lib/i18n'
 import { bookAppointment } from '@/app/actions/appointments'
 import { cn } from '@/lib/utils'
 
-// The calendar opens on this month and cannot page earlier than it.
-const BASE_YEAR = 2026
-const BASE_MONTH = 3 // April (0-indexed)
+// The calendar opens on the current month and cannot page earlier than it.
+const NOW = new Date()
+const BASE_YEAR = NOW.getFullYear()
+const BASE_MONTH = NOW.getMonth() // current month (0-indexed)
+// Midnight today, used to disable any date before today.
+const TODAY = new Date(BASE_YEAR, BASE_MONTH, NOW.getDate())
 // How many months forward the user may browse.
 const MAX_MONTHS_AHEAD = 11
 
@@ -45,7 +48,7 @@ const TIME_SLOTS: { period: Period; time: string }[] = [
   { period: 'afternoon', time: '3:30 PM' },
 ]
 
-// Total number of months from the base month (April 2026), used to clamp paging.
+// Total number of months from the current month, used to clamp paging.
 function monthOffset(year: number, month: number) {
   return (year - BASE_YEAR) * 12 + (month - BASE_MONTH)
 }
@@ -67,9 +70,7 @@ export function BookingModal({
   // The visible month and the currently selected calendar date.
   const [viewYear, setViewYear] = useState(BASE_YEAR)
   const [viewMonth, setViewMonth] = useState(BASE_MONTH)
-  const [selected, setSelected] = useState<Date>(
-    () => new Date(BASE_YEAR, BASE_MONTH, 14),
-  )
+  const [selected, setSelected] = useState<Date>(() => new Date(TODAY))
   const [selectedTime, setSelectedTime] = useState<string>('10:00 AM')
   const [confirmed, setConfirmed] = useState(false)
 
@@ -305,24 +306,29 @@ export function BookingModal({
                   ))}
                   {Array.from({ length: daysInMonth }).map((_, i) => {
                     const day = i + 1
+                    const dayDate = new Date(viewYear, viewMonth, day)
                     const isSelected =
                       selected.getFullYear() === viewYear &&
                       selected.getMonth() === viewMonth &&
                       selected.getDate() === day
+                    // Any date before today is blocked from selection.
+                    const isPast = dayDate < TODAY
                     return (
                       <button
                         key={day}
                         type="button"
-                        onClick={() => setSelected(new Date(viewYear, viewMonth, day))}
+                        disabled={isPast}
+                        onClick={() => setSelected(dayDate)}
                         aria-pressed={isSelected}
-                        aria-label={dateFormatter.format(
-                          new Date(viewYear, viewMonth, day),
-                        )}
+                        aria-disabled={isPast}
+                        aria-label={dateFormatter.format(dayDate)}
                         className={cn(
                           'mx-auto flex size-11 items-center justify-center rounded-full text-base font-semibold transition-colors',
-                          isSelected
-                            ? 'bg-primary text-primary-foreground'
-                            : 'text-foreground hover:bg-muted',
+                          isPast
+                            ? 'cursor-not-allowed text-muted-foreground/40 line-through'
+                            : isSelected
+                              ? 'bg-primary text-primary-foreground'
+                              : 'text-foreground hover:bg-muted',
                         )}
                       >
                         {day}
