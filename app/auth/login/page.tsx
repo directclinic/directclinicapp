@@ -50,7 +50,6 @@ export default function LoginPage() {
       <OAuthButtons
         labels={{
           google: 'Continue with Google',
-          apple: 'Continue with Apple',
           or: 'or',
         }}
       />
