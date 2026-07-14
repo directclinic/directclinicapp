@@ -6,6 +6,7 @@ import {
   Check,
   ChevronLeft,
   ChevronRight,
+  Loader2,
   MapPin,
   Phone,
   ShieldCheck,
@@ -18,9 +19,12 @@ import type { LanguageCode, Strings } from '@/lib/i18n'
 import { bookAppointment } from '@/app/actions/appointments'
 import { cn } from '@/lib/utils'
 
-// The calendar opens on this month and cannot page earlier than it.
-const BASE_YEAR = 2026
-const BASE_MONTH = 3 // April (0-indexed)
+// The calendar opens on the current month and cannot page earlier than it.
+const NOW = new Date()
+const BASE_YEAR = NOW.getFullYear()
+const BASE_MONTH = NOW.getMonth() // current month (0-indexed)
+// Midnight today, used to disable any date before today.
+const TODAY = new Date(BASE_YEAR, BASE_MONTH, NOW.getDate())
 // How many months forward the user may browse.
 const MAX_MONTHS_AHEAD = 11
 
@@ -45,7 +49,7 @@ const TIME_SLOTS: { period: Period; time: string }[] = [
   { period: 'afternoon', time: '3:30 PM' },
 ]
 
-// Total number of months from the base month (April 2026), used to clamp paging.
+// Total number of months from the current month, used to clamp paging.
 function monthOffset(year: number, month: number) {
   return (year - BASE_YEAR) * 12 + (month - BASE_MONTH)
 }
@@ -55,11 +59,15 @@ export function BookingModal({
   strings,
   language,
   onClose,
+  onConfirmedClose,
 }: {
   doctor: Doctor
   strings: Strings
   language: LanguageCode
   onClose: () => void
+  // Called when the patient dismisses the *confirmed* view (Done button or the
+  // close icon). Used to send them to their dashboard after booking.
+  onConfirmedClose: () => void
 }) {
   const t = strings.booking
   const locale = LOCALE_BY_LANG[language] ?? 'en-US'
@@ -67,9 +75,7 @@ export function BookingModal({
   // The visible month and the currently selected calendar date.
   const [viewYear, setViewYear] = useState(BASE_YEAR)
   const [viewMonth, setViewMonth] = useState(BASE_MONTH)
-  const [selected, setSelected] = useState<Date>(
-    () => new Date(BASE_YEAR, BASE_MONTH, 14),
-  )
+  const [selected, setSelected] = useState<Date>(() => new Date(TODAY))
   const [selectedTime, setSelectedTime] = useState<string>('10:00 AM')
   const [confirmed, setConfirmed] = useState(false)
 
@@ -86,8 +92,9 @@ export function BookingModal({
 
   async function handleConfirm() {
     setSaveError(null)
+    // Always show a brief loading state so the tap registers as "working".
+    setSaving(true)
     if (isRegistered) {
-      setSaving(true)
       const yyyy = selected.getFullYear()
       const mm = String(selected.getMonth() + 1).padStart(2, '0')
       const dd = String(selected.getDate()).padStart(2, '0')
@@ -101,12 +108,17 @@ export function BookingModal({
         appointmentTime: selectedTime,
         reason,
       })
-      setSaving(false)
       if (!result.ok) {
+        setSaving(false)
         setSaveError(result.error)
         return
       }
+    } else {
+      // Mock (non-registered) clinics don't hit the server, so pause briefly
+      // to give the same reassuring "booking…" feedback.
+      await new Promise((resolve) => setTimeout(resolve, 700))
     }
+    setSaving(false)
     setConfirmed(true)
   }
 
@@ -188,7 +200,7 @@ export function BookingModal({
           </div>
           <button
             type="button"
-            onClick={onClose}
+            onClick={confirmed ? onConfirmedClose : onClose}
             aria-label={strings.back}
             className="flex size-12 shrink-0 items-center justify-center rounded-full bg-primary-foreground/15 text-primary-foreground transition-colors hover:bg-primary-foreground/25 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-primary-foreground/40"
           >
@@ -202,7 +214,7 @@ export function BookingModal({
             strings={strings}
             dateLabel={dateFormatter.format(selected)}
             time={selectedTime}
-            onClose={onClose}
+            onClose={onConfirmedClose}
           />
         ) : (
           <div className="flex min-h-0 flex-1 flex-col overflow-y-auto">
@@ -305,24 +317,29 @@ export function BookingModal({
                   ))}
                   {Array.from({ length: daysInMonth }).map((_, i) => {
                     const day = i + 1
+                    const dayDate = new Date(viewYear, viewMonth, day)
                     const isSelected =
                       selected.getFullYear() === viewYear &&
                       selected.getMonth() === viewMonth &&
                       selected.getDate() === day
+                    // Any date before today is blocked from selection.
+                    const isPast = dayDate < TODAY
                     return (
                       <button
                         key={day}
                         type="button"
-                        onClick={() => setSelected(new Date(viewYear, viewMonth, day))}
+                        disabled={isPast}
+                        onClick={() => setSelected(dayDate)}
                         aria-pressed={isSelected}
-                        aria-label={dateFormatter.format(
-                          new Date(viewYear, viewMonth, day),
-                        )}
+                        aria-disabled={isPast}
+                        aria-label={dateFormatter.format(dayDate)}
                         className={cn(
                           'mx-auto flex size-11 items-center justify-center rounded-full text-base font-semibold transition-colors',
-                          isSelected
-                            ? 'bg-primary text-primary-foreground'
-                            : 'text-foreground hover:bg-muted',
+                          isPast
+                            ? 'cursor-not-allowed text-muted-foreground/40 line-through'
+                            : isSelected
+                              ? 'bg-primary text-primary-foreground'
+                              : 'text-foreground hover:bg-muted',
                         )}
                       >
                         {day}
@@ -452,7 +469,14 @@ export function BookingModal({
                 disabled={saving}
                 className="inline-flex min-h-16 w-full items-center justify-center gap-3 rounded-2xl bg-primary px-6 text-center text-xl font-extrabold text-primary-foreground shadow-lg transition-colors hover:bg-primary/90 disabled:opacity-60 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-primary/40"
               >
-                <CalendarCheck className="size-6 shrink-0" aria-hidden="true" />
+                {saving ? (
+                  <Loader2
+                    className="size-6 shrink-0 animate-spin"
+                    aria-hidden="true"
+                  />
+                ) : (
+                  <CalendarCheck className="size-6 shrink-0" aria-hidden="true" />
+                )}
                 <span className="text-balance">
                   {saving
                     ? t.saving

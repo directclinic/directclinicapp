@@ -7,6 +7,7 @@ const PROTECTED_PREFIXES = [
   '/search',
   '/intake',
   '/dashboard',
+  '/patient',
   '/clinic',
 ]
 

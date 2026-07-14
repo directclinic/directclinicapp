@@ -2,10 +2,13 @@ import { redirect } from 'next/navigation'
 import Link from 'next/link'
 import { Stethoscope, Search } from 'lucide-react'
 import { createClient } from '@/lib/supabase/server'
-import { signOut } from '@/app/actions/account'
+import { AutoRefresh } from '@/components/auto-refresh'
 import { DashboardTabs } from '@/components/dashboard/dashboard-tabs'
 import type { ClinicRow } from '@/components/dashboard/clinic-list'
 import type { AppointmentRow } from '@/components/dashboard/appointments-list'
+
+// Always render fresh so newly booked appointments appear on load.
+export const dynamic = 'force-dynamic'
 
 export default async function DashboardPage() {
   const supabase = await createClient()
@@ -23,7 +26,7 @@ export default async function DashboardPage() {
 
   // Patients don't belong here; clinics/doctors do. No role -> onboarding.
   if (!profile?.role) redirect('/onboarding')
-  if (profile.role === 'patient') redirect('/intake')
+  if (profile.role === 'patient') redirect('/patient')
 
   // Fetch clinics owned by this user, plus appointments made against them.
   const [{ data: clinicsData }, { data: apptData }] = await Promise.all([
@@ -37,7 +40,7 @@ export default async function DashboardPage() {
     supabase
       .from('appointments')
       .select(
-        'id, clinic_id, patient_name, patient_email, patient_phone, care_type, appointment_date, appointment_time, reason, status, clinics(name)',
+        'id, clinic_id, patient_name, patient_email, patient_phone, care_type, appointment_date, appointment_time, reason, status, doctor_note, clinics(name)',
       )
       .eq('clinic_owner_id', user.id)
       .order('appointment_date', { ascending: true }),
@@ -61,6 +64,7 @@ export default async function DashboardPage() {
       appointment_time: a.appointment_time,
       reason: a.reason,
       status: a.status,
+      doctor_note: a.doctor_note,
     }
   })
 
@@ -81,6 +85,7 @@ export default async function DashboardPage() {
 
   return (
     <div className="flex min-h-dvh flex-col bg-background">
+      <AutoRefresh />
       <header className="flex flex-wrap items-center justify-between gap-3 border-b-2 border-border bg-card px-4 py-4 sm:px-6">
         <div className="flex items-center gap-2">
           <span className="flex size-11 items-center justify-center rounded-xl bg-primary text-primary-foreground">
@@ -101,14 +106,6 @@ export default async function DashboardPage() {
             <Search className="size-4 shrink-0" aria-hidden="true" />
             Patient view
           </Link>
-          <form action={signOut}>
-            <button
-              type="submit"
-              className="min-h-11 rounded-xl border-2 border-border bg-card px-4 text-base font-bold text-foreground transition-colors hover:border-primary hover:text-primary focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-primary/40"
-            >
-              Sign out
-            </button>
-          </form>
         </div>
       </header>
 

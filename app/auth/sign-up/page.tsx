@@ -75,7 +75,6 @@ export default function SignUpPage() {
       <OAuthButtons
         labels={{
           google: 'Sign up with Google',
-          apple: 'Sign up with Apple',
           or: 'or',
         }}
       />

@@ -32,38 +32,25 @@ function GoogleIcon() {
   )
 }
 
-function AppleIcon() {
-  return (
-    <svg
-      className="size-6 shrink-0"
-      viewBox="0 0 24 24"
-      fill="currentColor"
-      aria-hidden="true"
-    >
-      <path d="M17.05 12.54c-.02-2.06 1.68-3.05 1.76-3.1-.96-1.4-2.45-1.6-2.99-1.62-1.27-.13-2.48.75-3.13.75-.64 0-1.64-.73-2.7-.71-1.39.02-2.67.81-3.38 2.05-1.44 2.5-.37 6.2 1.03 8.23.69.99 1.5 2.1 2.57 2.06 1.03-.04 1.42-.66 2.67-.66 1.24 0 1.6.66 2.69.64 1.11-.02 1.81-1 2.49-2 .78-1.15 1.1-2.26 1.12-2.32-.02-.01-2.15-.82-2.17-3.26ZM15.0 6.28c.57-.69.95-1.65.85-2.6-.82.03-1.81.54-2.4 1.23-.53.61-.99 1.58-.87 2.51.91.07 1.85-.46 2.42-1.14Z" />
-    </svg>
-  )
-}
-
 export function OAuthButtons({
   labels,
 }: {
-  labels: { google: string; apple: string; or: string }
+  labels: { google: string; or: string }
 }) {
-  const [loading, setLoading] = useState<null | 'google' | 'apple'>(null)
+  const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
 
-  async function signInWith(provider: 'google' | 'apple') {
+  async function signInWithGoogle() {
     setError(null)
-    setLoading(provider)
+    setLoading(true)
     const supabase = createClient()
     const { error } = await supabase.auth.signInWithOAuth({
-      provider,
+      provider: 'google',
       options: { redirectTo: REDIRECT },
     })
     if (error) {
       setError(error.message)
-      setLoading(null)
+      setLoading(false)
     }
   }
 
@@ -71,21 +58,12 @@ export function OAuthButtons({
     <div className="space-y-3">
       <button
         type="button"
-        onClick={() => signInWith('google')}
-        disabled={loading !== null}
+        onClick={signInWithGoogle}
+        disabled={loading}
         className="flex min-h-14 w-full items-center justify-center gap-3 rounded-2xl border-2 border-border bg-card px-5 text-lg font-bold text-foreground transition-colors hover:border-primary hover:bg-accent disabled:opacity-50 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-primary/40"
       >
         <GoogleIcon />
-        {loading === 'google' ? '…' : labels.google}
-      </button>
-      <button
-        type="button"
-        onClick={() => signInWith('apple')}
-        disabled={loading !== null}
-        className="flex min-h-14 w-full items-center justify-center gap-3 rounded-2xl border-2 border-foreground bg-foreground px-5 text-lg font-bold text-background transition-colors hover:opacity-90 disabled:opacity-50 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-primary/40"
-      >
-        <AppleIcon />
-        {loading === 'apple' ? '…' : labels.apple}
+        {loading ? '…' : labels.google}
       </button>
 
       {error && (
