@@ -15,7 +15,7 @@ import {
   type LucideIcon,
 } from 'lucide-react'
 import { TRANSLATIONS, type LanguageCode } from '@/lib/i18n'
-import { CARE_OPTIONS, CARE_DESCRIPTIONS, type CareId } from '@/lib/intake'
+import { CARE_OPTIONS, type CareId } from '@/lib/intake'
 import { useAccessibility } from '@/lib/use-accessibility'
 import { IntakeHeader } from '@/components/intake-header'
 import { cn } from '@/lib/utils'
@@ -65,7 +65,11 @@ export function TreatmentStep({
 
       <main className="flex-1 px-4 py-8 sm:py-12">
         <div className="mx-auto mb-8 max-w-3xl text-center">
-          <p className="mb-2 text-lg font-bold text-primary">Step 2 of 2</p>
+          <p className="mb-2 text-lg font-bold text-primary">
+            {strings.intake.stepFormat
+              .replace('{step}', '2')
+              .replace('{total}', '2')}
+          </p>
           <h1 className="text-balance text-3xl font-extrabold leading-tight text-foreground sm:text-4xl">
             {strings.intake.step2Label.replace(/^2\.\s*/, '')}
           </h1>
@@ -80,7 +84,7 @@ export function TreatmentStep({
             <span className="flex items-center gap-3 text-base font-semibold text-success-muted-foreground sm:text-lg">
               <ShieldCheck className="size-6 shrink-0 text-success" aria-hidden="true" />
               <span>
-                Using your insurance:{' '}
+                {strings.intake.usingInsurance}{' '}
                 <strong className="font-extrabold">{carrierName}</strong>
                 {' — '}
                 {plan}
@@ -91,7 +95,7 @@ export function TreatmentStep({
               className="inline-flex min-h-11 items-center gap-2 rounded-xl border-2 border-border bg-card px-4 text-base font-bold text-foreground transition-colors hover:border-primary hover:text-primary focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-primary/40"
             >
               <Pencil className="size-4 shrink-0" aria-hidden="true" />
-              Change insurance
+              {strings.intake.changeInsurance}
             </Link>
           </div>
 
@@ -144,7 +148,7 @@ export function TreatmentStep({
                             : 'text-muted-foreground',
                         )}
                       >
-                        {CARE_DESCRIPTIONS[option.id]}
+                        {strings.intake.careDescriptions[option.id]}
                       </span>
                     </span>
                   </button>

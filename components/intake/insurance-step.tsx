@@ -73,7 +73,11 @@ export function InsuranceStep({
 
       <main className="flex-1 px-4 py-8 sm:py-12">
         <div className="mx-auto mb-8 max-w-3xl text-center">
-          <p className="mb-2 text-lg font-bold text-primary">Step 1 of 2</p>
+          <p className="mb-2 text-lg font-bold text-primary">
+            {strings.intake.stepFormat
+              .replace('{step}', '1')
+              .replace('{total}', '2')}
+          </p>
           <h1 className="text-balance text-3xl font-extrabold leading-tight text-foreground sm:text-4xl">
             {strings.intake.step1Label.replace(/^1\.\s*/, '')}
           </h1>
@@ -213,7 +217,7 @@ export function InsuranceStep({
                   : 'cursor-not-allowed bg-primary/40 text-primary-foreground',
               )}
             >
-              Continue
+              {strings.intake.continueButton}
               <ArrowRight className="size-7 shrink-0" aria-hidden="true" />
             </button>
 

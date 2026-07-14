@@ -96,9 +96,14 @@ export interface IntakeStrings {
   step2Label: string
   step2Help: string
   care: Record<CareId, string>
+  careDescriptions: Record<CareId, string>
   findButton: string
   privacyBadge: string
   selectedSummary: string
+  stepFormat: string // e.g. "Step {step} of {total}"
+  continueButton: string
+  usingInsurance: string
+  changeInsurance: string
 }
 
 export const TRANSLATIONS: Record<LanguageCode, Strings> = {
@@ -150,10 +155,24 @@ export const TRANSLATIONS: Record<LanguageCode, Strings> = {
         physical: 'Physical Therapy',
         geriatric: 'Senior Geriatric Care',
       },
+      careDescriptions: {
+        pcp: 'A routine visit with a primary care doctor for check-ups, common illnesses, prescriptions, and referrals.',
+        dental:
+          'Cleanings, cavities, fillings, and tooth pain — general dentist care to keep your teeth and gums healthy.',
+        eye: 'A vision test and eye-health exam, including prescriptions for glasses or contact lenses.',
+        physical:
+          'Guided exercises and treatment to recover from injury, surgery, or pain and restore movement and strength.',
+        geriatric:
+          'Specialized care for older adults, covering chronic conditions, mobility, memory, and managing multiple medications.',
+      },
       findButton: 'Find In-Network Clinics & See Prices',
       privacyBadge:
         'Privacy Guaranteed: We do not ask for or save personal medical conditions. Your search is safe and anonymous.',
       selectedSummary: 'Your selections',
+      stepFormat: 'Step {step} of {total}',
+      continueButton: 'Continue',
+      usingInsurance: 'Using your insurance:',
+      changeInsurance: 'Change insurance',
     },
     booking: {
       scheduleWith: 'Schedule with',
@@ -230,10 +249,24 @@ export const TRANSLATIONS: Record<LanguageCode, Strings> = {
         physical: 'Fisioterapia',
         geriatric: 'Atención geriátrica para adultos mayores',
       },
+      careDescriptions: {
+        pcp: 'Una visita de rutina con un médico de cabecera para chequeos, enfermedades comunes, recetas y remisiones.',
+        dental:
+          'Limpiezas, caries, empastes y dolor de muelas: atención dental general para mantener sanos sus dientes y encías.',
+        eye: 'Un examen de la vista y de la salud ocular, incluidas recetas para lentes o lentes de contacto.',
+        physical:
+          'Ejercicios guiados y tratamiento para recuperarse de lesiones, cirugías o dolor y restaurar el movimiento y la fuerza.',
+        geriatric:
+          'Atención especializada para adultos mayores: enfermedades crónicas, movilidad, memoria y manejo de varios medicamentos.',
+      },
       findButton: 'Buscar clínicas en la red y ver precios',
       privacyBadge:
         'Privacidad garantizada: No preguntamos ni guardamos condiciones médicas personales. Su búsqueda es segura y anónima.',
       selectedSummary: 'Sus selecciones',
+      stepFormat: 'Paso {step} de {total}',
+      continueButton: 'Continuar',
+      usingInsurance: 'Usando su seguro:',
+      changeInsurance: 'Cambiar seguro',
     },
     booking: {
       scheduleWith: 'Programar con',
@@ -309,10 +342,23 @@ export const TRANSLATIONS: Record<LanguageCode, Strings> = {
         physical: '物理治療',
         geriatric: '長者老年護理',
       },
+      careDescriptions: {
+        pcp: '同家庭醫生嘅一般就診，包括健康檢查、常見疾病、處方同轉介。',
+        dental: '洗牙、蛀牙、補牙同牙痛——一般牙科護理，令你嘅牙齒同牙肉保持健康。',
+        eye: '視力測試同眼睛健康檢查，包括眼鏡或隱形眼鏡嘅處方。',
+        physical:
+          '有指導嘅運動同治療，幫你由受傷、手術或痛症中恢復，重建活動能力同力量。',
+        geriatric:
+          '為長者提供嘅專科護理，涵蓋慢性疾病、行動能力、記憶同管理多種藥物。',
+      },
       findButton: '尋找網絡內診所並查看價格',
       privacyBadge:
         '私隱保證：我哋唔會詢問或儲存你嘅個人醫療狀況。你嘅搜尋安全又匿名。',
       selectedSummary: '你嘅選擇',
+      stepFormat: '第 {step} 步，共 {total} 步',
+      continueButton: '繼續',
+      usingInsurance: '使用你嘅保險：',
+      changeInsurance: '更改保險',
     },
     booking: {
       scheduleWith: '預約',
@@ -368,7 +414,7 @@ export const TRANSLATIONS: Record<LanguageCode, Strings> = {
     languagesSpoken: 'Языки общения',
     bookAppointment: 'Записаться на приём',
     mapDirections: 'Маршрут на карте',
-    acceptingNew: 'Принимает новых пациен��ов',
+    acceptingNew: 'Принимает новых пациентов',
     reviews: 'отзывов',
     allBoroughs: 'Все районы',
     intake: {
@@ -385,14 +431,28 @@ export const TRANSLATIONS: Record<LanguageCode, Strings> = {
       care: {
         pcp: 'Общий осмотр / Терапевт',
         dental: 'Стоматология',
-        eye: 'Провер��а зрения',
+        eye: 'Проверка зрения',
         physical: 'Физиотерапия',
         geriatric: 'Гериатрическая помощь пожилым',
+      },
+      careDescriptions: {
+        pcp: 'Плановый приём у терапевта: осмотры, распространённые заболевания, рецепты и направления.',
+        dental:
+          'Чистка, кариес, пломбы и зубная боль — общая стоматологическая помощь для здоровья зубов и дёсен.',
+        eye: 'Проверка зрения и осмотр здоровья глаз, включая рецепты на очки или контактные линзы.',
+        physical:
+          'Упражнения под контролем и лечение для восстановления после травм, операций или боли и возвращения подвижности и силы.',
+        geriatric:
+          'Специализированная помощь пожилым: хронические заболевания, подвижность, память и приём нескольких лекарств.',
       },
       findButton: 'Найти клиники в сети и узнать цены',
       privacyBadge:
         'Конфиденциальность гарантирована: Мы не спрашиваем и не сохраняем личные медицинские данные. Ваш поиск безопасен и анонимен.',
       selectedSummary: 'Ваш выбор',
+      stepFormat: 'Шаг {step} из {total}',
+      continueButton: 'Продолжить',
+      usingInsurance: 'Используется ваша страховка:',
+      changeInsurance: 'Изменить страховку',
     },
     booking: {
       scheduleWith: 'Запись к',
@@ -428,7 +488,7 @@ export const TRANSLATIONS: Record<LanguageCode, Strings> = {
     decreaseText: 'লেখা ছোট করুন',
     increaseText: 'লেখা বড় করুন',
       searchPlaceholder: 'একটি নির্দিষ্ট এলাকা খুঁজুন',
-      addressPlaceholder: 'কাছের ক্লিনিক খুঁজতে আপনার ঠিকানা লি���ুন',
+      addressPlaceholder: 'কাছের ক্লিনিক খুঁজতে আপনার ঠিকানা লিখুন',
       useMyLocation: 'আমার অবস্থান ব্যবহার করুন',
       searchingLocation: 'আপনার ঠিকানা খোঁজা হচ্ছে…',
       locationNotFound: 'ঠিকানাটি পাওয়া যায়নি। একটি বরো বা জিপ কোড যোগ করে দেখুন।',
@@ -456,7 +516,7 @@ export const TRANSLATIONS: Record<LanguageCode, Strings> = {
         'কয়েকটি দ্রুত প্রশ্নের উত্তর দিন, আমরা আপনাকে নেটওয়ার্কভুক্ত ক্লিনিক ও স্পষ্ট দাম দেখাব।',
       step1Label: '১. আপনার বীমা প্রদানকারী নির্বাচন করুন',
       step1Help: 'আপনার বীমা কার্ডে দেখানো কোম্পানিটি বেছে নিন।',
-      selectCarrier: '��পনার বীমা প্রদানকারী বেছে নিন',
+      selectCarrier: 'আপনার বীমা প্রদানকারী বেছে নিন',
       planLabel: 'আপনার প্ল্যানের ধরন নির্বাচন করুন',
       selectPlan: 'আপনার প্ল্যানের ধরন বেছে নিন',
       step2Label: '২. আজ আপনার কোন ধরনের সেবা প্রয়োজন?',
@@ -468,10 +528,24 @@ export const TRANSLATIONS: Record<LanguageCode, Strings> = {
         physical: 'ফিজিক্যাল থেরাপি',
         geriatric: 'প্রবীণ বয়স্কদের সেবা',
       },
+      careDescriptions: {
+        pcp: 'চেকআপ, সাধারণ অসুস্থতা, প্রেসক্রিপশন ও রেফারেলের জন্য একজন প্রাথমিক ডাক্তারের সাথে নিয়মিত সাক্ষাৎ।',
+        dental:
+          'দাঁত পরিষ্কার, ক্যাভিটি, ফিলিং ও দাঁতব্যথা — দাঁত ও মাড়ি সুস্থ রাখতে সাধারণ দাঁতের যত্ন।',
+        eye: 'দৃষ্টি পরীক্ষা ও চোখের স্বাস্থ্য পরীক্ষা, চশমা বা কন্টাক্ট লেন্সের প্রেসক্রিপশনসহ।',
+        physical:
+          'আঘাত, অস্ত্রোপচার বা ব্যথা থেকে সেরে উঠতে এবং চলাফেরা ও শক্তি ফিরে পেতে নির্দেশিত ব্যায়াম ও চিকিৎসা।',
+        geriatric:
+          'প্রবীণদের জন্য বিশেষ যত্ন — দীর্ঘমেয়াদি রোগ, চলাফেরা, স্মৃতি ও একাধিক ওষুধ ব্যবস্থাপনা।',
+      },
       findButton: 'নেটওয়ার্কভুক্ত ক্লিনিক খুঁজুন ও দাম দেখুন',
       privacyBadge:
         'গোপনীয়তা নিশ্চিত: আমরা ব্যক্তিগত চিকিৎসা তথ্য জিজ্ঞাসা করি না বা সংরক্ষণ করি না। আপনার অনুসন্ধান নিরাপদ ও নামহীন।',
       selectedSummary: 'আপনার নির্বাচন',
+      stepFormat: 'ধাপ {step} / {total}',
+      continueButton: 'চালিয়ে যান',
+      usingInsurance: 'আপনার বীমা ব্যবহার করা হচ্ছে:',
+      changeInsurance: 'বীমা পরিবর্তন করুন',
     },
     booking: {
       scheduleWith: 'সাক্ষাৎ নির্ধারণ করুন',
@@ -548,10 +622,24 @@ export const TRANSLATIONS: Record<LanguageCode, Strings> = {
         physical: 'Fisioterapia',
         geriatric: 'Assistenza geriatrica per anziani',
       },
+      careDescriptions: {
+        pcp: 'Una visita di routine con un medico di base per controlli, malattie comuni, ricette e referti.',
+        dental:
+          'Pulizie, carie, otturazioni e mal di denti: cure dentistiche generali per mantenere sani denti e gengive.',
+        eye: 'Un test della vista e un esame della salute oculare, comprese le ricette per occhiali o lenti a contatto.',
+        physical:
+          'Esercizi guidati e trattamenti per riprendersi da infortuni, interventi o dolore e recuperare movimento e forza.',
+        geriatric:
+          'Assistenza specializzata per gli anziani: malattie croniche, mobilità, memoria e gestione di più farmaci.',
+      },
       findButton: 'Trova cliniche in rete e vedi i prezzi',
       privacyBadge:
         'Privacy garantita: Non chiediamo né salviamo condizioni mediche personali. La tua ricerca è sicura e anonima.',
       selectedSummary: 'Le tue scelte',
+      stepFormat: 'Passo {step} di {total}',
+      continueButton: 'Continua',
+      usingInsurance: 'Utilizzando la tua assicurazione:',
+      changeInsurance: 'Cambia assicurazione',
     },
     booking: {
       scheduleWith: 'Prenota con',
@@ -628,10 +716,24 @@ export const TRANSLATIONS: Record<LanguageCode, Strings> = {
         physical: 'Physical Therapy',
         geriatric: 'Pangangalaga sa Matatanda',
       },
+      careDescriptions: {
+        pcp: 'Karaniwang pagpapatingin sa isang primary care doctor para sa check-up, karaniwang sakit, reseta, at referral.',
+        dental:
+          'Paglilinis, bulok na ngipin, pasta, at sakit ng ngipin — pangkalahatang pangangalaga sa ngipin para manatiling malusog ang iyong ngipin at gilagid.',
+        eye: 'Pagsusuri ng paningin at kalusugan ng mata, kabilang ang reseta para sa salamin o contact lens.',
+        physical:
+          'Ginagabayang ehersisyo at paggamot para makabawi mula sa pinsala, operasyon, o sakit at maibalik ang galaw at lakas.',
+        geriatric:
+          'Espesyal na pangangalaga para sa matatanda, saklaw ang malalang sakit, paggalaw, memorya, at pamamahala ng maraming gamot.',
+      },
       findButton: 'Hanapin ang In-Network na Klinika at Tingnan ang Presyo',
       privacyBadge:
         'Garantisadong Privacy: Hindi kami nagtatanong o nag-iimbak ng personal na kondisyong medikal. Ligtas at anonimo ang iyong paghahanap.',
       selectedSummary: 'Ang iyong mga pinili',
+      stepFormat: 'Hakbang {step} sa {total}',
+      continueButton: 'Magpatuloy',
+      usingInsurance: 'Ginagamit ang iyong insurance:',
+      changeInsurance: 'Palitan ang insurance',
     },
     booking: {
       scheduleWith: 'Mag-iskedyul kay',

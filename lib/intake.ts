@@ -79,15 +79,6 @@ export const CARE_OPTIONS: CareOption[] = [
   { id: 'geriatric', icon: 'heart' },
 ]
 
-// Plain-language explanation of each care type, shown under the option so
-// patients understand what the visit covers before choosing.
-export const CARE_DESCRIPTIONS: Record<CareId, string> = {
-  pcp: 'A routine visit with a primary care doctor for check-ups, common illnesses, prescriptions, and referrals.',
-  dental:
-    'Cleanings, cavities, fillings, and tooth pain — general dentist care to keep your teeth and gums healthy.',
-  eye: 'A vision test and eye-health exam, including prescriptions for glasses or contact lenses.',
-  physical:
-    'Guided exercises and treatment to recover from injury, surgery, or pain and restore movement and strength.',
-  geriatric:
-    'Specialized care for older adults, covering chronic conditions, mobility, memory, and managing multiple medications.',
-}
+// Note: plain-language descriptions of each care type now live in the i18n
+// dictionary (lib/i18n.ts → intake.careDescriptions) so they are translated
+// along with the rest of the UI.
