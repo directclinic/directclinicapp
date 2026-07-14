@@ -90,7 +90,7 @@ export async function joinClinic(
   // Pull the doctor's own profile for the denormalized snapshot.
   const { data: profile } = await supabase
     .from('profiles')
-    .select('full_name, specialty')
+    .select('full_name')
     .eq('id', user.id)
     .maybeSingle()
 
@@ -101,7 +101,7 @@ export async function joinClinic(
     clinic_id: clinicId,
     doctor_id: user.id,
     doctor_name: doctorName,
-    doctor_specialty: profile?.specialty ?? null,
+    doctor_specialty: null,
     doctor_email: user.email ?? null,
   })
 
