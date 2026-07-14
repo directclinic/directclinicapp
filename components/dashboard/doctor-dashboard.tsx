@@ -10,6 +10,8 @@ import {
   Check,
   LogOut,
   Loader2,
+  UserRound,
+  CalendarClock,
 } from 'lucide-react'
 import {
   searchClinics,
@@ -18,13 +20,91 @@ import {
   type ClinicSearchResult,
   type DoctorMembership,
 } from '@/app/actions/clinic-members'
+import type { DoctorProfile } from '@/app/actions/doctor-profile'
+import {
+  DoctorProfileForm,
+} from '@/components/dashboard/doctor-profile-form'
+import {
+  AppointmentsList,
+  type AppointmentRow,
+} from '@/components/dashboard/appointments-list'
 import { cn } from '@/lib/utils'
+
+type DoctorTab = 'profile' | 'appointments' | 'clinics'
 
 export function DoctorDashboard({
   memberships,
+  profile,
+  appointments,
+  fallbackName,
 }: {
   memberships: DoctorMembership[]
+  profile: DoctorProfile | null
+  appointments: AppointmentRow[]
+  fallbackName: string
 }) {
+  const [tab, setTab] = useState<DoctorTab>('profile')
+
+  const tabs: { id: DoctorTab; label: string; icon: typeof UserRound }[] = [
+    { id: 'profile', label: 'My profile', icon: UserRound },
+    { id: 'appointments', label: `Appointments (${appointments.length})`, icon: CalendarClock },
+    { id: 'clinics', label: `My clinics (${memberships.length})`, icon: Building2 },
+  ]
+
+  return (
+    <div>
+      <div
+        role="tablist"
+        aria-label="Doctor dashboard sections"
+        className="mb-8 flex flex-wrap gap-2 border-b-2 border-border"
+      >
+        {tabs.map((t) => {
+          const Icon = t.icon
+          const active = tab === t.id
+          return (
+            <button
+              key={t.id}
+              role="tab"
+              type="button"
+              aria-selected={active}
+              onClick={() => setTab(t.id)}
+              className={cn(
+                '-mb-0.5 inline-flex min-h-12 items-center gap-2 border-b-4 px-4 text-base font-bold transition-colors focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-primary/40',
+                active
+                  ? 'border-primary text-primary'
+                  : 'border-transparent text-muted-foreground hover:text-foreground',
+              )}
+            >
+              <Icon className="size-5 shrink-0" aria-hidden="true" />
+              {t.label}
+            </button>
+          )
+        })}
+      </div>
+
+      {tab === 'profile' && (
+        <DoctorProfileForm profile={profile} fallbackName={fallbackName} />
+      )}
+
+      {tab === 'appointments' && (
+        <section>
+          <h2 className="mb-2 text-2xl font-extrabold text-foreground">
+            Your appointments
+          </h2>
+          <p className="mb-4 text-pretty text-base leading-relaxed text-muted-foreground">
+            Patients who booked at the clinics you joined. Add a note after each
+            visit and the patient will see it in their dashboard.
+          </p>
+          <AppointmentsList appointments={appointments} variant="doctor" />
+        </section>
+      )}
+
+      {tab === 'clinics' && <MyClinics memberships={memberships} />}
+    </div>
+  )
+}
+
+function MyClinics({ memberships }: { memberships: DoctorMembership[] }) {
   const router = useRouter()
 
   const [term, setTerm] = useState('')

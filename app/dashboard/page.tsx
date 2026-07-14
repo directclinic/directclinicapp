@@ -12,6 +12,7 @@ import type {
   DoctorMembership,
   ClinicMember,
 } from '@/app/actions/clinic-members'
+import type { DoctorProfile } from '@/app/actions/doctor-profile'
 
 // Always render fresh so newly booked appointments appear on load.
 export const dynamic = 'force-dynamic'
@@ -61,16 +62,70 @@ export default async function DashboardPage() {
       }
     })
 
+    // Doctor's public profile + appointments booked at clinics they belong to.
+    const memberClinicIds = memberships.map((m) => m.clinic_id)
+    const [{ data: docProfile }, apptRes] = await Promise.all([
+      supabase
+        .from('doctor_profiles')
+        .select(
+          'id, full_name, credential, specialty, bio, languages, years_experience, phone, accepting_new',
+        )
+        .eq('id', user.id)
+        .maybeSingle(),
+      memberClinicIds.length > 0
+        ? supabase
+            .from('appointments')
+            .select(
+              'id, patient_name, patient_email, patient_phone, care_type, appointment_date, appointment_time, reason, status, doctor_note, clinics(name)',
+            )
+            .in('clinic_id', memberClinicIds)
+            .order('appointment_date', { ascending: true })
+        : Promise.resolve({ data: [] as unknown[] }),
+    ])
+
+    const doctorAppointments: AppointmentRow[] = (
+      (apptRes.data ?? []) as Record<string, unknown>[]
+    ).map((a) => {
+      const clinicName = a.clinics as
+        | { name?: string }
+        | { name?: string }[]
+        | undefined
+      const name = Array.isArray(clinicName)
+        ? clinicName[0]?.name
+        : clinicName?.name
+      return {
+        id: a.id as string,
+        clinic_name: name ?? 'Clinic',
+        patient_name: a.patient_name as string,
+        patient_email: a.patient_email as string | null,
+        patient_phone: a.patient_phone as string | null,
+        care_type: a.care_type as string | null,
+        appointment_date: a.appointment_date as string,
+        appointment_time: a.appointment_time as string,
+        reason: a.reason as string | null,
+        status: a.status as string,
+        doctor_note: a.doctor_note as string | null,
+      }
+    })
+
+    const fallbackName =
+      profile.full_name || user.user_metadata?.full_name || user.email || 'Doctor'
+
     return (
       <DashboardShell displayName={displayName} roleLabel="Doctor">
         <h1 className="text-balance text-3xl font-extrabold leading-tight text-foreground sm:text-4xl">
           Welcome, {displayName}
         </h1>
         <p className="mb-8 mt-2 text-pretty text-lg leading-relaxed text-muted-foreground">
-          Find the clinics you work at and add yourself so patients can book
-          with you.
+          Build your profile, review your appointments, and manage the clinics
+          you work at.
         </p>
-        <DoctorDashboard memberships={memberships} />
+        <DoctorDashboard
+          memberships={memberships}
+          profile={(docProfile as DoctorProfile | null) ?? null}
+          appointments={doctorAppointments}
+          fallbackName={fallbackName}
+        />
       </DashboardShell>
     )
   }

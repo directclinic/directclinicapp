@@ -95,3 +95,35 @@ export async function saveDoctorNote(
   revalidatePath('/dashboard')
   return { ok: true }
 }
+
+// Let a member doctor add or update the note for an appointment at a clinic
+// they belong to. We don't filter by clinic_owner_id here (the doctor isn't the
+// owner); the `appt_update_clinic_member` RLS policy enforces that the doctor
+// is a member of the appointment's clinic.
+export async function saveMemberDoctorNote(
+  appointmentId: string,
+  note: string,
+): Promise<BookingResult> {
+  const supabase = await createClient()
+  const {
+    data: { user },
+  } = await supabase.auth.getUser()
+
+  if (!user) {
+    return { ok: false, error: 'Please sign in to save a note.' }
+  }
+
+  const { error } = await supabase
+    .from('appointments')
+    .update({
+      doctor_note: note.trim() || null,
+      note_updated_at: new Date().toISOString(),
+    })
+    .eq('id', appointmentId)
+
+  if (error) return { ok: false, error: error.message }
+
+  revalidatePath('/patient')
+  revalidatePath('/dashboard')
+  return { ok: true }
+}
