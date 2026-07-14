@@ -21,6 +21,7 @@ import {
 } from '@/lib/doctors'
 import { createClient } from '@/lib/supabase/client'
 import { geocodeAddress, reverseGeocode, type GeoResult } from '@/lib/geocode'
+import { getRoute, type RouteResult } from '@/lib/routing'
 import { TRANSLATIONS } from '@/lib/i18n'
 import { type CareId } from '@/lib/intake'
 import { useAccessibility, MIN_STEP, MAX_STEP } from '@/lib/use-accessibility'
@@ -28,6 +29,7 @@ import { TopNav } from '@/components/top-nav'
 import { SearchFilterBar } from '@/components/search-filter-bar'
 import { DoctorCard } from '@/components/doctor-card'
 import { BookingModal } from '@/components/booking-modal'
+import { DirectionsPanel } from '@/components/directions-panel'
 
 // Leaflet touches `window`, so load the map only on the client.
 const DoctorMap = dynamic(() => import('@/components/doctor-map'), {
@@ -51,6 +53,13 @@ function SearchView() {
   // The searcher's geocoded address; when set, results are sorted by proximity.
   const [userLocation, setUserLocation] = useState<GeoResult | null>(null)
   const [geoStatus, setGeoStatus] = useState<'idle' | 'loading' | 'error'>('idle')
+  // Live directions to a chosen clinic (route line + turn-by-turn steps).
+  const [directionsTo, setDirectionsTo] = useState<Doctor | null>(null)
+  const [route, setRoute] = useState<RouteResult | null>(null)
+  const [routeStatus, setRouteStatus] = useState<
+    'idle' | 'loading' | 'error' | 'denied'
+  >('idle')
+  const routeAbort = useRef<AbortController | null>(null)
   // Clinics registered by doctors/clinics in Supabase, merged into search.
   const [registered, setRegistered] = useState<Doctor[]>([])
   const listRef = useRef<HTMLDivElement>(null)
@@ -197,9 +206,74 @@ function SearchView() {
     return filtered
   }, [activeBorough, care, carrierId, estimatedCopay, userLocation, registered])
 
-  function handleDirections(d: Doctor) {
-    setFocused(d)
-  }
+  // Resolve a usable start point for directions: reuse the searcher's address
+  // if they already set one, otherwise ask the browser for live GPS location.
+  const resolveStartLocation = useCallback(async (): Promise<
+    GeoResult | 'denied' | null
+  > => {
+    if (userLocation) return userLocation
+    if (!('geolocation' in navigator)) return 'denied'
+    return new Promise((resolve) => {
+      navigator.geolocation.getCurrentPosition(
+        async (pos) => {
+          const { latitude, longitude } = pos.coords
+          const label = await reverseGeocode(latitude, longitude)
+          const loc = { lat: latitude, lng: longitude, label }
+          setUserLocation(loc)
+          setQuery(label)
+          resolve(loc)
+        },
+        () => resolve('denied'),
+        { enableHighAccuracy: true, timeout: 10000 },
+      )
+    })
+  }, [userLocation])
+
+  const handleDirections = useCallback(
+    async (d: Doctor) => {
+      setFocused(d)
+      setDirectionsTo(d)
+      setRoute(null)
+      setRouteStatus('loading')
+      // Ask for the patient's live location (or reuse a typed address).
+      const start = await resolveStartLocation()
+      if (start === 'denied') {
+        setRouteStatus('denied')
+        return
+      }
+      if (!start) {
+        setRouteStatus('error')
+        return
+      }
+      routeAbort.current?.abort()
+      const controller = new AbortController()
+      routeAbort.current = controller
+      try {
+        const result = await getRoute(
+          { lat: start.lat, lng: start.lng },
+          { lat: d.latitude, lng: d.longitude },
+          controller.signal,
+        )
+        if (controller.signal.aborted) return
+        if (!result) {
+          setRouteStatus('error')
+          return
+        }
+        setRoute(result)
+        setRouteStatus('idle')
+      } catch {
+        if (!controller.signal.aborted) setRouteStatus('error')
+      }
+    },
+    [resolveStartLocation],
+  )
+
+  const closeDirections = useCallback(() => {
+    routeAbort.current?.abort()
+    setDirectionsTo(null)
+    setRoute(null)
+    setRouteStatus('idle')
+  }, [])
 
   return (
     <div className="flex h-dvh flex-col bg-background">
@@ -277,8 +351,20 @@ function SearchView() {
               copayLabel={strings.copay}
               userLocation={userLocation}
               nearYouPrefix={strings.nearYouPrefix}
+              route={route?.coordinates ?? null}
             />
           </div>
+
+          {directionsTo && (
+            <DirectionsPanel
+              doctor={directionsTo}
+              route={route}
+              status={routeStatus}
+              title={strings.mapDirections}
+              onClose={closeDirections}
+              onRetry={() => handleDirections(directionsTo)}
+            />
+          )}
         </section>
       </div>
 

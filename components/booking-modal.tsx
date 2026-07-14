@@ -86,37 +86,33 @@ export function BookingModal({
   const [saving, setSaving] = useState(false)
   const [saveError, setSaveError] = useState<string | null>(null)
 
-  // Real (Supabase-registered) clinics carry a clinicId + ownerId, so their
-  // bookings are persisted to the owner's dashboard.
-  const isRegistered = Boolean(doctor.clinicId && doctor.ownerId)
-
   async function handleConfirm() {
     setSaveError(null)
     // Always show a brief loading state so the tap registers as "working".
     setSaving(true)
-    if (isRegistered) {
-      const yyyy = selected.getFullYear()
-      const mm = String(selected.getMonth() + 1).padStart(2, '0')
-      const dd = String(selected.getDate()).padStart(2, '0')
-      const result = await bookAppointment({
-        clinicId: doctor.clinicId!,
-        clinicOwnerId: doctor.ownerId!,
-        patientName,
-        patientPhone,
-        careType: doctor.specialty,
-        appointmentDate: `${yyyy}-${mm}-${dd}`,
-        appointmentTime: selectedTime,
-        reason,
-      })
-      if (!result.ok) {
-        setSaving(false)
-        setSaveError(result.error)
-        return
-      }
-    } else {
-      // Mock (non-registered) clinics don't hit the server, so pause briefly
-      // to give the same reassuring "booking…" feedback.
-      await new Promise((resolve) => setTimeout(resolve, 700))
+    const yyyy = selected.getFullYear()
+    const mm = String(selected.getMonth() + 1).padStart(2, '0')
+    const dd = String(selected.getDate()).padStart(2, '0')
+    // Persist every booking so it shows on the patient's dashboard. Registered
+    // clinics also link back to the owner via clinicId/ownerId; mock/seed
+    // clinics store their details as a snapshot on the appointment instead.
+    const result = await bookAppointment({
+      clinicId: doctor.clinicId,
+      clinicOwnerId: doctor.ownerId,
+      clinicName: doctor.fullName,
+      clinicAddress: doctor.address,
+      providerName: doctor.fullName,
+      patientName,
+      patientPhone,
+      careType: doctor.specialty,
+      appointmentDate: `${yyyy}-${mm}-${dd}`,
+      appointmentTime: selectedTime,
+      reason,
+    })
+    if (!result.ok) {
+      setSaving(false)
+      setSaveError(result.error)
+      return
     }
     setSaving(false)
     setConfirmed(true)
