@@ -1,7 +1,9 @@
 import { redirect } from 'next/navigation'
 import { createClient } from '@/lib/supabase/server'
+import { LandingPage } from '@/components/landing/landing-page'
 
-// Login-first entry point. Route users based on auth state + selected role.
+// Public entry point. Logged-out visitors see the marketing landing page;
+// signed-in users are routed to the right workspace based on their role.
 export default async function RootPage() {
   const supabase = await createClient()
   const {
@@ -9,7 +11,7 @@ export default async function RootPage() {
   } = await supabase.auth.getUser()
 
   if (!user) {
-    redirect('/auth/login')
+    return <LandingPage />
   }
 
   const { data: profile } = await supabase
