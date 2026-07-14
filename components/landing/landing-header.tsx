@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import { Stethoscope, Phone } from 'lucide-react'
+import { Stethoscope, Phone, LogIn } from 'lucide-react'
 
 const NAV_LINKS = [
   { href: '#how-it-works', label: 'How it works' },
@@ -36,8 +36,9 @@ export function LandingHeader() {
         <div className="flex items-center gap-2 sm:gap-3">
           <Link
             href="/auth/login"
-            className="hidden min-h-11 items-center rounded-xl px-4 text-base font-bold text-foreground transition-colors hover:text-primary sm:inline-flex"
+            className="inline-flex min-h-11 items-center gap-2 rounded-xl border-2 border-border bg-card px-4 text-base font-bold text-foreground transition-colors hover:border-primary hover:text-primary focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-primary/40"
           >
+            <LogIn className="size-5 shrink-0" aria-hidden="true" />
             Sign in
           </Link>
           <Link
