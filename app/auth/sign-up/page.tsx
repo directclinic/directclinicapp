@@ -59,7 +59,7 @@ export default function SignUpPage() {
   return (
     <AuthShell
       title="Create your account"
-      subtitle="Join Direct Clinic to find care or list your practice."
+      subtitle="Join Insy Care to find care or list your practice."
       footer={
         <>
           Already have an account?{' '}

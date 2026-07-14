@@ -30,7 +30,7 @@ export function LanguagePicker({
         <span className="flex size-11 items-center justify-center rounded-xl bg-primary text-primary-foreground">
           <Stethoscope className="size-6" aria-hidden="true" />
         </span>
-        <span className="text-xl font-bold text-foreground">Direct Clinic</span>
+        <span className="text-xl font-bold text-foreground">Insy Care</span>
       </header>
 
       <main className="flex-1 px-4 py-8 sm:py-12">
@@ -43,7 +43,7 @@ export function LanguagePicker({
               Choose your language
             </h1>
             <p className="mx-auto mt-3 max-w-xl text-pretty text-lg leading-relaxed text-muted-foreground sm:text-xl">
-              We&apos;ll use this across Direct Clinic. You can change it anytime
+              We&apos;ll use this across Insy Care. You can change it anytime
               from the language button on any page.
             </p>
           </div>

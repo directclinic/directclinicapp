@@ -63,7 +63,7 @@ export function PatientDashboard({
             <Stethoscope className="size-6" aria-hidden="true" />
           </span>
           <span className="text-xl font-bold text-foreground">
-            Direct Clinic
+            Insy Care
           </span>
           <span className="ml-2 rounded-full bg-accent px-3 py-1 text-sm font-bold text-accent-foreground">
             {t.patientBadge}
