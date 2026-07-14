@@ -19,7 +19,7 @@ export function AuthShell({
         <span className="flex size-11 items-center justify-center rounded-xl bg-primary text-primary-foreground">
           <Stethoscope className="size-6" aria-hidden="true" />
         </span>
-        <span className="text-xl font-bold text-foreground">Direct Clinic</span>
+        <span className="text-xl font-bold text-foreground">Insy Care</span>
       </header>
 
       <main className="flex flex-1 items-center justify-center px-4 py-8 sm:py-12">
