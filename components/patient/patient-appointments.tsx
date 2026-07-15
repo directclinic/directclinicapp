@@ -2,6 +2,7 @@
 
 import { useState, useTransition } from 'react'
 import { useRouter } from 'next/navigation'
+import Link from 'next/link'
 import {
   CalendarClock,
   CalendarCheck,
@@ -13,6 +14,7 @@ import {
   Check,
   X,
   Loader2,
+  Phone,
 } from 'lucide-react'
 import type { DashboardStrings } from '@/lib/dashboard-i18n'
 import { setAppointmentConfirmation } from '@/app/actions/appointments'
