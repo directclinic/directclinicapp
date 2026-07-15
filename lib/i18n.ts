@@ -64,6 +64,7 @@ export interface BookingStrings {
   selectTime: string
   morning: string
   afternoon: string
+  slotTaken: string
   monthLabel: string
   weekdays: [string, string, string, string, string, string, string]
   addressLabel: string
@@ -180,6 +181,7 @@ export const TRANSLATIONS: Record<LanguageCode, Strings> = {
       selectTime: 'Select a Time',
       morning: 'Morning',
       afternoon: 'Afternoon',
+      slotTaken: 'Booked',
       monthLabel: 'April 2026',
       weekdays: ['S', 'M', 'T', 'W', 'T', 'F', 'S'],
       addressLabel: 'Clinic address',
@@ -274,6 +276,7 @@ export const TRANSLATIONS: Record<LanguageCode, Strings> = {
       selectTime: 'Seleccione una hora',
       morning: 'Mañana',
       afternoon: 'Tarde',
+      slotTaken: 'Reservado',
       monthLabel: 'Abril 2026',
       weekdays: ['D', 'L', 'M', 'X', 'J', 'V', 'S'],
       addressLabel: 'Dirección de la clínica',
@@ -366,6 +369,7 @@ export const TRANSLATIONS: Record<LanguageCode, Strings> = {
       selectTime: '選擇時間',
       morning: '上午',
       afternoon: '下午',
+      slotTaken: '已預約',
       monthLabel: '2026年4月',
       weekdays: ['日', '一', '二', '三', '四', '五', '六'],
       addressLabel: '診所地址',
@@ -460,6 +464,7 @@ export const TRANSLATIONS: Record<LanguageCode, Strings> = {
       selectTime: 'Выберите время',
       morning: 'Утро',
       afternoon: 'День',
+      slotTaken: 'Занято',
       monthLabel: 'Апрель 2026',
       weekdays: ['Вс', 'Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб'],
       addressLabel: 'Адрес клиники',
@@ -553,6 +558,7 @@ export const TRANSLATIONS: Record<LanguageCode, Strings> = {
       selectTime: 'একটি সময় নির্বাচন করুন',
       morning: 'সকাল',
       afternoon: 'বিকাল',
+      slotTaken: 'বুক করা হয়েছে',
       monthLabel: 'এপ্রিল ২০২৬',
       weekdays: ['র', 'সো', 'ম', 'বু', 'বৃ', 'শু', 'শ'],
       addressLabel: 'ক্লিনিকের ঠিকানা',
@@ -647,6 +653,7 @@ export const TRANSLATIONS: Record<LanguageCode, Strings> = {
       selectTime: 'Seleziona un orario',
       morning: 'Mattina',
       afternoon: 'Pomeriggio',
+      slotTaken: 'Prenotato',
       monthLabel: 'Aprile 2026',
       weekdays: ['D', 'L', 'M', 'M', 'G', 'V', 'S'],
       addressLabel: 'Indirizzo della clinica',
@@ -741,6 +748,7 @@ export const TRANSLATIONS: Record<LanguageCode, Strings> = {
       selectTime: 'Pumili ng Oras',
       morning: 'Umaga',
       afternoon: 'Hapon',
+      slotTaken: 'Nakabook',
       monthLabel: 'Abril 2026',
       weekdays: ['Li', 'Lu', 'Ma', 'Mi', 'Hu', 'Bi', 'Sa'],
       addressLabel: 'Address ng klinika',
