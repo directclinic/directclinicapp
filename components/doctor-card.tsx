@@ -4,12 +4,14 @@ import {
   BadgeCheck,
   CalendarCheck,
   MapPin,
+  Navigation,
   Star,
   TrainFront,
 } from 'lucide-react'
 import type { Doctor } from '@/lib/doctors'
 import type { Strings } from '@/lib/i18n'
 import { cn } from '@/lib/utils'
+import { ClinicDoctors } from '@/components/clinic-doctors'
 
 function initials(name: string) {
   const parts = name.replace('Dr. ', '').split(' ')
@@ -31,6 +33,7 @@ export function DoctorCard({
   onSelect,
   onBook,
   tone,
+  distanceMi,
 }: {
   doctor: Doctor
   strings: Strings
@@ -39,6 +42,7 @@ export function DoctorCard({
   onSelect: () => void
   onBook: () => void
   tone: number
+  distanceMi?: number
 }) {
   return (
     <article
@@ -72,6 +76,15 @@ export function DoctorCard({
             <MapPin className="size-4 shrink-0" aria-hidden="true" />
             {doctor.neighborhood}, {doctor.borough}
           </p>
+          {distanceMi !== undefined && (
+            <p className="mt-1.5 inline-flex items-center gap-1.5 rounded-full bg-primary/10 px-3 py-1 text-base font-bold text-primary">
+              <Navigation className="size-4 shrink-0" aria-hidden="true" />
+              {distanceMi < 0.1
+                ? '< 0.1'
+                : distanceMi.toFixed(distanceMi < 10 ? 1 : 0)}{' '}
+              {strings.milesAway}
+            </p>
+          )}
           <p className="mt-1 flex items-center gap-1.5 text-base font-medium text-foreground">
             <Star
               className="size-4 shrink-0 fill-[oklch(0.75_0.15_80)] text-[oklch(0.75_0.15_80)]"
@@ -151,6 +164,10 @@ export function DoctorCard({
           {strings.mapDirections}
         </button>
       </div>
+
+      {/* Registered clinics expose their doctor roster; patients can tap a
+          doctor to view that doctor's public profile. */}
+      {doctor.clinicId && <ClinicDoctors clinicId={doctor.clinicId} />}
     </article>
   )
 }

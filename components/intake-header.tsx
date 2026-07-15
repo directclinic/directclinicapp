@@ -1,7 +1,8 @@
 'use client'
 
 import { useEffect, useRef, useState } from 'react'
-import { Globe, Check, Minus, Plus, Stethoscope } from 'lucide-react'
+import Link from 'next/link'
+import { CalendarClock, Globe, Check, Minus, Plus, Stethoscope } from 'lucide-react'
 import { LANGUAGES, type LanguageCode, type Strings } from '@/lib/i18n'
 import { MAX_STEP, MIN_STEP } from '@/lib/use-accessibility'
 import { cn } from '@/lib/utils'
@@ -40,10 +41,19 @@ export function IntakeHeader({
         <span className="flex size-11 items-center justify-center rounded-xl bg-primary text-primary-foreground">
           <Stethoscope className="size-6" aria-hidden="true" />
         </span>
-        <span className="text-xl font-bold text-foreground">Direct Clinic</span>
+        <span className="text-xl font-bold text-foreground">Insy Care</span>
       </div>
 
       <div className="flex items-center gap-3">
+        {/* Back to the patient dashboard */}
+        <Link
+          href="/patient"
+          className="inline-flex min-h-12 items-center gap-2 rounded-xl border-2 border-border bg-card px-4 text-base font-bold text-foreground transition-colors hover:border-primary hover:text-primary focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-primary/40"
+        >
+          <CalendarClock className="size-5 shrink-0" aria-hidden="true" />
+          <span className="hidden sm:inline">My appointments</span>
+        </Link>
+
         {/* Text size toggle */}
         <div
           className="flex items-center gap-1 rounded-xl border-2 border-border bg-card p-1"
