@@ -1,6 +1,7 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useTransition } from 'react'
+import { useRouter } from 'next/navigation'
 import {
   CalendarClock,
   CalendarCheck,
@@ -8,9 +9,25 @@ import {
   History,
   MapPin,
   Stethoscope,
+  BellRing,
+  Check,
+  X,
+  Loader2,
 } from 'lucide-react'
 import type { DashboardStrings } from '@/lib/dashboard-i18n'
+import { setAppointmentConfirmation } from '@/app/actions/appointments'
 import { cn } from '@/lib/utils'
+
+// An appointment needs confirmation when it's within this many days.
+const CONFIRM_WINDOW_DAYS = 3
+
+function daysUntil(iso: string) {
+  const target = new Date(iso + 'T00:00:00')
+  const today = startOfToday()
+  return Math.round(
+    (target.getTime() - today.getTime()) / (1000 * 60 * 60 * 24),
+  )
+}
 
 export interface PatientAppointment {
   id: string
@@ -22,6 +39,7 @@ export interface PatientAppointment {
   appointment_time: string
   reason: string | null
   status: string
+  confirmation_status: string
   doctor_note: string | null
 }
 
@@ -41,6 +59,94 @@ function startOfToday() {
   const d = new Date()
   d.setHours(0, 0, 0, 0)
   return d
+}
+
+function ConfirmationSection({
+  appt,
+  t,
+}: {
+  appt: PatientAppointment
+  t: DashboardStrings
+}) {
+  const router = useRouter()
+  const [pending, startTransition] = useTransition()
+  const [error, setError] = useState<string | null>(null)
+
+  function respond(status: 'confirmed' | 'declined') {
+    setError(null)
+    startTransition(async () => {
+      const res = await setAppointmentConfirmation(appt.id, status)
+      if (!res.ok) setError(res.error)
+      else router.refresh()
+    })
+  }
+
+  if (appt.confirmation_status === 'confirmed') {
+    return (
+      <div className="mt-5 flex items-center gap-2 rounded-2xl border-2 border-primary/25 bg-primary/5 px-4 py-3 text-base font-bold text-primary">
+        <Check className="size-5 shrink-0" aria-hidden="true" />
+        {t.confirmedBadge}
+      </div>
+    )
+  }
+
+  if (appt.confirmation_status === 'declined') {
+    return (
+      <div className="mt-5 flex items-center gap-2 rounded-2xl border-2 border-destructive/30 bg-destructive/10 px-4 py-3 text-base font-bold text-destructive">
+        <X className="size-5 shrink-0" aria-hidden="true" />
+        {t.declinedBadge}
+      </div>
+    )
+  }
+
+  const days = daysUntil(appt.appointment_date)
+  const needsConfirm = days >= 0 && days <= CONFIRM_WINDOW_DAYS
+
+  return (
+    <div
+      className={cn(
+        'mt-5 rounded-2xl border-2 p-4',
+        needsConfirm
+          ? 'border-accent-foreground/20 bg-accent'
+          : 'border-border bg-muted/40',
+      )}
+    >
+      <p className="flex items-center gap-2 text-base font-bold text-foreground">
+        <BellRing className="size-5 shrink-0 text-primary" aria-hidden="true" />
+        {needsConfirm ? t.confirmTitle : t.awaitingConfirm}
+      </p>
+      <p className="mt-1 text-pretty text-base leading-relaxed text-muted-foreground">
+        {t.stillComing}
+      </p>
+      <div className="mt-3 flex flex-wrap gap-2">
+        <button
+          type="button"
+          disabled={pending}
+          onClick={() => respond('confirmed')}
+          className="inline-flex min-h-11 items-center gap-2 rounded-xl bg-primary px-4 text-base font-bold text-primary-foreground transition-opacity hover:opacity-90 disabled:opacity-60 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-primary/40"
+        >
+          {pending ? (
+            <Loader2 className="size-5 shrink-0 animate-spin" aria-hidden="true" />
+          ) : (
+            <Check className="size-5 shrink-0" aria-hidden="true" />
+          )}
+          {t.yesConfirm}
+        </button>
+        <button
+          type="button"
+          disabled={pending}
+          onClick={() => respond('declined')}
+          className="inline-flex min-h-11 items-center gap-2 rounded-xl border-2 border-border bg-card px-4 text-base font-bold text-foreground transition-colors hover:border-destructive hover:text-destructive disabled:opacity-60 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-primary/40"
+        >
+          <X className="size-5 shrink-0" aria-hidden="true" />
+          {t.noDecline}
+        </button>
+      </div>
+      {error && (
+        <p className="mt-2 text-base font-semibold text-destructive">{error}</p>
+      )}
+    </div>
+  )
 }
 
 function AppointmentCard({
@@ -99,6 +205,9 @@ function AppointmentCard({
         </div>
       </div>
 
+      {/* Confirmation reminder shown for upcoming visits */}
+      {!isPast && <ConfirmationSection appt={appt} t={t} />}
+
       {/* Doctor's note, shared with the patient after the visit */}
       {appt.doctor_note ? (
         <div className="mt-5 rounded-2xl border-2 border-primary/25 bg-primary/5 p-4">
@@ -143,8 +252,31 @@ export function PatientAppointments({
 
   const list = tab === 'upcoming' ? upcoming : past
 
+  const needConfirmCount = upcoming.filter((a) => {
+    const d = daysUntil(a.appointment_date)
+    return (
+      a.confirmation_status === 'pending' && d >= 0 && d <= CONFIRM_WINDOW_DAYS
+    )
+  }).length
+
   return (
     <div>
+      {tab === 'upcoming' && needConfirmCount > 0 && (
+        <div className="mb-6 flex items-start gap-3 rounded-2xl border-2 border-primary/30 bg-primary/5 p-4">
+          <BellRing
+            className="mt-0.5 size-6 shrink-0 text-primary"
+            aria-hidden="true"
+          />
+          <div>
+            <p className="text-lg font-extrabold text-foreground">
+              {t.confirmTitle}
+            </p>
+            <p className="mt-0.5 text-pretty text-base leading-relaxed text-muted-foreground">
+              {t.confirmPrompt}
+            </p>
+          </div>
+        </div>
+      )}
       <div
         role="tablist"
         aria-label="Appointment sections"

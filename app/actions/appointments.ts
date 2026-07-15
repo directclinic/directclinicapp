@@ -63,6 +63,37 @@ export async function bookAppointment(
   return { ok: true }
 }
 
+// Patient confirms or declines that they're still coming to an upcoming visit.
+// Scoped to patient_id so a patient can only respond to their own appointments.
+export async function setAppointmentConfirmation(
+  appointmentId: string,
+  status: 'confirmed' | 'declined',
+): Promise<BookingResult> {
+  const supabase = await createClient()
+  const {
+    data: { user },
+  } = await supabase.auth.getUser()
+
+  if (!user) {
+    return { ok: false, error: 'Please sign in to respond.' }
+  }
+
+  const { error } = await supabase
+    .from('appointments')
+    .update({
+      confirmation_status: status,
+      confirmed_at: new Date().toISOString(),
+    })
+    .eq('id', appointmentId)
+    .eq('patient_id', user.id)
+
+  if (error) return { ok: false, error: error.message }
+
+  revalidatePath('/patient')
+  revalidatePath('/dashboard')
+  return { ok: true }
+}
+
 // Let a doctor/clinic add or update the note for one of their appointments.
 // Scoped to clinic_owner_id so a user can only write notes on their own
 // appointments; the DB RLS policy enforces this too.

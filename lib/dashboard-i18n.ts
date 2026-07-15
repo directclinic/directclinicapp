@@ -30,6 +30,19 @@ export interface DashboardStrings {
   noNoteYet: string
   noUpcoming: string
   noPast: string
+  // Confirmation reminder
+  confirmTitle: string
+  confirmPrompt: string
+  stillComing: string
+  yesConfirm: string
+  noDecline: string
+  confirmedBadge: string
+  declinedBadge: string
+  awaitingConfirm: string
+  // Call
+  startCall: string
+  joinCall: string
+  callTitle: string
 }
 
 export const DASHBOARD_TRANSLATIONS: Record<LanguageCode, DashboardStrings> = {
@@ -61,6 +74,18 @@ export const DASHBOARD_TRANSLATIONS: Record<LanguageCode, DashboardStrings> = {
     noUpcoming:
       'You have no upcoming appointments. Find a clinic to book your next visit.',
     noPast: 'No past appointments yet.',
+    confirmTitle: 'Please confirm your appointment',
+    confirmPrompt:
+      'Your visit is coming up soon. Let the clinic know if you are still coming.',
+    stillComing: 'Are you still coming to this appointment?',
+    yesConfirm: "Yes, I'll be there",
+    noDecline: "No, I can't make it",
+    confirmedBadge: 'Confirmed',
+    declinedBadge: 'Declined',
+    awaitingConfirm: 'Awaiting your confirmation',
+    startCall: 'Start call',
+    joinCall: 'Join call',
+    callTitle: 'Call',
   },
   es: {
     patientBadge: 'Paciente',
@@ -90,6 +115,18 @@ export const DASHBOARD_TRANSLATIONS: Record<LanguageCode, DashboardStrings> = {
     noUpcoming:
       'No tienes citas próximas. Busca una clínica para reservar tu próxima visita.',
     noPast: 'Aún no hay citas anteriores.',
+    confirmTitle: 'Confirma tu cita',
+    confirmPrompt:
+      'Tu visita es pronto. Avísale a la clínica si aún vas a asistir.',
+    stillComing: '¿Todavía vas a asistir a esta cita?',
+    yesConfirm: 'Sí, allí estaré',
+    noDecline: 'No, no puedo asistir',
+    confirmedBadge: 'Confirmada',
+    declinedBadge: 'Cancelada',
+    awaitingConfirm: 'Esperando tu confirmación',
+    startCall: 'Iniciar llamada',
+    joinCall: 'Unirse a la llamada',
+    callTitle: 'Llamada',
   },
   zh: {
     patientBadge: '病人',
@@ -118,6 +155,17 @@ export const DASHBOARD_TRANSLATIONS: Record<LanguageCode, DashboardStrings> = {
     noNoteYet: '醫生重未有記錄。',
     noUpcoming: '你冇即將到來嘅預約。尋找診所預約下次診症。',
     noPast: '重未有過往預約。',
+    confirmTitle: '請確認你嘅預約',
+    confirmPrompt: '你嘅診症快到喇。請話俾診所知你係咪仲會嚟。',
+    stillComing: '你係咪仲會嚟呢個預約？',
+    yesConfirm: '係，我會嚟',
+    noDecline: '唔係，我嚟唔到',
+    confirmedBadge: '已確認',
+    declinedBadge: '已取消',
+    awaitingConfirm: '等緊你確認',
+    startCall: '開始通話',
+    joinCall: '加入通話',
+    callTitle: '通話',
   },
   ru: {
     patientBadge: 'Пациент',
@@ -147,6 +195,18 @@ export const DASHBOARD_TRANSLATIONS: Record<LanguageCode, DashboardStrings> = {
     noUpcoming:
       'У вас нет предстоящих приёмов. Найдите клинику, чтобы записаться на следующий визит.',
     noPast: 'Прошедших приёмов пока нет.',
+    confirmTitle: 'Пожалуйста, подтвердите приём',
+    confirmPrompt:
+      'Ваш визит уже скоро. Сообщите клинике, придёте ли вы.',
+    stillComing: 'Вы всё ещё придёте на этот приём?',
+    yesConfirm: 'Да, я приду',
+    noDecline: 'Нет, не смогу прийти',
+    confirmedBadge: 'Подтверждено',
+    declinedBadge: 'Отменено',
+    awaitingConfirm: 'Ожидает вашего подтверждения',
+    startCall: 'Начать звонок',
+    joinCall: 'Присоединиться к звонку',
+    callTitle: 'Звонок',
   },
   bn: {
     patientBadge: 'রোগী',
@@ -176,6 +236,18 @@ export const DASHBOARD_TRANSLATIONS: Record<LanguageCode, DashboardStrings> = {
     noUpcoming:
       'আপনার কোনো আসন্ন অ্যাপয়েন্টমেন্ট নেই। পরবর্তী ভিজিট বুক করতে একটি ক্লিনিক খুঁজুন।',
     noPast: 'এখনও কোনো পূর্ববর্তী অ্যাপয়েন্টমেন্ট নেই।',
+    confirmTitle: 'অনুগ্রহ করে আপনার অ্যাপয়েন্টমেন্ট নিশ্চিত করুন',
+    confirmPrompt:
+      'আপনার ভিজিট শীঘ্রই আসছে। আপনি আসছেন কিনা ক্লিনিককে জানান।',
+    stillComing: 'আপনি কি এখনও এই অ্যাপয়েন্টমেন্টে আসছেন?',
+    yesConfirm: 'হ্যাঁ, আমি আসব',
+    noDecline: 'না, আমি আসতে পারব না',
+    confirmedBadge: 'নিশ্চিত',
+    declinedBadge: 'বাতিল',
+    awaitingConfirm: 'আপনার নিশ্চিতকরণের অপেক্ষায়',
+    startCall: 'কল শুরু করুন',
+    joinCall: 'কলে যোগ দিন',
+    callTitle: 'কল',
   },
   it: {
     patientBadge: 'Paziente',
@@ -205,6 +277,18 @@ export const DASHBOARD_TRANSLATIONS: Record<LanguageCode, DashboardStrings> = {
     noUpcoming:
       'Non hai appuntamenti in arrivo. Trova una clinica per prenotare la prossima visita.',
     noPast: 'Nessun appuntamento passato.',
+    confirmTitle: 'Conferma il tuo appuntamento',
+    confirmPrompt:
+      'La tua visita è imminente. Fai sapere alla clinica se verrai.',
+    stillComing: 'Verrai ancora a questo appuntamento?',
+    yesConfirm: 'Sì, ci sarò',
+    noDecline: 'No, non posso venire',
+    confirmedBadge: 'Confermato',
+    declinedBadge: 'Annullato',
+    awaitingConfirm: 'In attesa della tua conferma',
+    startCall: 'Avvia chiamata',
+    joinCall: 'Partecipa alla chiamata',
+    callTitle: 'Chiamata',
   },
   tl: {
     patientBadge: 'Pasyente',
@@ -234,5 +318,17 @@ export const DASHBOARD_TRANSLATIONS: Record<LanguageCode, DashboardStrings> = {
     noUpcoming:
       'Wala kang paparating na appointment. Maghanap ng klinika para mag-book ng susunod mong pagbisita.',
     noPast: 'Wala pang nakaraang appointment.',
+    confirmTitle: 'Pakikumpirma ang iyong appointment',
+    confirmPrompt:
+      'Malapit na ang iyong pagbisita. Ipaalam sa klinika kung pupunta ka pa rin.',
+    stillComing: 'Pupunta ka pa rin ba sa appointment na ito?',
+    yesConfirm: 'Oo, pupunta ako',
+    noDecline: 'Hindi, hindi ako makakapunta',
+    confirmedBadge: 'Nakumpirma',
+    declinedBadge: 'Kinansela',
+    awaitingConfirm: 'Naghihintay ng iyong kumpirmasyon',
+    startCall: 'Simulan ang tawag',
+    joinCall: 'Sumali sa tawag',
+    callTitle: 'Tawag',
   },
 }

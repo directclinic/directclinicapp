@@ -30,7 +30,7 @@ export default async function PatientDashboardPage() {
   const { data: apptData } = await supabase
     .from('appointments')
     .select(
-      'id, care_type, appointment_date, appointment_time, reason, status, doctor_note, clinic_name, clinic_address, provider_name, clinics(name, provider_name, address)',
+      'id, care_type, appointment_date, appointment_time, reason, status, confirmation_status, doctor_note, clinic_name, clinic_address, provider_name, clinics(name, provider_name, address)',
     )
     .eq('patient_id', user.id)
     .order('appointment_date', { ascending: true })
@@ -58,6 +58,9 @@ export default async function PatientDashboardPage() {
       appointment_time: a.appointment_time,
       reason: a.reason,
       status: a.status,
+      confirmation_status:
+        (a as { confirmation_status?: string }).confirmation_status ??
+        'pending',
       doctor_note: a.doctor_note,
     }
   })
