@@ -78,3 +78,7 @@ export const CARE_OPTIONS: CareOption[] = [
   { id: 'physical', icon: 'activity' },
   { id: 'geriatric', icon: 'heart' },
 ]
+
+// Note: plain-language descriptions of each care type now live in the i18n
+// dictionary (lib/i18n.ts → intake.careDescriptions) so they are translated
+// along with the rest of the UI.

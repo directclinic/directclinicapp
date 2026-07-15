@@ -1,36 +1,33 @@
-'use client'
+import { redirect } from 'next/navigation'
+import { createClient } from '@/lib/supabase/server'
+import { LandingPage } from '@/components/landing/landing-page'
 
-import { TRANSLATIONS } from '@/lib/i18n'
-import { useAccessibility } from '@/lib/use-accessibility'
-import { IntakeHeader } from '@/components/intake-header'
-import { IntakeForm } from '@/components/intake-form'
+// Public entry point. Logged-out visitors see the marketing landing page;
+// signed-in users are routed to the right workspace based on their role.
+export default async function RootPage() {
+  const supabase = await createClient()
+  const {
+    data: { user },
+  } = await supabase.auth.getUser()
 
-export default function IntakePage() {
-  const { language, setLanguage, fontStep, setFontStep } = useAccessibility()
-  const strings = TRANSLATIONS[language]
+  if (!user) {
+    return <LandingPage />
+  }
 
-  return (
-    <div className="flex min-h-dvh flex-col bg-background">
-      <IntakeHeader
-        language={language}
-        setLanguage={setLanguage}
-        strings={strings}
-        fontStep={fontStep}
-        setFontStep={setFontStep}
-      />
+  const { data: profile } = await supabase
+    .from('profiles')
+    .select('role')
+    .eq('id', user.id)
+    .maybeSingle()
 
-      <main className="flex-1 px-4 py-8 sm:py-12">
-        <div className="mx-auto mb-8 max-w-3xl text-center">
-          <h1 className="text-balance text-3xl font-extrabold leading-tight text-foreground sm:text-4xl">
-            {strings.intake.welcomeTitle}
-          </h1>
-          <p className="mx-auto mt-3 max-w-2xl text-pretty text-lg leading-relaxed text-muted-foreground sm:text-xl">
-            {strings.intake.welcomeSubtitle}
-          </p>
-        </div>
+  if (!profile?.role) {
+    redirect('/onboarding')
+  }
 
-        <IntakeForm strings={strings} />
-      </main>
-    </div>
-  )
+  if (profile.role === 'patient') {
+    redirect('/patient')
+  }
+
+  // Doctors and clinics go to their clinic workspace.
+  redirect('/dashboard')
 }

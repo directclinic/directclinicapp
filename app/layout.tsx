@@ -1,14 +1,16 @@
 import { Analytics } from '@vercel/analytics/next'
 import type { Metadata, Viewport } from 'next'
 import { Inter } from 'next/font/google'
+import { Suspense } from 'react'
+import { GlobalSignOut } from '@/components/global-sign-out'
 import './globals.css'
 
 const inter = Inter({ subsets: ['latin'], variable: '--font-inter' })
 
 export const metadata: Metadata = {
-  title: 'Find a Doctor in NYC — In-Network Search',
+  title: 'InsyCare — Find NYC Clinics in Your Language & Insurance',
   description:
-    'Senior-friendly, accessible doctor search for New York City. Find verified in-network doctors near you with clear pricing and multilingual support.',
+    'InsyCare gives adult immigrants in NYC a direct way to find local clinics that match their native language and insurance. No hidden bills, no middlemen.',
   generator: 'v0.app',
   icons: {
     icon: [
@@ -46,6 +48,9 @@ export default function RootLayout({
     <html lang="en" className={`${inter.variable} bg-background`}>
       <body className="font-sans antialiased">
         {children}
+        <Suspense fallback={null}>
+          <GlobalSignOut />
+        </Suspense>
         {process.env.NODE_ENV === 'production' && <Analytics />}
       </body>
     </html>
