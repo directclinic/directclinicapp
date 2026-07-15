@@ -210,6 +210,17 @@ function AppointmentCard({
       {/* Confirmation reminder shown for upcoming visits */}
       {!isPast && <ConfirmationSection appt={appt} t={t} />}
 
+      {/* Direct call to the clinic/doctor for upcoming, non-declined visits */}
+      {!isPast && appt.confirmation_status !== 'declined' && (
+        <Link
+          href={`/call/${appt.id}`}
+          className="mt-4 inline-flex min-h-11 items-center gap-2 rounded-xl border-2 border-primary bg-card px-4 text-base font-bold text-primary transition-colors hover:bg-primary hover:text-primary-foreground focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-primary/40"
+        >
+          <Phone className="size-5 shrink-0" aria-hidden="true" />
+          {t.startCall}
+        </Link>
+      )}
+
       {/* Doctor's note, shared with the patient after the visit */}
       {appt.doctor_note ? (
         <div className="mt-5 rounded-2xl border-2 border-primary/25 bg-primary/5 p-4">
