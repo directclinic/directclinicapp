@@ -11,6 +11,7 @@ import {
 import type { Doctor } from '@/lib/doctors'
 import type { Strings } from '@/lib/i18n'
 import { cn } from '@/lib/utils'
+import { ClinicDoctors } from '@/components/clinic-doctors'
 
 function initials(name: string) {
   const parts = name.replace('Dr. ', '').split(' ')
@@ -163,6 +164,10 @@ export function DoctorCard({
           {strings.mapDirections}
         </button>
       </div>
+
+      {/* Registered clinics expose their doctor roster; patients can tap a
+          doctor to view that doctor's public profile. */}
+      {doctor.clinicId && <ClinicDoctors clinicId={doctor.clinicId} />}
     </article>
   )
 }

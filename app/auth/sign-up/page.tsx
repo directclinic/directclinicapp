@@ -3,7 +3,7 @@
 import { useState } from 'react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
-import { User, Lock, Mail, ArrowRight } from 'lucide-react'
+import { User, Lock, Mail, ArrowRight, ArrowLeft } from 'lucide-react'
 import { createClient } from '@/lib/supabase/client'
 import { createAccount } from '@/app/actions/account'
 import { AuthShell } from '@/components/auth/auth-shell'
@@ -59,7 +59,7 @@ export default function SignUpPage() {
   return (
     <AuthShell
       title="Create your account"
-      subtitle="Join Direct Clinic to find care or list your practice."
+      subtitle="Join Insy Care to find care or list your practice."
       footer={
         <>
           Already have an account?{' '}
@@ -72,6 +72,14 @@ export default function SignUpPage() {
         </>
       }
     >
+      <Link
+        href="/"
+        className="mb-4 inline-flex min-h-11 items-center gap-2 text-base font-bold text-muted-foreground transition-colors hover:text-primary focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-primary/40"
+      >
+        <ArrowLeft className="size-5 shrink-0" aria-hidden="true" />
+        Back to home
+      </Link>
+
       <OAuthButtons
         labels={{
           google: 'Sign up with Google',

@@ -4,8 +4,14 @@ import { revalidatePath } from 'next/cache'
 import { createClient } from '@/lib/supabase/server'
 
 export interface BookingInput {
-  clinicId: string
-  clinicOwnerId: string
+  // For registered clinics these are real UUIDs that link to the clinics /
+  // profiles tables. For seed/mock clinics they are omitted, and we store the
+  // clinic details on the appointment row instead.
+  clinicId?: string | null
+  clinicOwnerId?: string | null
+  clinicName?: string
+  clinicAddress?: string
+  providerName?: string
   patientName: string
   patientEmail?: string
   patientPhone?: string
@@ -31,8 +37,14 @@ export async function bookAppointment(
   }
 
   const { error } = await supabase.from('appointments').insert({
-    clinic_id: input.clinicId,
-    clinic_owner_id: input.clinicOwnerId,
+    // Null for mock/seed clinics that have no registered owner.
+    clinic_id: input.clinicId || null,
+    clinic_owner_id: input.clinicOwnerId || null,
+    // Snapshot of the clinic so it always shows on the patient's dashboard,
+    // even when there's no linked clinic record.
+    clinic_name: input.clinicName?.trim() || null,
+    clinic_address: input.clinicAddress?.trim() || null,
+    provider_name: input.providerName?.trim() || null,
     patient_id: user.id,
     patient_name: input.patientName.trim() || user.email || 'Patient',
     patient_email: input.patientEmail?.trim() || user.email || null,
@@ -79,6 +91,38 @@ export async function saveDoctorNote(
   if (error) return { ok: false, error: error.message }
 
   // Patient dashboard reads these notes; refresh it and the doctor view.
+  revalidatePath('/patient')
+  revalidatePath('/dashboard')
+  return { ok: true }
+}
+
+// Let a member doctor add or update the note for an appointment at a clinic
+// they belong to. We don't filter by clinic_owner_id here (the doctor isn't the
+// owner); the `appt_update_clinic_member` RLS policy enforces that the doctor
+// is a member of the appointment's clinic.
+export async function saveMemberDoctorNote(
+  appointmentId: string,
+  note: string,
+): Promise<BookingResult> {
+  const supabase = await createClient()
+  const {
+    data: { user },
+  } = await supabase.auth.getUser()
+
+  if (!user) {
+    return { ok: false, error: 'Please sign in to save a note.' }
+  }
+
+  const { error } = await supabase
+    .from('appointments')
+    .update({
+      doctor_note: note.trim() || null,
+      note_updated_at: new Date().toISOString(),
+    })
+    .eq('id', appointmentId)
+
+  if (error) return { ok: false, error: error.message }
+
   revalidatePath('/patient')
   revalidatePath('/dashboard')
   return { ok: true }

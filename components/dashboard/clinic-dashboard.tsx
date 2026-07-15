@@ -2,36 +2,53 @@
 
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
-import { Building2, CalendarClock, LayoutGrid, PlusCircle } from 'lucide-react'
+import {
+  Building2,
+  CalendarClock,
+  LayoutGrid,
+  PlusCircle,
+  Users,
+  Stethoscope,
+} from 'lucide-react'
 import { ClinicForm } from '@/components/dashboard/clinic-form'
 import { ClinicList, type ClinicRow } from '@/components/dashboard/clinic-list'
 import {
   AppointmentsList,
   type AppointmentRow,
 } from '@/components/dashboard/appointments-list'
+import {
+  DoctorsRoster,
+  type RosterClinic,
+} from '@/components/dashboard/doctors-roster'
 import { cn } from '@/lib/utils'
 
-type Tab = 'overview' | 'add'
+type Tab = 'overview' | 'doctors' | 'add'
 
-export function DashboardTabs({
+export function ClinicDashboard({
   clinics,
   appointments,
+  roster,
 }: {
   clinics: ClinicRow[]
   appointments: AppointmentRow[]
+  roster: RosterClinic[]
 }) {
   const router = useRouter()
   const [tab, setTab] = useState<Tab>('overview')
 
   const totalBookings = appointments.length
-  const upcoming = appointments.filter(
-    (a) => new Date(a.appointment_date + 'T00:00:00') >= startOfToday(),
-  ).length
+  const totalDoctors = roster.reduce((sum, c) => sum + c.doctors.length, 0)
 
   const stats = [
+    { label: 'Total appointments', value: totalBookings, icon: CalendarClock },
     { label: 'Clinics', value: clinics.length, icon: Building2 },
-    { label: 'Total bookings', value: totalBookings, icon: CalendarClock },
-    { label: 'Upcoming', value: upcoming, icon: LayoutGrid },
+    { label: 'Doctors', value: totalDoctors, icon: Users },
+  ]
+
+  const tabs: { id: Tab; label: string; icon: typeof LayoutGrid }[] = [
+    { id: 'overview', label: 'Overview', icon: LayoutGrid },
+    { id: 'doctors', label: 'Doctors', icon: Stethoscope },
+    { id: 'add', label: 'Add clinic', icon: PlusCircle },
   ]
 
   return (
@@ -65,37 +82,29 @@ export function DashboardTabs({
         aria-label="Dashboard sections"
         className="mt-8 flex gap-2 rounded-2xl border-2 border-border bg-card p-1.5"
       >
-        <button
-          role="tab"
-          aria-selected={tab === 'overview'}
-          onClick={() => setTab('overview')}
-          className={cn(
-            'flex min-h-12 flex-1 items-center justify-center gap-2 rounded-xl text-lg font-bold transition-colors focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-primary/40',
-            tab === 'overview'
-              ? 'bg-primary text-primary-foreground'
-              : 'text-foreground hover:bg-accent',
-          )}
-        >
-          <LayoutGrid className="size-5 shrink-0" aria-hidden="true" />
-          Overview
-        </button>
-        <button
-          role="tab"
-          aria-selected={tab === 'add'}
-          onClick={() => setTab('add')}
-          className={cn(
-            'flex min-h-12 flex-1 items-center justify-center gap-2 rounded-xl text-lg font-bold transition-colors focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-primary/40',
-            tab === 'add'
-              ? 'bg-primary text-primary-foreground'
-              : 'text-foreground hover:bg-accent',
-          )}
-        >
-          <PlusCircle className="size-5 shrink-0" aria-hidden="true" />
-          Add clinic
-        </button>
+        {tabs.map((t) => {
+          const Icon = t.icon
+          return (
+            <button
+              key={t.id}
+              role="tab"
+              aria-selected={tab === t.id}
+              onClick={() => setTab(t.id)}
+              className={cn(
+                'flex min-h-12 flex-1 items-center justify-center gap-2 rounded-xl text-base font-bold transition-colors focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-primary/40 sm:text-lg',
+                tab === t.id
+                  ? 'bg-primary text-primary-foreground'
+                  : 'text-foreground hover:bg-accent',
+              )}
+            >
+              <Icon className="size-5 shrink-0" aria-hidden="true" />
+              {t.label}
+            </button>
+          )
+        })}
       </div>
 
-      {tab === 'overview' ? (
+      {tab === 'overview' && (
         <div className="mt-8 space-y-10">
           <section>
             <h2 className="mb-4 text-2xl font-extrabold text-foreground">
@@ -110,7 +119,20 @@ export function DashboardTabs({
             <AppointmentsList appointments={appointments} />
           </section>
         </div>
-      ) : (
+      )}
+
+      {tab === 'doctors' && (
+        <div className="mt-8">
+          <section>
+            <h2 className="mb-4 text-2xl font-extrabold text-foreground">
+              Doctors in your clinics
+            </h2>
+            <DoctorsRoster clinics={roster} />
+          </section>
+        </div>
+      )}
+
+      {tab === 'add' && (
         <div className="mt-8">
           <ClinicForm
             onCreated={() => {
@@ -122,10 +144,4 @@ export function DashboardTabs({
       )}
     </div>
   )
-}
-
-function startOfToday() {
-  const d = new Date()
-  d.setHours(0, 0, 0, 0)
-  return d
 }

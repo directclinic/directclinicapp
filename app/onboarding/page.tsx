@@ -34,7 +34,7 @@ export default async function OnboardingPage() {
             <Stethoscope className="size-6" aria-hidden="true" />
           </span>
           <span className="text-xl font-bold text-foreground">
-            Direct Clinic
+            Insy Care
           </span>
         </div>
       </header>
@@ -46,7 +46,7 @@ export default async function OnboardingPage() {
               Welcome, {displayName}
             </h1>
             <p className="mx-auto mt-3 max-w-xl text-pretty text-lg leading-relaxed text-muted-foreground sm:text-xl">
-              Tell us how you&apos;ll use Direct Clinic so we can set up the
+              Tell us how you&apos;ll use Insy Care so we can set up the
               right experience for you.
             </p>
           </div>

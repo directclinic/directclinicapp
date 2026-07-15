@@ -8,6 +8,7 @@ import {
   Marker,
   Popup,
   Circle,
+  Polyline,
   useMap,
 } from 'react-leaflet'
 import { DOCTORS, NYC_CENTER, type Doctor } from '@/lib/doctors'
@@ -94,6 +95,21 @@ function LocationController({ userLocation }: { userLocation: GeoResult | null }
   return null
 }
 
+// Once a route is available, frame the whole path so the user sees the trip
+// from their location to the clinic at a glance.
+function RouteController({ route }: { route: [number, number][] | null }) {
+  const map = useMap()
+  useEffect(() => {
+    if (route && route.length > 1) {
+      map.fitBounds(route as L.LatLngBoundsExpression, {
+        padding: [60, 60],
+        maxZoom: 15,
+      })
+    }
+  }, [route, map])
+  return null
+}
+
 export default function DoctorMap({
   doctors = DOCTORS,
   focused,
@@ -101,6 +117,7 @@ export default function DoctorMap({
   copayLabel = 'Co-pay',
   userLocation = null,
   nearYouPrefix = 'Near',
+  route = null,
 }: {
   doctors?: Doctor[]
   focused: Doctor | null
@@ -108,6 +125,7 @@ export default function DoctorMap({
   copayLabel?: string
   userLocation?: GeoResult | null
   nearYouPrefix?: string
+  route?: [number, number][] | null
 }) {
   const markerRefs = useRef<Record<string, L.Marker | null>>({})
 
@@ -125,6 +143,20 @@ export default function DoctorMap({
       />
       <MapController focused={focused} markerRefs={markerRefs} />
       <LocationController userLocation={userLocation} />
+      <RouteController route={route} />
+      {route && route.length > 1 && (
+        <>
+          {/* White casing under the route for contrast on busy map tiles. */}
+          <Polyline
+            positions={route}
+            pathOptions={{ color: '#ffffff', weight: 9, opacity: 0.9 }}
+          />
+          <Polyline
+            positions={route}
+            pathOptions={{ color: '#2563eb', weight: 5, opacity: 0.95 }}
+          />
+        </>
+      )}
       {userLocation && (
         <>
           <Circle

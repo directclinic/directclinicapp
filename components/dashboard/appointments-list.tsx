@@ -10,7 +10,12 @@ import {
   Phone,
   User,
 } from 'lucide-react'
-import { saveDoctorNote } from '@/app/actions/appointments'
+import {
+  saveDoctorNote,
+  saveMemberDoctorNote,
+} from '@/app/actions/appointments'
+
+type NoteVariant = 'clinic' | 'doctor'
 
 export interface AppointmentRow {
   id: string
@@ -39,9 +44,11 @@ function formatDate(iso: string) {
 function NoteEditor({
   appointmentId,
   initialNote,
+  variant,
 }: {
   appointmentId: string
   initialNote: string | null
+  variant: NoteVariant
 }) {
   const router = useRouter()
   const [note, setNote] = useState(initialNote ?? '')
@@ -55,7 +62,10 @@ function NoteEditor({
     setSaving(true)
     setError(null)
     setSaved(false)
-    const result = await saveDoctorNote(appointmentId, note)
+    const result =
+      variant === 'doctor'
+        ? await saveMemberDoctorNote(appointmentId, note)
+        : await saveDoctorNote(appointmentId, note)
     setSaving(false)
     if (!result.ok) {
       setError(result.error)
@@ -111,8 +121,10 @@ function NoteEditor({
 
 export function AppointmentsList({
   appointments,
+  variant = 'clinic',
 }: {
   appointments: AppointmentRow[]
+  variant?: NoteVariant
 }) {
   if (appointments.length === 0) {
     return (
@@ -179,7 +191,11 @@ export function AppointmentsList({
             </div>
           </div>
 
-          <NoteEditor appointmentId={a.id} initialNote={a.doctor_note} />
+          <NoteEditor
+            appointmentId={a.id}
+            initialNote={a.doctor_note}
+            variant={variant}
+          />
         </li>
       ))}
     </ul>
