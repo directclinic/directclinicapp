@@ -10,6 +10,8 @@ import {
 } from 'react'
 import dynamic from 'next/dynamic'
 import { useRouter, useSearchParams } from 'next/navigation'
+import { Map as MapIcon, List as ListIcon } from 'lucide-react'
+import { cn } from '@/lib/utils'
 import {
   DOCTORS,
   CARRIER_ID_BY_NAME,
@@ -48,6 +50,9 @@ function SearchView() {
   const [query, setQuery] = useState('')
   const [activeBorough, setActiveBorough] = useState<string>('All Boroughs')
   const [focused, setFocused] = useState<Doctor | null>(null)
+  // On phones the list and map can't sit side by side, so we show one at a
+  // time and let the user flip between them. Ignored on lg+ (both show).
+  const [mobileView, setMobileView] = useState<'list' | 'map'>('list')
   // The doctor whose booking modal is currently open (null when closed).
   const [bookingDoctor, setBookingDoctor] = useState<Doctor | null>(null)
   // The searcher's geocoded address; when set, results are sorted by proximity.
@@ -233,6 +238,8 @@ function SearchView() {
     async (d: Doctor) => {
       setFocused(d)
       setDirectionsTo(d)
+      // On phones, bring the map forward so the route is actually visible.
+      setMobileView('map')
       setRoute(null)
       setRouteStatus('loading')
       // Ask for the patient's live location (or reuse a typed address).
@@ -291,7 +298,10 @@ function SearchView() {
         {/* Left: doctor listings */}
         <section
           aria-label="Doctor listings"
-          className="flex min-h-0 flex-col border-b-2 border-border lg:w-[480px] lg:border-b-0 lg:border-r-2 xl:w-[540px]"
+          className={cn(
+            'min-h-0 flex-col border-border lg:flex lg:w-[480px] lg:flex-none lg:border-r-2 xl:w-[540px]',
+            mobileView === 'list' ? 'flex flex-1' : 'hidden',
+          )}
         >
           <div className="border-b-2 border-border bg-card px-5 py-4">
             <h1 className="text-pretty text-2xl font-extrabold leading-tight text-foreground sm:text-3xl">
@@ -327,7 +337,10 @@ function SearchView() {
         {/* Right: live interactive map */}
         <section
           aria-label="Interactive map of New York City"
-          className="relative min-h-[420px] flex-1"
+          className={cn(
+            'relative flex-1',
+            mobileView === 'map' ? 'block min-h-0' : 'hidden lg:block',
+          )}
         >
           <SearchFilterBar
             strings={strings}
@@ -367,6 +380,28 @@ function SearchView() {
           )}
         </section>
       </div>
+
+      {/* Phone-only toggle to flip between the full list and the full map.
+          Hidden once a directions sheet is up so it never overlaps it. */}
+      {!directionsTo && (
+        <button
+          type="button"
+          onClick={() => setMobileView((v) => (v === 'list' ? 'map' : 'list'))}
+          className="fixed bottom-6 left-1/2 z-[1100] inline-flex -translate-x-1/2 items-center gap-2 rounded-full border-2 border-primary-foreground/25 bg-primary px-6 py-3 text-lg font-bold text-primary-foreground shadow-xl transition-transform active:scale-95 lg:hidden"
+        >
+          {mobileView === 'list' ? (
+            <>
+              <MapIcon className="size-5 shrink-0" aria-hidden="true" />
+              {strings.showMap}
+            </>
+          ) : (
+            <>
+              <ListIcon className="size-5 shrink-0" aria-hidden="true" />
+              {strings.showList}
+            </>
+          )}
+        </button>
+      )}
 
       {bookingDoctor && (
         <BookingModal
