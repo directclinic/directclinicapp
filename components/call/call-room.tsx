@@ -277,7 +277,7 @@ export function CallRoom({
       supabase.removeChannel(channelRef.current)
       channelRef.current = null
     }
-    audioCtxRef.current?.close().catch(() => {})
+    audioCtxRef.current?.close().catch(() => { })
     audioCtxRef.current = null
     mixDestRef.current = null
   }, [])
@@ -320,7 +320,7 @@ export function CallRoom({
         console.log('[v0] finalize failed:', (err as Error).message)
         setError(
           'The call ended, but we could not save the recording: ' +
-            (err as Error).message,
+          (err as Error).message,
         )
       }
       setProcessing(false)
@@ -454,8 +454,7 @@ export function CallRoom({
       </div>
 
       <p className="mt-6 text-pretty text-sm leading-relaxed text-muted-foreground">
-        This call is recorded. After it ends, a transcript and translation are
-        generated for the patient.
+        This call is recorded. During your call, there will be a live translation using AI on the side for you to read & understand.
       </p>
     </div>
   )
