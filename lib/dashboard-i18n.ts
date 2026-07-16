@@ -43,6 +43,17 @@ export interface DashboardStrings {
   startCall: string
   joinCall: string
   callTitle: string
+  // Notifications
+  notifTitle: string
+  notifDesc: string
+  notifEnable: string
+  notifEnabling: string
+  notifOn: string
+  notifDisable: string
+  notifBlocked: string
+  notifUnsupported: string
+  notifIosHint: string
+  notifTest: string
 }
 
 export const DASHBOARD_TRANSLATIONS: Record<LanguageCode, DashboardStrings> = {
@@ -86,6 +97,20 @@ export const DASHBOARD_TRANSLATIONS: Record<LanguageCode, DashboardStrings> = {
     startCall: 'Start call',
     joinCall: 'Join call',
     callTitle: 'Call',
+    notifTitle: 'Appointment reminders',
+    notifDesc:
+      'Get a notification on this device the day before each appointment so you can confirm you are still coming.',
+    notifEnable: 'Turn on notifications',
+    notifEnabling: 'Turning on…',
+    notifOn: 'Notifications are on',
+    notifDisable: 'Turn off',
+    notifBlocked:
+      'Notifications are blocked. Enable them in your browser settings, then try again.',
+    notifUnsupported:
+      'This browser does not support notifications. Try a different browser.',
+    notifIosHint:
+      'On iPhone, first add this app to your Home Screen (Share → Add to Home Screen), then open it from there to enable notifications.',
+    notifTest: 'Send a test',
   },
   es: {
     patientBadge: 'Paciente',
@@ -127,6 +152,20 @@ export const DASHBOARD_TRANSLATIONS: Record<LanguageCode, DashboardStrings> = {
     startCall: 'Iniciar llamada',
     joinCall: 'Unirse a la llamada',
     callTitle: 'Llamada',
+    notifTitle: 'Recordatorios de citas',
+    notifDesc:
+      'Recibe una notificación en este dispositivo el día antes de cada cita para que confirmes si aún vas a asistir.',
+    notifEnable: 'Activar notificaciones',
+    notifEnabling: 'Activando…',
+    notifOn: 'Las notificaciones están activadas',
+    notifDisable: 'Desactivar',
+    notifBlocked:
+      'Las notificaciones están bloqueadas. Actívalas en la configuración de tu navegador e inténtalo de nuevo.',
+    notifUnsupported:
+      'Este navegador no admite notificaciones. Prueba con otro navegador.',
+    notifIosHint:
+      'En iPhone, primero añade esta app a tu pantalla de inicio (Compartir → Añadir a inicio) y ábrela desde ahí para activar las notificaciones.',
+    notifTest: 'Enviar una prueba',
   },
   zh: {
     patientBadge: '病人',
@@ -166,6 +205,18 @@ export const DASHBOARD_TRANSLATIONS: Record<LanguageCode, DashboardStrings> = {
     startCall: '開始通話',
     joinCall: '加入通話',
     callTitle: '通話',
+    notifTitle: '預約提醒',
+    notifDesc:
+      '喺每次預約前一日，喺呢部裝置收到通知，等你可以確認係咪仲會嚟。',
+    notifEnable: '開啟通知',
+    notifEnabling: '開啟緊…',
+    notifOn: '通知已開啟',
+    notifDisable: '關閉',
+    notifBlocked: '通知已被封鎖。請喺瀏覽器設定開啟，然後再試。',
+    notifUnsupported: '呢個瀏覽器唔支援通知。請試用其他瀏覽器。',
+    notifIosHint:
+      '喺 iPhone 上，請先將呢個應用程式加入主畫面（分享 → 加至主畫面），再由主畫面開啟嚟啟用通知。',
+    notifTest: '傳送測試',
   },
   ru: {
     patientBadge: 'Пациент',
@@ -207,6 +258,20 @@ export const DASHBOARD_TRANSLATIONS: Record<LanguageCode, DashboardStrings> = {
     startCall: 'Начать звонок',
     joinCall: 'Присоединиться к звонку',
     callTitle: 'Звонок',
+    notifTitle: 'Напоминания о приёмах',
+    notifDesc:
+      'Получайте уведомление на этом устройстве за день до каждого приёма, чтобы подтвердить, что вы придёте.',
+    notifEnable: 'Включить уведомления',
+    notifEnabling: 'Включение…',
+    notifOn: 'Уведомления включены',
+    notifDisable: 'Выключить',
+    notifBlocked:
+      'Уведомления заблокированы. Включите их в настройках браузера и попробуйте снова.',
+    notifUnsupported:
+      'Этот браузер не поддерживает уведомления. Попробуйте другой браузер.',
+    notifIosHint:
+      'На iPhone сначала добавьте это приложение на главный экран (Поделиться → На экран «Домой»), затем откройте его оттуда, чтобы включить уведомления.',
+    notifTest: 'Отправить тест',
   },
   bn: {
     patientBadge: 'রোগী',
@@ -248,6 +313,20 @@ export const DASHBOARD_TRANSLATIONS: Record<LanguageCode, DashboardStrings> = {
     startCall: 'কল শুরু করুন',
     joinCall: 'কলে যোগ দিন',
     callTitle: 'কল',
+    notifTitle: 'অ্যাপয়েন্টমেন্ট রিমাইন্ডার',
+    notifDesc:
+      'প্রতিটি অ্যাপয়েন্টমেন্টের আগের দিন এই ডিভাইসে একটি নোটিফিকেশন পান, যাতে আপনি নিশ্চিত করতে পারেন আপনি আসছেন।',
+    notifEnable: 'নোটিফিকেশন চালু করুন',
+    notifEnabling: 'চালু হচ্ছে…',
+    notifOn: 'নোটিফিকেশন চালু আছে',
+    notifDisable: 'বন্ধ করুন',
+    notifBlocked:
+      'নোটিফিকেশন ব্লক করা আছে। আপনার ব্রাউজার সেটিংসে এটি চালু করে আবার চেষ্টা করুন।',
+    notifUnsupported:
+      'এই ব্রাউজার নোটিফিকেশন সমর্থন করে না। অন্য ব্রাউজার ব্যবহার করুন।',
+    notifIosHint:
+      'iPhone-এ, প্রথমে এই অ্যাপটি আপনার হোম স্ক্রিনে যোগ করুন (শেয়ার → Add to Home Screen), তারপর সেখান থেকে খুলে নোটিফিকেশন চালু করুন।',
+    notifTest: 'একটি পরীক্ষা পাঠান',
   },
   it: {
     patientBadge: 'Paziente',
@@ -289,6 +368,20 @@ export const DASHBOARD_TRANSLATIONS: Record<LanguageCode, DashboardStrings> = {
     startCall: 'Avvia chiamata',
     joinCall: 'Partecipa alla chiamata',
     callTitle: 'Chiamata',
+    notifTitle: 'Promemoria appuntamenti',
+    notifDesc:
+      'Ricevi una notifica su questo dispositivo il giorno prima di ogni appuntamento per confermare che verrai.',
+    notifEnable: 'Attiva le notifiche',
+    notifEnabling: 'Attivazione…',
+    notifOn: 'Le notifiche sono attive',
+    notifDisable: 'Disattiva',
+    notifBlocked:
+      'Le notifiche sono bloccate. Attivale nelle impostazioni del browser e riprova.',
+    notifUnsupported:
+      'Questo browser non supporta le notifiche. Prova con un altro browser.',
+    notifIosHint:
+      "Su iPhone, aggiungi prima questa app alla schermata Home (Condividi → Aggiungi a Home), poi aprila da lì per attivare le notifiche.",
+    notifTest: 'Invia una prova',
   },
   tl: {
     patientBadge: 'Pasyente',
@@ -330,5 +423,19 @@ export const DASHBOARD_TRANSLATIONS: Record<LanguageCode, DashboardStrings> = {
     startCall: 'Simulan ang tawag',
     joinCall: 'Sumali sa tawag',
     callTitle: 'Tawag',
+    notifTitle: 'Mga paalala sa appointment',
+    notifDesc:
+      'Makatanggap ng notification sa device na ito isang araw bago ang bawat appointment para makumpirma mong pupunta ka pa rin.',
+    notifEnable: 'I-on ang notifications',
+    notifEnabling: 'Ino-on…',
+    notifOn: 'Naka-on ang notifications',
+    notifDisable: 'I-off',
+    notifBlocked:
+      'Naka-block ang notifications. I-enable ito sa settings ng iyong browser, tapos subukan ulit.',
+    notifUnsupported:
+      'Hindi sinusuportahan ng browser na ito ang notifications. Sumubok ng ibang browser.',
+    notifIosHint:
+      'Sa iPhone, idagdag muna ang app na ito sa iyong Home Screen (Share → Add to Home Screen), tapos buksan ito mula doon para i-enable ang notifications.',
+    notifTest: 'Magpadala ng test',
   },
 }

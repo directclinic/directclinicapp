@@ -11,6 +11,7 @@ import {
 import { AutoRefresh } from '@/components/auto-refresh'
 import { LanguageSwitcher } from '@/components/language-switcher'
 import { InsuranceCard } from '@/components/patient/insurance-card'
+import { PushToggle } from '@/components/patient/push-toggle'
 import {
   PatientAppointments,
   type PatientAppointment,
@@ -113,6 +114,8 @@ export function PatientDashboard({
               )
             })}
           </div>
+
+          <PushToggle t={t} />
 
           <InsuranceCard
             carrier={insuranceCarrier}
