@@ -17,7 +17,16 @@ import {
 import { CARRIER_NAME_BY_ID, type Doctor } from '@/lib/doctors'
 import type { LanguageCode, Strings } from '@/lib/i18n'
 import { bookAppointment } from '@/app/actions/appointments'
+import { createClient } from '@/lib/supabase/client'
 import { cn } from '@/lib/utils'
+
+// Format a Date as YYYY-MM-DD in local time (matches how bookings are stored).
+function toISODate(d: Date) {
+  const yyyy = d.getFullYear()
+  const mm = String(d.getMonth() + 1).padStart(2, '0')
+  const dd = String(d.getDate()).padStart(2, '0')
+  return `${yyyy}-${mm}-${dd}`
+}
 
 // The calendar opens on the current month and cannot page earlier than it.
 const NOW = new Date()
@@ -78,6 +87,11 @@ export function BookingModal({
   const [selected, setSelected] = useState<Date>(() => new Date(TODAY))
   const [selectedTime, setSelectedTime] = useState<string>('10:00 AM')
   const [confirmed, setConfirmed] = useState(false)
+
+  // Times already taken for the selected date at this clinic. These are grayed
+  // out so two patients can't book the same slot.
+  const [bookedTimes, setBookedTimes] = useState<Set<string>>(new Set())
+  const [loadingSlots, setLoadingSlots] = useState(false)
 
   // Patient contact info collected before confirming.
   const [patientName, setPatientName] = useState('')
@@ -165,6 +179,40 @@ export function BookingModal({
       document.body.style.overflow = ''
     }
   }, [onClose])
+
+  // Load which times are already booked for the selected date, so we can gray
+  // them out. Re-runs whenever the chosen date (or clinic) changes.
+  const selectedISO = toISODate(selected)
+  useEffect(() => {
+    let active = true
+    setLoadingSlots(true)
+    const supabase = createClient()
+    supabase
+      .rpc('booked_slots', {
+        p_clinic_id: doctor.clinicId ?? null,
+        p_clinic_name: doctor.fullName,
+        p_date: selectedISO,
+      })
+      .then(({ data, error }) => {
+        if (!active) return
+        setBookedTimes(
+          error || !data ? new Set() : new Set(data as string[]),
+        )
+        setLoadingSlots(false)
+      })
+    return () => {
+      active = false
+    }
+  }, [selectedISO, doctor.clinicId, doctor.fullName])
+
+  // If the currently selected time becomes unavailable, move to the first
+  // open slot so the patient never confirms a taken time.
+  useEffect(() => {
+    if (bookedTimes.has(selectedTime)) {
+      const firstOpen = TIME_SLOTS.find((s) => !bookedTimes.has(s.time))
+      if (firstOpen) setSelectedTime(firstOpen.time)
+    }
+  }, [bookedTimes, selectedTime])
 
   return (
     <div
@@ -352,25 +400,34 @@ export function BookingModal({
                 </h3>
                 <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
                   {TIME_SLOTS.map(({ period, time }) => {
-                    const isSelected = selectedTime === time
+                    const isBooked = bookedTimes.has(time)
+                    const isSelected = !isBooked && selectedTime === time
                     const PeriodIcon = period === 'morning' ? Sun : Sunset
                     return (
                       <button
                         key={time}
                         type="button"
+                        disabled={isBooked || loadingSlots}
                         onClick={() => setSelectedTime(time)}
                         aria-pressed={isSelected}
+                        aria-disabled={isBooked}
                         className={cn(
                           'flex min-h-16 items-center gap-3 rounded-2xl border-2 px-5 py-3 text-left transition-colors',
-                          isSelected
-                            ? 'border-primary bg-primary text-primary-foreground'
-                            : 'border-border bg-card text-foreground hover:border-primary/50 hover:bg-muted',
+                          isBooked
+                            ? 'cursor-not-allowed border-border bg-muted text-muted-foreground/60'
+                            : isSelected
+                              ? 'border-primary bg-primary text-primary-foreground'
+                              : 'border-border bg-card text-foreground hover:border-primary/50 hover:bg-muted',
                         )}
                       >
                         <PeriodIcon
                           className={cn(
                             'size-6 shrink-0',
-                            isSelected ? 'text-primary-foreground' : 'text-primary',
+                            isBooked
+                              ? 'text-muted-foreground/50'
+                              : isSelected
+                                ? 'text-primary-foreground'
+                                : 'text-primary',
                           )}
                           aria-hidden="true"
                         />
@@ -385,8 +442,20 @@ export function BookingModal({
                           >
                             {period === 'morning' ? t.morning : t.afternoon}
                           </span>
-                          <span className="text-xl font-extrabold">{time}</span>
+                          <span
+                            className={cn(
+                              'text-xl font-extrabold',
+                              isBooked && 'line-through',
+                            )}
+                          >
+                            {time}
+                          </span>
                         </span>
+                        {isBooked && (
+                          <span className="ml-auto rounded-full bg-border px-2.5 py-1 text-xs font-bold uppercase tracking-wide text-muted-foreground">
+                            {t.slotTaken}
+                          </span>
+                        )}
                       </button>
                     )
                   })}

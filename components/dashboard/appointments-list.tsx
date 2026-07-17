@@ -2,12 +2,14 @@
 
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
+import Link from 'next/link'
 import {
   CalendarClock,
   Check,
   FileText,
   Mail,
   Phone,
+  PhoneCall,
   User,
 } from 'lucide-react'
 import {
@@ -188,6 +190,13 @@ export function AppointmentsList({
               <span className="text-lg font-extrabold text-primary">
                 {a.appointment_time}
               </span>
+              <Link
+                href={`/call/${a.id}`}
+                className="inline-flex min-h-11 items-center gap-2 rounded-xl border-2 border-primary bg-card px-4 text-base font-bold text-primary transition-colors hover:bg-primary hover:text-primary-foreground focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-primary/40"
+              >
+                <PhoneCall className="size-5 shrink-0" aria-hidden="true" />
+                Join call
+              </Link>
             </div>
           </div>
 
