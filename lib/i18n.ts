@@ -51,6 +51,8 @@ export interface Strings {
   languagesSpoken: string
   bookAppointment: string
   mapDirections: string
+  showMap: string
+  showList: string
   acceptingNew: string
   reviews: string
   allBoroughs: string
@@ -64,6 +66,7 @@ export interface BookingStrings {
   selectTime: string
   morning: string
   afternoon: string
+  slotTaken: string
   monthLabel: string
   weekdays: [string, string, string, string, string, string, string]
   addressLabel: string
@@ -134,6 +137,8 @@ export const TRANSLATIONS: Record<LanguageCode, Strings> = {
     languagesSpoken: 'Languages spoken',
     bookAppointment: 'Book appointment',
     mapDirections: 'Map Directions',
+    showMap: 'Map',
+    showList: 'List',
     acceptingNew: 'Accepting new patients',
     reviews: 'reviews',
     allBoroughs: 'All Boroughs',
@@ -180,6 +185,7 @@ export const TRANSLATIONS: Record<LanguageCode, Strings> = {
       selectTime: 'Select a Time',
       morning: 'Morning',
       afternoon: 'Afternoon',
+      slotTaken: 'Booked',
       monthLabel: 'April 2026',
       weekdays: ['S', 'M', 'T', 'W', 'T', 'F', 'S'],
       addressLabel: 'Clinic address',
@@ -228,6 +234,8 @@ export const TRANSLATIONS: Record<LanguageCode, Strings> = {
     languagesSpoken: 'Idiomas que se hablan',
     bookAppointment: 'Reservar cita',
     mapDirections: 'Cómo llegar',
+    showMap: 'Mapa',
+    showList: 'Lista',
     acceptingNew: 'Acepta nuevos pacientes',
     reviews: 'reseñas',
     allBoroughs: 'Todos los distritos',
@@ -274,6 +282,7 @@ export const TRANSLATIONS: Record<LanguageCode, Strings> = {
       selectTime: 'Seleccione una hora',
       morning: 'Mañana',
       afternoon: 'Tarde',
+      slotTaken: 'Reservado',
       monthLabel: 'Abril 2026',
       weekdays: ['D', 'L', 'M', 'X', 'J', 'V', 'S'],
       addressLabel: 'Dirección de la clínica',
@@ -321,6 +330,8 @@ export const TRANSLATIONS: Record<LanguageCode, Strings> = {
     languagesSpoken: '會說的語言',
     bookAppointment: '預約',
     mapDirections: '地圖路線',
+    showMap: '地圖',
+    showList: '清單',
     acceptingNew: '接受新病人',
     reviews: '則評價',
     allBoroughs: '所有區',
@@ -366,6 +377,7 @@ export const TRANSLATIONS: Record<LanguageCode, Strings> = {
       selectTime: '選擇時間',
       morning: '上午',
       afternoon: '下午',
+      slotTaken: '已預約',
       monthLabel: '2026年4月',
       weekdays: ['日', '一', '二', '三', '四', '五', '六'],
       addressLabel: '診所地址',
@@ -414,6 +426,8 @@ export const TRANSLATIONS: Record<LanguageCode, Strings> = {
     languagesSpoken: 'Языки общения',
     bookAppointment: 'Записаться на приём',
     mapDirections: 'Маршрут на карте',
+    showMap: 'Карта',
+    showList: 'Список',
     acceptingNew: 'Принимает новых пациентов',
     reviews: 'отзывов',
     allBoroughs: 'Все районы',
@@ -460,6 +474,7 @@ export const TRANSLATIONS: Record<LanguageCode, Strings> = {
       selectTime: 'Выберите время',
       morning: 'Утро',
       afternoon: 'День',
+      slotTaken: 'Занято',
       monthLabel: 'Апрель 2026',
       weekdays: ['Вс', 'Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб'],
       addressLabel: 'Адрес клиники',
@@ -507,6 +522,8 @@ export const TRANSLATIONS: Record<LanguageCode, Strings> = {
     languagesSpoken: 'কথ্য ভাষা',
     bookAppointment: 'অ্যাপয়েন্টমেন্ট নিন',
     mapDirections: 'মানচিত্রে পথ',
+    showMap: 'মানচিত্র',
+    showList: 'তালিকা',
     acceptingNew: 'নতুন রোগী নিচ্ছেন',
     reviews: 'পর্যালোচনা',
     allBoroughs: 'সব বরো',
@@ -518,7 +535,7 @@ export const TRANSLATIONS: Record<LanguageCode, Strings> = {
       step1Help: 'আপনার বীমা কার্ডে দেখানো কোম্পানিটি বেছে নিন।',
       selectCarrier: 'আপনার বীমা প্রদানকারী বেছে নিন',
       planLabel: 'আপনার প্ল্যানের ধরন নির্বাচন করুন',
-      selectPlan: 'আপনার প্ল্যানের ধরন বেছে নিন',
+      selectPlan: 'আপনার প্ল্যানের ধরন বেছে ���িন',
       step2Label: '২. আজ আপনার কোন ধরনের সেবা প্রয়োজন?',
       step2Help: 'আপনার সফরের সাথে সবচেয়ে মানানসই বিকল্পটি বেছে নিন।',
       care: {
@@ -540,7 +557,7 @@ export const TRANSLATIONS: Record<LanguageCode, Strings> = {
       },
       findButton: 'নেটওয়ার্কভুক্ত ক্লিনিক খুঁজুন ও দাম দেখুন',
       privacyBadge:
-        'গোপনীয়তা নিশ্চিত: আমরা ব্যক্তিগত চিকিৎসা তথ্য জিজ্ঞাসা করি না বা সংরক্ষণ করি না। আপনার অনুসন্ধান নিরাপদ ও নামহীন।',
+        'গোপনীয়���া নিশ্চিত: আমরা ব্যক্তিগত চিকিৎসা তথ্য জিজ্ঞাসা করি না বা সংরক্ষণ করি না। আপনার অনুসন্ধান নিরাপদ ও নামহীন।',
       selectedSummary: 'আপনার নির্বাচন',
       stepFormat: 'ধাপ {step} / {total}',
       continueButton: 'চালিয়ে যান',
@@ -553,6 +570,7 @@ export const TRANSLATIONS: Record<LanguageCode, Strings> = {
       selectTime: 'একটি সময় নির্বাচন করুন',
       morning: 'সকাল',
       afternoon: 'বিকাল',
+      slotTaken: 'বুক করা হয়েছে',
       monthLabel: 'এপ্রিল ২০২৬',
       weekdays: ['র', 'সো', 'ম', 'বু', 'বৃ', 'শু', 'শ'],
       addressLabel: 'ক্লিনিকের ঠিকানা',
@@ -601,6 +619,8 @@ export const TRANSLATIONS: Record<LanguageCode, Strings> = {
     languagesSpoken: 'Lingue parlate',
     bookAppointment: 'Prenota appuntamento',
     mapDirections: 'Indicazioni sulla mappa',
+    showMap: 'Mappa',
+    showList: 'Elenco',
     acceptingNew: 'Accetta nuovi pazienti',
     reviews: 'recensioni',
     allBoroughs: 'Tutti i distretti',
@@ -647,6 +667,7 @@ export const TRANSLATIONS: Record<LanguageCode, Strings> = {
       selectTime: 'Seleziona un orario',
       morning: 'Mattina',
       afternoon: 'Pomeriggio',
+      slotTaken: 'Prenotato',
       monthLabel: 'Aprile 2026',
       weekdays: ['D', 'L', 'M', 'M', 'G', 'V', 'S'],
       addressLabel: 'Indirizzo della clinica',
@@ -695,6 +716,8 @@ export const TRANSLATIONS: Record<LanguageCode, Strings> = {
     languagesSpoken: 'Mga wikang sinasalita',
     bookAppointment: 'Mag-book ng appointment',
     mapDirections: 'Direksyon sa Mapa',
+    showMap: 'Mapa',
+    showList: 'Listahan',
     acceptingNew: 'Tumatanggap ng bagong pasyente',
     reviews: 'mga review',
     allBoroughs: 'Lahat ng Borough',
@@ -741,6 +764,7 @@ export const TRANSLATIONS: Record<LanguageCode, Strings> = {
       selectTime: 'Pumili ng Oras',
       morning: 'Umaga',
       afternoon: 'Hapon',
+      slotTaken: 'Nakabook',
       monthLabel: 'Abril 2026',
       weekdays: ['Li', 'Lu', 'Ma', 'Mi', 'Hu', 'Bi', 'Sa'],
       addressLabel: 'Address ng klinika',
